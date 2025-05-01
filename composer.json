@@ -1,0 +1,11 @@
+{
+    "name": "plantilla/management",
+    "description": "Plantilla Management System",
+    "type": "project",
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.29"
+    },
+    "config": {
+        "secure-http": false
+    }
+} 

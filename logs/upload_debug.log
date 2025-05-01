@@ -1,0 +1,39 @@
+[2025-05-01 04:53:40] Upload process started
+[2025-05-01 04:53:40] File received: Array
+(
+    [name] => recods.xlsx
+    [full_path] => recods.xlsx
+    [type] => application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+    [tmp_name] => D:\xampp\tmp\php66C0.tmp
+    [error] => 0
+    [size] => 9091
+)
+
+[2025-05-01 04:53:40] Division ID: 8
+[2025-05-01 04:53:40] Invalid file extension. Only CSV files are allowed. Detected extension: xlsx
+[2025-05-01 04:55:03] Upload process started
+[2025-05-01 04:55:03] File received: Array
+(
+    [name] => recods.xlsx
+    [full_path] => recods.xlsx
+    [type] => application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+    [tmp_name] => D:\xampp\tmp\phpA888.tmp
+    [error] => 0
+    [size] => 9091
+)
+
+[2025-05-01 04:55:03] Division ID: 8
+[2025-05-01 04:55:03] Converting Excel to CSV
+[2025-05-01 04:55:38] Upload process started
+[2025-05-01 04:55:38] File received: Array
+(
+    [name] => recods.xlsx
+    [full_path] => recods.xlsx
+    [type] => application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+    [tmp_name] => D:\xampp\tmp\php3151.tmp
+    [error] => 0
+    [size] => 9091
+)
+
+[2025-05-01 04:55:38] Division ID: 8
+[2025-05-01 04:55:38] Reading Excel file

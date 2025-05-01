@@ -1,0 +1,17 @@
+[30-Apr-2025 12:20:13 Europe/Berlin] Received POST data: Array
+(
+    [first_name] => admin
+    [last_name] => admin
+    [username] => admin
+    [email] => admin@gmail.com
+    [password] => 1234
+    [role] => user
+    [status] => active
+)
+
+[30-Apr-2025 12:20:13 Europe/Berlin] Processed data - Username: admin, Email: admin@gmail.com, First Name: admin, Last Name: admin, Role: user
+[30-Apr-2025 12:20:13 Europe/Berlin] New user created with ID: 2
+[30-Apr-2025 12:20:13 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 cannot be passed by reference in D:\xampp\htdocs\Plantilla\admin\process\add_user.php:102
+Stack trace:
+#0 {main}
+  thrown in D:\xampp\htdocs\Plantilla\admin\process\add_user.php on line 102

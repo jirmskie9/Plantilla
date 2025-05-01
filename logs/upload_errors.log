@@ -1,0 +1,1619 @@
+[01-May-2025 05:01:23 Europe/Berlin] CSV Row: Array
+(
+    [0] => EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2
+)
+
+[01-May-2025 05:01:23 Europe/Berlin] Skipping incomplete row
+[01-May-2025 05:01:23 Europe/Berlin] CSV Row: Array
+(
+    [0] => EMP-002,Maria Santos,HR Specialist,SG-12,Active,3
+)
+
+[01-May-2025 05:01:23 Europe/Berlin] Skipping incomplete row
+[01-May-2025 05:01:23 Europe/Berlin] CSV Row: Array
+(
+    [0] => EMP-003,Robert Lim,Accountant,SG-15,Active,8
+)
+
+[01-May-2025 05:01:23 Europe/Berlin] Skipping incomplete row
+[01-May-2025 05:01:23 Europe/Berlin] CSV Row: Array
+(
+    [0] => EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15
+)
+
+[01-May-2025 05:01:23 Europe/Berlin] Skipping incomplete row
+[01-May-2025 05:01:23 Europe/Berlin] CSV Row: Array
+(
+    [0] => EMP-005,James Wilson,Research Specialist,SG-13,Active,30
+)
+
+[01-May-2025 05:01:23 Europe/Berlin] Skipping incomplete row
+[01-May-2025 05:01:23 Europe/Berlin] CSV Row: Array
+(
+    [0] => EMP-006,Anna Torres,Field Technician,SG-10,Active,43
+)
+
+[01-May-2025 05:01:23 Europe/Berlin] Skipping incomplete row
+[01-May-2025 05:01:23 Europe/Berlin] CSV Row: Array
+(
+    [0] => EMP-007,Michael Tan,IT Specialist,SG-12,Active,10
+)
+
+[01-May-2025 05:01:23 Europe/Berlin] Skipping incomplete row
+[01-May-2025 05:01:23 Europe/Berlin] CSV Row: Array
+(
+    [0] => EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6
+)
+
+[01-May-2025 05:01:23 Europe/Berlin] Skipping incomplete row
+[01-May-2025 05:01:23 Europe/Berlin] CSV Row: Array
+(
+    [0] => EMP-009,David Chen,Engineer,SG-14,Active,11
+)
+
+[01-May-2025 05:01:23 Europe/Berlin] Skipping incomplete row
+[01-May-2025 05:01:23 Europe/Berlin] CSV Row: Array
+(
+    [0] => EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19
+)
+
+[01-May-2025 05:01:23 Europe/Berlin] Skipping incomplete row
+[01-May-2025 05:04:42 Europe/Berlin] Skipped row - missing required fields: EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2
+[01-May-2025 05:04:42 Europe/Berlin] Skipped row - missing required fields: EMP-002,Maria Santos,HR Specialist,SG-12,Active,3
+[01-May-2025 05:04:42 Europe/Berlin] Skipped row - missing required fields: EMP-003,Robert Lim,Accountant,SG-15,Active,8
+[01-May-2025 05:04:42 Europe/Berlin] Skipped row - missing required fields: EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15
+[01-May-2025 05:04:42 Europe/Berlin] Skipped row - missing required fields: EMP-005,James Wilson,Research Specialist,SG-13,Active,30
+[01-May-2025 05:04:42 Europe/Berlin] Skipped row - missing required fields: EMP-006,Anna Torres,Field Technician,SG-10,Active,43
+[01-May-2025 05:04:42 Europe/Berlin] Skipped row - missing required fields: EMP-007,Michael Tan,IT Specialist,SG-12,Active,10
+[01-May-2025 05:04:42 Europe/Berlin] Skipped row - missing required fields: EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6
+[01-May-2025 05:04:42 Europe/Berlin] Skipped row - missing required fields: EMP-009,David Chen,Engineer,SG-14,Active,11
+[01-May-2025 05:04:42 Europe/Berlin] Skipped row - missing required fields: EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19
+[01-May-2025 05:06:53 Europe/Berlin] Starting file processing
+[01-May-2025 05:06:53 Europe/Berlin] File info: Array
+(
+    [name] => records.csv
+    [full_path] => records.csv
+    [type] => text/csv
+    [tmp_name] => D:\xampp\tmp\php80B2.tmp
+    [error] => 0
+    [size] => 618
+)
+
+[01-May-2025 05:06:53 Europe/Berlin] Line 1: Array
+(
+    [0] => EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2
+)
+
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 83
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 84
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 85
+[01-May-2025 05:06:53 Europe/Berlin] Line 2: Array
+(
+    [0] => EMP-002,Maria Santos,HR Specialist,SG-12,Active,3
+)
+
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 83
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 84
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 85
+[01-May-2025 05:06:53 Europe/Berlin] Line 3: Array
+(
+    [0] => EMP-003,Robert Lim,Accountant,SG-15,Active,8
+)
+
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 83
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 84
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 85
+[01-May-2025 05:06:53 Europe/Berlin] Line 4: Array
+(
+    [0] => EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15
+)
+
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 83
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 84
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 85
+[01-May-2025 05:06:53 Europe/Berlin] Line 5: Array
+(
+    [0] => EMP-005,James Wilson,Research Specialist,SG-13,Active,30
+)
+
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 83
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 84
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 85
+[01-May-2025 05:06:53 Europe/Berlin] Line 6: Array
+(
+    [0] => EMP-006,Anna Torres,Field Technician,SG-10,Active,43
+)
+
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 83
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 84
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 85
+[01-May-2025 05:06:53 Europe/Berlin] Line 7: Array
+(
+    [0] => EMP-007,Michael Tan,IT Specialist,SG-12,Active,10
+)
+
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 83
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 84
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 85
+[01-May-2025 05:06:53 Europe/Berlin] Line 8: Array
+(
+    [0] => EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6
+)
+
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 83
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 84
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 85
+[01-May-2025 05:06:53 Europe/Berlin] Line 9: Array
+(
+    [0] => EMP-009,David Chen,Engineer,SG-14,Active,11
+)
+
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 83
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 84
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 85
+[01-May-2025 05:06:53 Europe/Berlin] Line 10: Array
+(
+    [0] => EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19
+)
+
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 83
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 84
+[01-May-2025 05:06:53 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 85
+[01-May-2025 05:06:53 Europe/Berlin] Skipped row - missing required fields: EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2
+[01-May-2025 05:06:53 Europe/Berlin] Skipped row - missing required fields: EMP-002,Maria Santos,HR Specialist,SG-12,Active,3
+[01-May-2025 05:06:53 Europe/Berlin] Skipped row - missing required fields: EMP-003,Robert Lim,Accountant,SG-15,Active,8
+[01-May-2025 05:06:53 Europe/Berlin] Skipped row - missing required fields: EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15
+[01-May-2025 05:06:53 Europe/Berlin] Skipped row - missing required fields: EMP-005,James Wilson,Research Specialist,SG-13,Active,30
+[01-May-2025 05:06:53 Europe/Berlin] Skipped row - missing required fields: EMP-006,Anna Torres,Field Technician,SG-10,Active,43
+[01-May-2025 05:06:53 Europe/Berlin] Skipped row - missing required fields: EMP-007,Michael Tan,IT Specialist,SG-12,Active,10
+[01-May-2025 05:06:53 Europe/Berlin] Skipped row - missing required fields: EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6
+[01-May-2025 05:06:53 Europe/Berlin] Skipped row - missing required fields: EMP-009,David Chen,Engineer,SG-14,Active,11
+[01-May-2025 05:06:53 Europe/Berlin] Skipped row - missing required fields: EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19
+[01-May-2025 05:08:34 Europe/Berlin] Starting file processing
+[01-May-2025 05:08:34 Europe/Berlin] File info: Array
+(
+    [name] => records.csv
+    [full_path] => records.csv
+    [type] => text/csv
+    [tmp_name] => D:\xampp\tmp\phpA41.tmp
+    [error] => 0
+    [size] => 618
+)
+
+[01-May-2025 05:08:34 Europe/Berlin] Line 1: Array
+(
+    [0] => EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2
+)
+
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 93
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 94
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 95
+[01-May-2025 05:08:34 Europe/Berlin] Invalid division ID: 
+[01-May-2025 05:08:34 Europe/Berlin] Line 2: Array
+(
+    [0] => EMP-002,Maria Santos,HR Specialist,SG-12,Active,3
+)
+
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 93
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 94
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 95
+[01-May-2025 05:08:34 Europe/Berlin] Invalid division ID: 
+[01-May-2025 05:08:34 Europe/Berlin] Line 3: Array
+(
+    [0] => EMP-003,Robert Lim,Accountant,SG-15,Active,8
+)
+
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 93
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 94
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 95
+[01-May-2025 05:08:34 Europe/Berlin] Invalid division ID: 
+[01-May-2025 05:08:34 Europe/Berlin] Line 4: Array
+(
+    [0] => EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15
+)
+
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 93
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 94
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 95
+[01-May-2025 05:08:34 Europe/Berlin] Invalid division ID: 
+[01-May-2025 05:08:34 Europe/Berlin] Line 5: Array
+(
+    [0] => EMP-005,James Wilson,Research Specialist,SG-13,Active,30
+)
+
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 93
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 94
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 95
+[01-May-2025 05:08:34 Europe/Berlin] Invalid division ID: 
+[01-May-2025 05:08:34 Europe/Berlin] Line 6: Array
+(
+    [0] => EMP-006,Anna Torres,Field Technician,SG-10,Active,43
+)
+
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 93
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 94
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 95
+[01-May-2025 05:08:34 Europe/Berlin] Invalid division ID: 
+[01-May-2025 05:08:34 Europe/Berlin] Line 7: Array
+(
+    [0] => EMP-007,Michael Tan,IT Specialist,SG-12,Active,10
+)
+
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 93
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 94
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 95
+[01-May-2025 05:08:34 Europe/Berlin] Invalid division ID: 
+[01-May-2025 05:08:34 Europe/Berlin] Line 8: Array
+(
+    [0] => EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6
+)
+
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 93
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 94
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 95
+[01-May-2025 05:08:34 Europe/Berlin] Invalid division ID: 
+[01-May-2025 05:08:34 Europe/Berlin] Line 9: Array
+(
+    [0] => EMP-009,David Chen,Engineer,SG-14,Active,11
+)
+
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 93
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 94
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 95
+[01-May-2025 05:08:34 Europe/Berlin] Invalid division ID: 
+[01-May-2025 05:08:34 Europe/Berlin] Line 10: Array
+(
+    [0] => EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19
+)
+
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 93
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 2 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 94
+[01-May-2025 05:08:34 Europe/Berlin] PHP Warning:  Undefined array key 3 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 95
+[01-May-2025 05:08:34 Europe/Berlin] Invalid division ID: 
+[01-May-2025 05:09:54 Europe/Berlin] Starting file upload process
+[01-May-2025 05:09:54 Europe/Berlin] Processing file: records.csv
+[01-May-2025 05:11:13 Europe/Berlin] Starting file upload process
+[01-May-2025 05:11:13 Europe/Berlin] Processing file: records.csv
+[01-May-2025 05:11:13 Europe/Berlin] Skipping incomplete row 2: "EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"
+
+[01-May-2025 05:11:13 Europe/Berlin] Skipping incomplete row 3: "EMP-002,Maria Santos,HR Specialist,SG-12,Active,3"
+
+[01-May-2025 05:11:13 Europe/Berlin] Skipping incomplete row 4: "EMP-003,Robert Lim,Accountant,SG-15,Active,8"
+
+[01-May-2025 05:11:13 Europe/Berlin] Skipping incomplete row 5: "EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15"
+
+[01-May-2025 05:11:13 Europe/Berlin] Skipping incomplete row 6: "EMP-005,James Wilson,Research Specialist,SG-13,Active,30"
+
+[01-May-2025 05:11:13 Europe/Berlin] Skipping incomplete row 7: "EMP-006,Anna Torres,Field Technician,SG-10,Active,43"
+
+[01-May-2025 05:11:13 Europe/Berlin] Skipping incomplete row 8: "EMP-007,Michael Tan,IT Specialist,SG-12,Active,10"
+
+[01-May-2025 05:11:13 Europe/Berlin] Skipping incomplete row 9: "EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6"
+
+[01-May-2025 05:11:13 Europe/Berlin] Skipping incomplete row 10: "EMP-009,David Chen,Engineer,SG-14,Active,11"
+
+[01-May-2025 05:11:13 Europe/Berlin] Skipping incomplete row 11: "EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19"
+
+[01-May-2025 05:11:51 Europe/Berlin] Starting file upload process
+[01-May-2025 05:11:51 Europe/Berlin] Processing file: records.csv
+[01-May-2025 05:11:51 Europe/Berlin] Skipping incomplete row 2: "EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"
+
+[01-May-2025 05:11:51 Europe/Berlin] Skipping incomplete row 3: "EMP-002,Maria Santos,HR Specialist,SG-12,Active,3"
+
+[01-May-2025 05:11:51 Europe/Berlin] Skipping incomplete row 4: "EMP-003,Robert Lim,Accountant,SG-15,Active,8"
+
+[01-May-2025 05:11:51 Europe/Berlin] Skipping incomplete row 5: "EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15"
+
+[01-May-2025 05:11:51 Europe/Berlin] Skipping incomplete row 6: "EMP-005,James Wilson,Research Specialist,SG-13,Active,30"
+
+[01-May-2025 05:11:51 Europe/Berlin] Skipping incomplete row 7: "EMP-006,Anna Torres,Field Technician,SG-10,Active,43"
+
+[01-May-2025 05:11:51 Europe/Berlin] Skipping incomplete row 8: "EMP-007,Michael Tan,IT Specialist,SG-12,Active,10"
+
+[01-May-2025 05:11:51 Europe/Berlin] Skipping incomplete row 9: "EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6"
+
+[01-May-2025 05:11:51 Europe/Berlin] Skipping incomplete row 10: "EMP-009,David Chen,Engineer,SG-14,Active,11"
+
+[01-May-2025 05:11:51 Europe/Berlin] Skipping incomplete row 11: "EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19"
+
+[01-May-2025 05:13:06 Europe/Berlin] Starting file upload process
+[01-May-2025 05:13:06 Europe/Berlin] Processing file: records.csv
+[01-May-2025 05:13:06 Europe/Berlin] PHP Warning:  fopen(D:\xampp\tmp\php30C5.tmp): Failed to open stream: No such file or directory in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 46
+[01-May-2025 05:13:06 Europe/Berlin] Upload failed: Failed to open uploaded file
+[01-May-2025 05:13:06 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: fclose(): Argument #1 ($stream) must be of type resource, bool given in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php:150
+Stack trace:
+#0 D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php(150): fclose(false)
+#1 {main}
+  thrown in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 150
+[01-May-2025 05:14:11 Europe/Berlin] Starting file upload process
+[01-May-2025 05:14:11 Europe/Berlin] Processing file: recordsccv.csv
+[01-May-2025 05:14:11 Europe/Berlin] PHP Warning:  fopen(D:\xampp\tmp\php2D47.tmp): Failed to open stream: No such file or directory in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 46
+[01-May-2025 05:14:11 Europe/Berlin] Upload failed: Failed to open uploaded file
+[01-May-2025 05:14:11 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: fclose(): Argument #1 ($stream) must be of type resource, bool given in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php:150
+Stack trace:
+#0 D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php(150): fclose(false)
+#1 {main}
+  thrown in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 150
+[01-May-2025 05:15:53 Europe/Berlin] Starting file upload process
+[01-May-2025 05:15:53 Europe/Berlin] Processing file: records.csv
+[01-May-2025 05:15:53 Europe/Berlin] PHP Warning:  fopen(D:\xampp\tmp\phpBD7D.tmp): Failed to open stream: No such file or directory in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 46
+[01-May-2025 05:15:53 Europe/Berlin] Upload failed: Failed to open uploaded file
+[01-May-2025 05:15:53 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: fclose(): Argument #1 ($stream) must be of type resource, bool given in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php:150
+Stack trace:
+#0 D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php(150): fclose(false)
+#1 {main}
+  thrown in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 150
+[01-May-2025 05:16:53 Europe/Berlin] Starting file upload process
+[01-May-2025 05:16:53 Europe/Berlin] Processing file: recordsccv.csv
+[01-May-2025 05:16:53 Europe/Berlin] PHP Warning:  fopen(D:\xampp\tmp\phpA6B5.tmp): Failed to open stream: No such file or directory in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 46
+[01-May-2025 05:16:53 Europe/Berlin] Upload failed: Failed to open uploaded file
+[01-May-2025 05:16:53 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: fclose(): Argument #1 ($stream) must be of type resource, bool given in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php:150
+Stack trace:
+#0 D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php(150): fclose(false)
+#1 {main}
+  thrown in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 150
+[01-May-2025 05:18:00 Europe/Berlin] Starting file upload process
+[01-May-2025 05:18:00 Europe/Berlin] Processing file: records.csv
+[01-May-2025 05:18:00 Europe/Berlin] PHP Warning:  fopen(D:\xampp\tmp\phpABE2.tmp): Failed to open stream: No such file or directory in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 46
+[01-May-2025 05:18:00 Europe/Berlin] Upload failed: Failed to open uploaded file
+[01-May-2025 05:18:00 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: fclose(): Argument #1 ($stream) must be of type resource, bool given in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php:150
+Stack trace:
+#0 D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php(150): fclose(false)
+#1 {main}
+  thrown in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 150
+[01-May-2025 05:18:47 Europe/Berlin] Starting file upload process
+[01-May-2025 05:18:47 Europe/Berlin] Processing file: xlsls.xlsx
+[01-May-2025 05:18:47 Europe/Berlin] Upload failed: Only CSV files are allowed
+[01-May-2025 05:18:47 Europe/Berlin] PHP Warning:  Undefined variable $handle in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 150
+[01-May-2025 05:18:47 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: fclose(): Argument #1 ($stream) must be of type resource, null given in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php:150
+Stack trace:
+#0 D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php(150): fclose(NULL)
+#1 {main}
+  thrown in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 150
+[01-May-2025 05:19:43 Europe/Berlin] Starting file upload process
+[01-May-2025 05:19:43 Europe/Berlin] Processing file: records.csv
+[01-May-2025 05:19:43 Europe/Berlin] PHP Warning:  fopen(D:\xampp\tmp\php4001.tmp): Failed to open stream: No such file or directory in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 46
+[01-May-2025 05:19:43 Europe/Berlin] Upload failed: Failed to open uploaded file
+[01-May-2025 05:19:43 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: fclose(): Argument #1 ($stream) must be of type resource, bool given in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php:150
+Stack trace:
+#0 D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php(150): fclose(false)
+#1 {main}
+  thrown in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 150
+[01-May-2025 05:21:12 Europe/Berlin] Starting file upload process
+[01-May-2025 05:21:12 Europe/Berlin] Processing file: xlsls.xlsx
+[01-May-2025 05:21:12 Europe/Berlin] Upload failed: Only CSV files are allowed
+[01-May-2025 05:21:12 Europe/Berlin] PHP Warning:  Undefined variable $handle in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 150
+[01-May-2025 05:21:12 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: fclose(): Argument #1 ($stream) must be of type resource, null given in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php:150
+Stack trace:
+#0 D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php(150): fclose(NULL)
+#1 {main}
+  thrown in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 150
+[01-May-2025 05:41:32 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:41:32 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:41:32 Europe/Berlin] Processing uploaded file: {"name":"recordsccv.csv","full_path":"recordsccv.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php39A2.tmp","error":0,"size":615}
+[01-May-2025 05:41:32 Europe/Berlin] File saved successfully to: ../../uploads/upload_6812ed6cce11d1.28894583.csv
+[01-May-2025 05:41:32 Europe/Berlin] Upload recorded with ID: 1
+[01-May-2025 05:41:32 Europe/Berlin] Cleaned up temporary file: ../../uploads/upload_6812ed6cce11d1.28894583.csv
+[01-May-2025 05:41:32 Europe/Berlin] Fatal error: Missing required column: employee_id
+[01-May-2025 05:43:51 Europe/Berlin] Starting file upload process
+[01-May-2025 05:43:51 Europe/Berlin] POST data: {"division":"3"}
+[01-May-2025 05:43:51 Europe/Berlin] FILES data: {"file":{"name":"recordsccv.csv","full_path":"recordsccv.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php5733.tmp","error":0,"size":615}}
+[01-May-2025 05:43:51 Europe/Berlin] Database connection successful
+[01-May-2025 05:43:51 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:43:51 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:43:51 Europe/Berlin] Processing uploaded file: {"name":"recordsccv.csv","full_path":"recordsccv.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php5733.tmp","error":0,"size":615}
+[01-May-2025 05:43:51 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812edf771c0d9.45956972.csv
+[01-May-2025 05:43:51 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812edf771c0d9.45956972.csv
+[01-May-2025 05:43:51 Europe/Berlin] Upload recorded with ID: 2
+[01-May-2025 05:43:51 Europe/Berlin] CSV Headers: ["employee_id,name,position,salary_grade,status,division_id"]
+[01-May-2025 05:43:51 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812edf771c0d9.45956972.csv
+[01-May-2025 05:43:51 Europe/Berlin] Fatal error: Missing required columns: employee_id, name, position, salary_grade, status, division_id
+[01-May-2025 05:43:51 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:43:51 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: employee_id, name, position, salary_grade, status, division_id"}
+[01-May-2025 05:43:59 Europe/Berlin] Starting file upload process
+[01-May-2025 05:43:59 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:43:59 Europe/Berlin] FILES data: {"file":{"name":"recordsccv.csv","full_path":"recordsccv.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php775F.tmp","error":0,"size":615}}
+[01-May-2025 05:43:59 Europe/Berlin] Database connection successful
+[01-May-2025 05:43:59 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:43:59 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:43:59 Europe/Berlin] Processing uploaded file: {"name":"recordsccv.csv","full_path":"recordsccv.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php775F.tmp","error":0,"size":615}
+[01-May-2025 05:43:59 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812edffaa4cc7.66023940.csv
+[01-May-2025 05:43:59 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812edffaa4cc7.66023940.csv
+[01-May-2025 05:43:59 Europe/Berlin] Upload recorded with ID: 3
+[01-May-2025 05:43:59 Europe/Berlin] CSV Headers: ["employee_id,name,position,salary_grade,status,division_id"]
+[01-May-2025 05:43:59 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812edffaa4cc7.66023940.csv
+[01-May-2025 05:43:59 Europe/Berlin] Fatal error: Missing required columns: employee_id, name, position, salary_grade, status, division_id
+[01-May-2025 05:43:59 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:43:59 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: employee_id, name, position, salary_grade, status, division_id"}
+[01-May-2025 05:44:05 Europe/Berlin] Starting file upload process
+[01-May-2025 05:44:05 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:44:05 Europe/Berlin] FILES data: {"file":{"name":"xlsls.xlsx","full_path":"xlsls.xlsx","type":"application\/vnd.openxmlformats-officedocument.spreadsheetml.sheet","tmp_name":"D:\\xampp\\tmp\\php8E72.tmp","error":0,"size":9079}}
+[01-May-2025 05:44:05 Europe/Berlin] Database connection successful
+[01-May-2025 05:44:05 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:44:05 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:44:05 Europe/Berlin] Processing uploaded file: {"name":"xlsls.xlsx","full_path":"xlsls.xlsx","type":"application\/vnd.openxmlformats-officedocument.spreadsheetml.sheet","tmp_name":"D:\\xampp\\tmp\\php8E72.tmp","error":0,"size":9079}
+[01-May-2025 05:44:05 Europe/Berlin] Fatal error: Invalid file type: xlsx. Please upload a CSV file.
+[01-May-2025 05:44:05 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:44:05 Europe/Berlin] Sending error response: {"success":false,"error":"Invalid file type: xlsx. Please upload a CSV file."}
+[01-May-2025 05:44:11 Europe/Berlin] Starting file upload process
+[01-May-2025 05:44:11 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:44:11 Europe/Berlin] FILES data: {"file":{"name":"january_plantilla.xlsx","full_path":"january_plantilla.xlsx","type":"application\/vnd.openxmlformats-officedocument.spreadsheetml.sheet","tmp_name":"D:\\xampp\\tmp\\phpA660.tmp","error":0,"size":9421}}
+[01-May-2025 05:44:11 Europe/Berlin] Database connection successful
+[01-May-2025 05:44:11 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:44:11 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:44:11 Europe/Berlin] Processing uploaded file: {"name":"january_plantilla.xlsx","full_path":"january_plantilla.xlsx","type":"application\/vnd.openxmlformats-officedocument.spreadsheetml.sheet","tmp_name":"D:\\xampp\\tmp\\phpA660.tmp","error":0,"size":9421}
+[01-May-2025 05:44:11 Europe/Berlin] Fatal error: Invalid file type: xlsx. Please upload a CSV file.
+[01-May-2025 05:44:11 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:44:11 Europe/Berlin] Sending error response: {"success":false,"error":"Invalid file type: xlsx. Please upload a CSV file."}
+[01-May-2025 05:44:16 Europe/Berlin] Starting file upload process
+[01-May-2025 05:44:16 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:44:16 Europe/Berlin] FILES data: {"file":{"name":"recordsccv.csv","full_path":"recordsccv.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpB814.tmp","error":0,"size":615}}
+[01-May-2025 05:44:16 Europe/Berlin] Database connection successful
+[01-May-2025 05:44:16 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:44:16 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:44:16 Europe/Berlin] Processing uploaded file: {"name":"recordsccv.csv","full_path":"recordsccv.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpB814.tmp","error":0,"size":615}
+[01-May-2025 05:44:16 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812ee103cc4f2.50555243.csv
+[01-May-2025 05:44:16 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812ee103cc4f2.50555243.csv
+[01-May-2025 05:44:16 Europe/Berlin] Upload recorded with ID: 4
+[01-May-2025 05:44:16 Europe/Berlin] CSV Headers: ["employee_id,name,position,salary_grade,status,division_id"]
+[01-May-2025 05:44:16 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812ee103cc4f2.50555243.csv
+[01-May-2025 05:44:16 Europe/Berlin] Fatal error: Missing required columns: employee_id, name, position, salary_grade, status, division_id
+[01-May-2025 05:44:16 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:44:16 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: employee_id, name, position, salary_grade, status, division_id"}
+[01-May-2025 05:47:28 Europe/Berlin] Starting file upload process
+[01-May-2025 05:47:28 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:47:28 Europe/Berlin] FILES data: {"file":{"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpA829.tmp","error":0,"size":618}}
+[01-May-2025 05:47:28 Europe/Berlin] Database connection successful
+[01-May-2025 05:47:28 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:47:28 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:47:28 Europe/Berlin] Processing uploaded file: {"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpA829.tmp","error":0,"size":618}
+[01-May-2025 05:47:28 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812eed0c18ad0.66513728.csv
+[01-May-2025 05:47:28 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812eed0c18ad0.66513728.csv
+[01-May-2025 05:47:28 Europe/Berlin] Upload recorded with ID: 5
+[01-May-2025 05:47:28 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:47:28 Europe/Berlin] Number of columns: 6
+[01-May-2025 05:47:28 Europe/Berlin] Normalized Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:47:28 Europe/Berlin] Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 05:47:28 Europe/Berlin] Missing columns: Employee ID, Division ID
+[01-May-2025 05:47:28 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:47:28 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812eed0c18ad0.66513728.csv
+[01-May-2025 05:47:28 Europe/Berlin] Fatal error: Missing required columns: Employee ID, Division ID. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:47:28 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:47:28 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: Employee ID, Division ID. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 05:49:14 Europe/Berlin] Starting file upload process
+[01-May-2025 05:49:14 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:49:14 Europe/Berlin] FILES data: {"file":{"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php4494.tmp","error":0,"size":618}}
+[01-May-2025 05:49:14 Europe/Berlin] Database connection successful
+[01-May-2025 05:49:14 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:49:14 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:49:14 Europe/Berlin] Processing uploaded file: {"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php4494.tmp","error":0,"size":618}
+[01-May-2025 05:49:14 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812ef3a5a0841.01447542.csv
+[01-May-2025 05:49:14 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812ef3a5a0841.01447542.csv
+[01-May-2025 05:49:14 Europe/Berlin] Upload recorded with ID: 6
+[01-May-2025 05:49:14 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:49:14 Europe/Berlin] Number of columns: 6
+[01-May-2025 05:49:14 Europe/Berlin] Normalized Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:49:14 Europe/Berlin] Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 05:49:14 Europe/Berlin] Missing columns: Employee Id, Division Id
+[01-May-2025 05:49:14 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:49:14 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812ef3a5a0841.01447542.csv
+[01-May-2025 05:49:14 Europe/Berlin] Fatal error: Missing required columns: Employee Id, Division Id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:49:14 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:49:14 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: Employee Id, Division Id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 05:49:29 Europe/Berlin] Starting file upload process
+[01-May-2025 05:49:29 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:49:29 Europe/Berlin] FILES data: {"file":{"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php80D3.tmp","error":0,"size":618}}
+[01-May-2025 05:49:29 Europe/Berlin] Database connection successful
+[01-May-2025 05:49:29 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:49:29 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:49:29 Europe/Berlin] Processing uploaded file: {"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php80D3.tmp","error":0,"size":618}
+[01-May-2025 05:49:29 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812ef49c19f87.13536517.csv
+[01-May-2025 05:49:29 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812ef49c19f87.13536517.csv
+[01-May-2025 05:49:29 Europe/Berlin] Upload recorded with ID: 7
+[01-May-2025 05:49:29 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:49:29 Europe/Berlin] Number of columns: 6
+[01-May-2025 05:49:29 Europe/Berlin] Normalized Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:49:29 Europe/Berlin] Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 05:49:29 Europe/Berlin] Missing columns: Employee Id, Division Id
+[01-May-2025 05:49:29 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:49:29 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812ef49c19f87.13536517.csv
+[01-May-2025 05:49:29 Europe/Berlin] Fatal error: Missing required columns: Employee Id, Division Id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:49:29 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:49:29 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: Employee Id, Division Id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 05:51:34 Europe/Berlin] Starting file upload process
+[01-May-2025 05:51:34 Europe/Berlin] POST data: {"division":"3"}
+[01-May-2025 05:51:34 Europe/Berlin] FILES data: {"file":{"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php687F.tmp","error":0,"size":618}}
+[01-May-2025 05:51:34 Europe/Berlin] Database connection successful
+[01-May-2025 05:51:34 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:51:34 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:51:34 Europe/Berlin] Processing uploaded file: {"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php687F.tmp","error":0,"size":618}
+[01-May-2025 05:51:34 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812efc69875d1.50622142.csv
+[01-May-2025 05:51:34 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812efc69875d1.50622142.csv
+[01-May-2025 05:51:34 Europe/Berlin] Upload recorded with ID: 8
+[01-May-2025 05:51:34 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:51:34 Europe/Berlin] Number of columns: 6
+[01-May-2025 05:51:34 Europe/Berlin] Normalized Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:51:34 Europe/Berlin] Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 05:51:34 Europe/Berlin] Missing columns: Employee Id, Division Id
+[01-May-2025 05:51:34 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:51:34 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812efc69875d1.50622142.csv
+[01-May-2025 05:51:34 Europe/Berlin] Fatal error: Missing required columns: Employee Id, Division Id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:51:34 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:51:34 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: Employee Id, Division Id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 05:51:51 Europe/Berlin] Starting file upload process
+[01-May-2025 05:51:51 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:51:51 Europe/Berlin] FILES data: {"file":{"name":"records.csv","full_path":"records.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpAA7B.tmp","error":0,"size":618}}
+[01-May-2025 05:51:51 Europe/Berlin] Database connection successful
+[01-May-2025 05:51:51 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:51:51 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:51:51 Europe/Berlin] Processing uploaded file: {"name":"records.csv","full_path":"records.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpAA7B.tmp","error":0,"size":618}
+[01-May-2025 05:51:51 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812efd77d5478.92055016.csv
+[01-May-2025 05:51:51 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812efd77d5478.92055016.csv
+[01-May-2025 05:51:51 Europe/Berlin] Upload recorded with ID: 9
+[01-May-2025 05:51:51 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:51:51 Europe/Berlin] Number of columns: 6
+[01-May-2025 05:51:51 Europe/Berlin] Normalized Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:51:51 Europe/Berlin] Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 05:51:51 Europe/Berlin] Missing columns: Employee Id, Division Id
+[01-May-2025 05:51:51 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:51:51 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812efd77d5478.92055016.csv
+[01-May-2025 05:51:51 Europe/Berlin] Fatal error: Missing required columns: Employee Id, Division Id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:51:51 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:51:51 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: Employee Id, Division Id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 05:52:39 Europe/Berlin] Starting file upload process
+[01-May-2025 05:52:39 Europe/Berlin] POST data: {"division":"1"}
+[01-May-2025 05:52:39 Europe/Berlin] FILES data: {"file":{"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php65AE.tmp","error":0,"size":618}}
+[01-May-2025 05:52:39 Europe/Berlin] Database connection successful
+[01-May-2025 05:52:39 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:52:39 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:52:39 Europe/Berlin] Processing uploaded file: {"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php65AE.tmp","error":0,"size":618}
+[01-May-2025 05:52:39 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f0076dd207.98829562.csv
+[01-May-2025 05:52:39 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f0076dd207.98829562.csv
+[01-May-2025 05:52:39 Europe/Berlin] Upload recorded with ID: 10
+[01-May-2025 05:52:39 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:52:39 Europe/Berlin] Number of columns: 6
+[01-May-2025 05:52:39 Europe/Berlin] Normalized Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:52:39 Europe/Berlin] Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 05:52:39 Europe/Berlin] Missing columns: Employee Id, Division Id
+[01-May-2025 05:52:39 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:52:39 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f0076dd207.98829562.csv
+[01-May-2025 05:52:39 Europe/Berlin] Fatal error: Missing required columns: Employee Id, Division Id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:52:39 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:52:39 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: Employee Id, Division Id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 05:56:09 Europe/Berlin] Starting file upload process
+[01-May-2025 05:56:09 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:56:09 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php9AF9.tmp","error":0,"size":618}}
+[01-May-2025 05:56:09 Europe/Berlin] Database connection successful
+[01-May-2025 05:56:09 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:56:09 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:56:09 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php9AF9.tmp","error":0,"size":618}
+[01-May-2025 05:56:09 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f0d9a86cf7.06510935.csv
+[01-May-2025 05:56:09 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f0d9a86cf7.06510935.csv
+[01-May-2025 05:56:09 Europe/Berlin] First line of CSV: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:56:09 Europe/Berlin] Upload recorded with ID: 11
+[01-May-2025 05:56:09 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:56:09 Europe/Berlin] Number of columns: 6
+[01-May-2025 05:56:09 Europe/Berlin] Normalized Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:56:09 Europe/Berlin] Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 05:56:09 Europe/Berlin] Missing columns: Employee Id, Division Id
+[01-May-2025 05:56:09 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:56:09 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f0d9a86cf7.06510935.csv
+[01-May-2025 05:56:09 Europe/Berlin] Fatal error: Missing required columns: Employee Id, Division Id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:56:09 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:56:09 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: Employee Id, Division Id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 05:57:50 Europe/Berlin] Starting file upload process
+[01-May-2025 05:57:50 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:57:50 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php239D.tmp","error":0,"size":618}}
+[01-May-2025 05:57:50 Europe/Berlin] Database connection successful
+[01-May-2025 05:57:50 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:57:50 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:57:50 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php239D.tmp","error":0,"size":618}
+[01-May-2025 05:57:50 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f13e313213.71344488.csv
+[01-May-2025 05:57:50 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f13e313213.71344488.csv
+[01-May-2025 05:57:50 Europe/Berlin] First line of file: ﻿"employee_id,name,position,salary_grade,status,division_id"
+
+[01-May-2025 05:57:50 Europe/Berlin] Detected delimiter: ,
+[01-May-2025 05:57:50 Europe/Berlin] Delimiter counts: {",":5,";":0,"\\t":0,"|":0}
+[01-May-2025 05:57:50 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:57:50 Europe/Berlin] Number of columns: 6
+[01-May-2025 05:57:50 Europe/Berlin] Normalized Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:57:50 Europe/Berlin] Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 05:57:50 Europe/Berlin] Missing columns: Employee Id, Division Id
+[01-May-2025 05:57:50 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:57:50 Europe/Berlin] Fatal error: Missing required columns: Employee Id, Division Id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:57:50 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:57:50 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: Employee Id, Division Id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 05:58:11 Europe/Berlin] Starting file upload process
+[01-May-2025 05:58:11 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:58:11 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php7633.tmp","error":0,"size":618}}
+[01-May-2025 05:58:11 Europe/Berlin] Database connection successful
+[01-May-2025 05:58:11 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:58:11 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:58:11 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php7633.tmp","error":0,"size":618}
+[01-May-2025 05:58:11 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f153545a03.50128689.csv
+[01-May-2025 05:58:11 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f153545a03.50128689.csv
+[01-May-2025 05:58:11 Europe/Berlin] First line of file: ﻿"employee_id,name,position,salary_grade,status,division_id"
+
+[01-May-2025 05:58:11 Europe/Berlin] Detected delimiter: ,
+[01-May-2025 05:58:11 Europe/Berlin] Delimiter counts: {",":5,";":0,"\\t":0,"|":0}
+[01-May-2025 05:58:11 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:58:11 Europe/Berlin] Number of columns: 6
+[01-May-2025 05:58:11 Europe/Berlin] Normalized Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:58:11 Europe/Berlin] Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 05:58:11 Europe/Berlin] Missing columns: Employee Id, Division Id
+[01-May-2025 05:58:11 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:58:11 Europe/Berlin] Fatal error: Missing required columns: Employee Id, Division Id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 05:58:11 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:58:11 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: Employee Id, Division Id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 05:59:11 Europe/Berlin] Starting file upload process
+[01-May-2025 05:59:11 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 05:59:11 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php62D6.tmp","error":0,"size":618}}
+[01-May-2025 05:59:11 Europe/Berlin] Database connection successful
+[01-May-2025 05:59:11 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 05:59:11 Europe/Berlin] Using user_id: 1
+[01-May-2025 05:59:11 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php62D6.tmp","error":0,"size":618}
+[01-May-2025 05:59:11 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f18fe2c884.55770814.csv
+[01-May-2025 05:59:11 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f18fe2c884.55770814.csv
+[01-May-2025 05:59:11 Europe/Berlin] Upload recorded with ID: 12
+[01-May-2025 05:59:11 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 05:59:11 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 05:59:11 Europe/Berlin] Normalized Header Map: {"employeeid":0,"name":1,"position":2,"salarygrade":3,"status":4,"divisionid":5}
+[01-May-2025 05:59:11 Europe/Berlin] Starting database transaction
+[01-May-2025 05:59:11 Europe/Berlin] Processing row 2: ["EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"]
+[01-May-2025 05:59:11 Europe/Berlin] Mapped data for row 2: {"employee_id":"EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 05:59:11 Europe/Berlin] Error - Row 2: Missing required fields (employee_id or name)
+[01-May-2025 05:59:11 Europe/Berlin] Processing row 3: ["EMP-002,Maria Santos,HR Specialist,SG-12,Active,3"]
+[01-May-2025 05:59:11 Europe/Berlin] Mapped data for row 3: {"employee_id":"EMP-002,Maria Santos,HR Specialist,SG-12,Active,3","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 05:59:11 Europe/Berlin] Error - Row 3: Missing required fields (employee_id or name)
+[01-May-2025 05:59:11 Europe/Berlin] Processing row 4: ["EMP-003,Robert Lim,Accountant,SG-15,Active,8"]
+[01-May-2025 05:59:11 Europe/Berlin] Mapped data for row 4: {"employee_id":"EMP-003,Robert Lim,Accountant,SG-15,Active,8","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 05:59:11 Europe/Berlin] Error - Row 4: Missing required fields (employee_id or name)
+[01-May-2025 05:59:11 Europe/Berlin] Processing row 5: ["EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15"]
+[01-May-2025 05:59:11 Europe/Berlin] Mapped data for row 5: {"employee_id":"EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 05:59:11 Europe/Berlin] Error - Row 5: Missing required fields (employee_id or name)
+[01-May-2025 05:59:11 Europe/Berlin] Processing row 6: ["EMP-005,James Wilson,Research Specialist,SG-13,Active,30"]
+[01-May-2025 05:59:11 Europe/Berlin] Mapped data for row 6: {"employee_id":"EMP-005,James Wilson,Research Specialist,SG-13,Active,30","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 05:59:11 Europe/Berlin] Error - Row 6: Missing required fields (employee_id or name)
+[01-May-2025 05:59:11 Europe/Berlin] Processing row 7: ["EMP-006,Anna Torres,Field Technician,SG-10,Active,43"]
+[01-May-2025 05:59:11 Europe/Berlin] Mapped data for row 7: {"employee_id":"EMP-006,Anna Torres,Field Technician,SG-10,Active,43","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 05:59:11 Europe/Berlin] Error - Row 7: Missing required fields (employee_id or name)
+[01-May-2025 05:59:11 Europe/Berlin] Processing row 8: ["EMP-007,Michael Tan,IT Specialist,SG-12,Active,10"]
+[01-May-2025 05:59:11 Europe/Berlin] Mapped data for row 8: {"employee_id":"EMP-007,Michael Tan,IT Specialist,SG-12,Active,10","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 05:59:11 Europe/Berlin] Error - Row 8: Missing required fields (employee_id or name)
+[01-May-2025 05:59:11 Europe/Berlin] Processing row 9: ["EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6"]
+[01-May-2025 05:59:11 Europe/Berlin] Mapped data for row 9: {"employee_id":"EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 05:59:11 Europe/Berlin] Error - Row 9: Missing required fields (employee_id or name)
+[01-May-2025 05:59:11 Europe/Berlin] Processing row 10: ["EMP-009,David Chen,Engineer,SG-14,Active,11"]
+[01-May-2025 05:59:11 Europe/Berlin] Mapped data for row 10: {"employee_id":"EMP-009,David Chen,Engineer,SG-14,Active,11","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 05:59:11 Europe/Berlin] Error - Row 10: Missing required fields (employee_id or name)
+[01-May-2025 05:59:11 Europe/Berlin] Processing row 11: ["EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19"]
+[01-May-2025 05:59:11 Europe/Berlin] Mapped data for row 11: {"employee_id":"EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 05:59:11 Europe/Berlin] Error - Row 11: Missing required fields (employee_id or name)
+[01-May-2025 05:59:11 Europe/Berlin] Finished processing CSV file. Imported: 0, Errors: 10
+[01-May-2025 05:59:11 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f18fe2c884.55770814.csv
+[01-May-2025 05:59:11 Europe/Berlin] Fatal error: No records were successfully imported
+[01-May-2025 05:59:11 Europe/Berlin] Transaction rolled back
+[01-May-2025 05:59:11 Europe/Berlin] Sending error response: {"success":false,"error":"No records were successfully imported"}
+[01-May-2025 06:00:03 Europe/Berlin] Starting file upload process
+[01-May-2025 06:00:03 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:00:03 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php2B77.tmp","error":0,"size":618}}
+[01-May-2025 06:00:03 Europe/Berlin] Database connection successful
+[01-May-2025 06:00:03 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:00:03 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:00:03 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php2B77.tmp","error":0,"size":618}
+[01-May-2025 06:00:03 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f1c34769c6.22791262.csv
+[01-May-2025 06:00:03 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f1c34769c6.22791262.csv
+[01-May-2025 06:00:03 Europe/Berlin] Upload recorded with ID: 13
+[01-May-2025 06:00:03 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:00:03 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 06:00:03 Europe/Berlin] Normalized Header Map: {"employeeid":0,"name":1,"position":2,"salarygrade":3,"status":4,"divisionid":5}
+[01-May-2025 06:00:03 Europe/Berlin] Starting database transaction
+[01-May-2025 06:00:03 Europe/Berlin] Processing row 2: ["EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"]
+[01-May-2025 06:00:03 Europe/Berlin] Mapped data for row 2: {"employee_id":"EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:00:03 Europe/Berlin] Error - Row 2: Name is required
+[01-May-2025 06:00:03 Europe/Berlin] Processing row 3: ["EMP-002,Maria Santos,HR Specialist,SG-12,Active,3"]
+[01-May-2025 06:00:03 Europe/Berlin] Mapped data for row 3: {"employee_id":"EMP-002,Maria Santos,HR Specialist,SG-12,Active,3","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:00:03 Europe/Berlin] Error - Row 3: Name is required
+[01-May-2025 06:00:03 Europe/Berlin] Processing row 4: ["EMP-003,Robert Lim,Accountant,SG-15,Active,8"]
+[01-May-2025 06:00:03 Europe/Berlin] Mapped data for row 4: {"employee_id":"EMP-003,Robert Lim,Accountant,SG-15,Active,8","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:00:03 Europe/Berlin] Error - Row 4: Name is required
+[01-May-2025 06:00:03 Europe/Berlin] Processing row 5: ["EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15"]
+[01-May-2025 06:00:03 Europe/Berlin] Mapped data for row 5: {"employee_id":"EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:00:03 Europe/Berlin] Error - Row 5: Name is required
+[01-May-2025 06:00:03 Europe/Berlin] Processing row 6: ["EMP-005,James Wilson,Research Specialist,SG-13,Active,30"]
+[01-May-2025 06:00:03 Europe/Berlin] Mapped data for row 6: {"employee_id":"EMP-005,James Wilson,Research Specialist,SG-13,Active,30","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:00:03 Europe/Berlin] Error - Row 6: Name is required
+[01-May-2025 06:00:03 Europe/Berlin] Processing row 7: ["EMP-006,Anna Torres,Field Technician,SG-10,Active,43"]
+[01-May-2025 06:00:03 Europe/Berlin] Mapped data for row 7: {"employee_id":"EMP-006,Anna Torres,Field Technician,SG-10,Active,43","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:00:03 Europe/Berlin] Error - Row 7: Name is required
+[01-May-2025 06:00:03 Europe/Berlin] Processing row 8: ["EMP-007,Michael Tan,IT Specialist,SG-12,Active,10"]
+[01-May-2025 06:00:03 Europe/Berlin] Mapped data for row 8: {"employee_id":"EMP-007,Michael Tan,IT Specialist,SG-12,Active,10","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:00:03 Europe/Berlin] Error - Row 8: Name is required
+[01-May-2025 06:00:03 Europe/Berlin] Processing row 9: ["EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6"]
+[01-May-2025 06:00:03 Europe/Berlin] Mapped data for row 9: {"employee_id":"EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:00:03 Europe/Berlin] Error - Row 9: Name is required
+[01-May-2025 06:00:03 Europe/Berlin] Processing row 10: ["EMP-009,David Chen,Engineer,SG-14,Active,11"]
+[01-May-2025 06:00:03 Europe/Berlin] Mapped data for row 10: {"employee_id":"EMP-009,David Chen,Engineer,SG-14,Active,11","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:00:03 Europe/Berlin] Error - Row 10: Name is required
+[01-May-2025 06:00:03 Europe/Berlin] Processing row 11: ["EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19"]
+[01-May-2025 06:00:03 Europe/Berlin] Mapped data for row 11: {"employee_id":"EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:00:03 Europe/Berlin] Error - Row 11: Name is required
+[01-May-2025 06:00:03 Europe/Berlin] Finished processing CSV file. Total rows: 10, Imported: 0, Errors: 10
+[01-May-2025 06:00:03 Europe/Berlin] No records were successfully imported. Total rows processed: 10
+[01-May-2025 06:00:03 Europe/Berlin] Errors encountered: Row 2: Name is required
+Row 3: Name is required
+Row 4: Name is required
+Row 5: Name is required
+Row 6: Name is required
+Row 7: Name is required
+Row 8: Name is required
+Row 9: Name is required
+Row 10: Name is required
+Row 11: Name is required
+[01-May-2025 06:00:03 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f1c34769c6.22791262.csv
+[01-May-2025 06:00:03 Europe/Berlin] Fatal error: No records were successfully imported. Please check your data and try again.
+[01-May-2025 06:00:03 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:00:03 Europe/Berlin] Sending error response: {"success":false,"error":"No records were successfully imported. Please check your data and try again."}
+[01-May-2025 06:02:07 Europe/Berlin] Starting file upload process
+[01-May-2025 06:02:07 Europe/Berlin] POST data: {"division":"3"}
+[01-May-2025 06:02:07 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php1100.tmp","error":0,"size":618}}
+[01-May-2025 06:02:07 Europe/Berlin] Database connection successful
+[01-May-2025 06:02:07 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:02:07 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:02:07 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php1100.tmp","error":0,"size":618}
+[01-May-2025 06:02:07 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f23f8cea83.61342912.csv
+[01-May-2025 06:02:07 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f23f8cea83.61342912.csv
+[01-May-2025 06:02:07 Europe/Berlin] Upload recorded with ID: 14
+[01-May-2025 06:02:07 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:02:07 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 06:02:07 Europe/Berlin] Normalized Header Map: {"employeeid":0,"name":1,"position":2,"salarygrade":3,"status":4,"divisionid":5}
+[01-May-2025 06:02:07 Europe/Berlin] Starting database transaction
+[01-May-2025 06:02:07 Europe/Berlin] Processing row 2: ["EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"]
+[01-May-2025 06:02:07 Europe/Berlin] Mapped data for row 2: {"employee_id":"EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:02:07 Europe/Berlin] Error - Row 2: Name is required
+[01-May-2025 06:02:07 Europe/Berlin] Processing row 3: ["EMP-002,Maria Santos,HR Specialist,SG-12,Active,3"]
+[01-May-2025 06:02:07 Europe/Berlin] Mapped data for row 3: {"employee_id":"EMP-002,Maria Santos,HR Specialist,SG-12,Active,3","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:02:07 Europe/Berlin] Error - Row 3: Name is required
+[01-May-2025 06:02:07 Europe/Berlin] Processing row 4: ["EMP-003,Robert Lim,Accountant,SG-15,Active,8"]
+[01-May-2025 06:02:07 Europe/Berlin] Mapped data for row 4: {"employee_id":"EMP-003,Robert Lim,Accountant,SG-15,Active,8","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:02:07 Europe/Berlin] Error - Row 4: Name is required
+[01-May-2025 06:02:07 Europe/Berlin] Processing row 5: ["EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15"]
+[01-May-2025 06:02:07 Europe/Berlin] Mapped data for row 5: {"employee_id":"EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:02:07 Europe/Berlin] Error - Row 5: Name is required
+[01-May-2025 06:02:07 Europe/Berlin] Processing row 6: ["EMP-005,James Wilson,Research Specialist,SG-13,Active,30"]
+[01-May-2025 06:02:07 Europe/Berlin] Mapped data for row 6: {"employee_id":"EMP-005,James Wilson,Research Specialist,SG-13,Active,30","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:02:07 Europe/Berlin] Error - Row 6: Name is required
+[01-May-2025 06:02:07 Europe/Berlin] Processing row 7: ["EMP-006,Anna Torres,Field Technician,SG-10,Active,43"]
+[01-May-2025 06:02:07 Europe/Berlin] Mapped data for row 7: {"employee_id":"EMP-006,Anna Torres,Field Technician,SG-10,Active,43","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:02:07 Europe/Berlin] Error - Row 7: Name is required
+[01-May-2025 06:02:07 Europe/Berlin] Processing row 8: ["EMP-007,Michael Tan,IT Specialist,SG-12,Active,10"]
+[01-May-2025 06:02:07 Europe/Berlin] Mapped data for row 8: {"employee_id":"EMP-007,Michael Tan,IT Specialist,SG-12,Active,10","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:02:07 Europe/Berlin] Error - Row 8: Name is required
+[01-May-2025 06:02:07 Europe/Berlin] Processing row 9: ["EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6"]
+[01-May-2025 06:02:07 Europe/Berlin] Mapped data for row 9: {"employee_id":"EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:02:07 Europe/Berlin] Error - Row 9: Name is required
+[01-May-2025 06:02:07 Europe/Berlin] Processing row 10: ["EMP-009,David Chen,Engineer,SG-14,Active,11"]
+[01-May-2025 06:02:07 Europe/Berlin] Mapped data for row 10: {"employee_id":"EMP-009,David Chen,Engineer,SG-14,Active,11","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:02:07 Europe/Berlin] Error - Row 10: Name is required
+[01-May-2025 06:02:07 Europe/Berlin] Processing row 11: ["EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19"]
+[01-May-2025 06:02:07 Europe/Berlin] Mapped data for row 11: {"employee_id":"EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19","name":"","position":"","salary_grade":"","status":"","division_id":0}
+[01-May-2025 06:02:07 Europe/Berlin] Error - Row 11: Name is required
+[01-May-2025 06:02:07 Europe/Berlin] Finished processing CSV file. Total rows: 10, Imported: 0, Errors: 10
+[01-May-2025 06:02:07 Europe/Berlin] No records were successfully imported. Total rows processed: 10
+[01-May-2025 06:02:07 Europe/Berlin] Errors encountered: Row 2: Name is required
+Row 3: Name is required
+Row 4: Name is required
+Row 5: Name is required
+Row 6: Name is required
+Row 7: Name is required
+Row 8: Name is required
+Row 9: Name is required
+Row 10: Name is required
+Row 11: Name is required
+[01-May-2025 06:02:07 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f23f8cea83.61342912.csv
+[01-May-2025 06:02:07 Europe/Berlin] Fatal error: No records were successfully imported. Please check your data and try again.
+[01-May-2025 06:02:07 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:02:07 Europe/Berlin] Sending error response: {"success":false,"error":"No records were successfully imported. Please check your data and try again."}
+[01-May-2025 06:05:39 Europe/Berlin] Starting file upload process
+[01-May-2025 06:05:39 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:05:39 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php4EC7.tmp","error":0,"size":618}}
+[01-May-2025 06:05:39 Europe/Berlin] Database connection successful
+[01-May-2025 06:05:39 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:05:39 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:05:40 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php4EC7.tmp","error":0,"size":618}
+[01-May-2025 06:05:40 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f314003649.49995338.csv
+[01-May-2025 06:05:40 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f314003649.49995338.csv
+[01-May-2025 06:05:40 Europe/Berlin] Upload recorded with ID: 15
+[01-May-2025 06:05:40 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:05:40 Europe/Berlin] Cleaned Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:05:40 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f314003649.49995338.csv
+[01-May-2025 06:05:40 Europe/Berlin] Fatal error: Missing required column: employee_id
+[01-May-2025 06:05:40 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:05:40 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required column: employee_id"}
+[01-May-2025 06:06:32 Europe/Berlin] Starting file upload process
+[01-May-2025 06:06:32 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:06:32 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php1C69.tmp","error":0,"size":618}}
+[01-May-2025 06:06:32 Europe/Berlin] Database connection successful
+[01-May-2025 06:06:32 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:06:32 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:06:32 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php1C69.tmp","error":0,"size":618}
+[01-May-2025 06:06:32 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3489c8508.01886762.csv
+[01-May-2025 06:06:32 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3489c8508.01886762.csv
+[01-May-2025 06:06:32 Europe/Berlin] Upload recorded with ID: 16
+[01-May-2025 06:06:32 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:06:32 Europe/Berlin] Cleaned Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:06:32 Europe/Berlin] Missing columns: employee_id, division_id
+[01-May-2025 06:06:32 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 06:06:32 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3489c8508.01886762.csv
+[01-May-2025 06:06:32 Europe/Berlin] Fatal error: Missing required columns: employee_id, division_id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 06:06:32 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:06:32 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: employee_id, division_id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 06:06:48 Europe/Berlin] Starting file upload process
+[01-May-2025 06:06:48 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:06:48 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php5889.tmp","error":0,"size":618}}
+[01-May-2025 06:06:48 Europe/Berlin] Database connection successful
+[01-May-2025 06:06:48 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:06:48 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:06:48 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php5889.tmp","error":0,"size":618}
+[01-May-2025 06:06:48 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3580823a0.02781231.csv
+[01-May-2025 06:06:48 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3580823a0.02781231.csv
+[01-May-2025 06:06:48 Europe/Berlin] Upload recorded with ID: 17
+[01-May-2025 06:06:48 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:06:48 Europe/Berlin] Cleaned Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:06:48 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3580823a0.02781231.csv
+[01-May-2025 06:06:48 Europe/Berlin] Fatal error: Missing required column: employee_id
+[01-May-2025 06:06:48 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:06:48 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required column: employee_id"}
+[01-May-2025 06:08:20 Europe/Berlin] Starting file upload process
+[01-May-2025 06:08:20 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:08:20 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpC047.tmp","error":0,"size":618}}
+[01-May-2025 06:08:20 Europe/Berlin] Database connection successful
+[01-May-2025 06:08:20 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:08:20 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:08:20 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpC047.tmp","error":0,"size":618}
+[01-May-2025 06:08:20 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3b4219216.82676686.csv
+[01-May-2025 06:08:20 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3b4219216.82676686.csv
+[01-May-2025 06:08:20 Europe/Berlin] Upload recorded with ID: 18
+[01-May-2025 06:08:20 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:08:20 Europe/Berlin] Cleaned Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:08:20 Europe/Berlin] Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 06:08:20 Europe/Berlin] Missing columns: employee_id, division_id
+[01-May-2025 06:08:20 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 06:08:20 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3b4219216.82676686.csv
+[01-May-2025 06:08:20 Europe/Berlin] Fatal error: Missing required columns: employee_id, division_id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 06:08:20 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:08:20 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: employee_id, division_id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 06:09:07 Europe/Berlin] Starting file upload process
+[01-May-2025 06:09:07 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:09:07 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php78CB.tmp","error":0,"size":618}}
+[01-May-2025 06:09:07 Europe/Berlin] Database connection successful
+[01-May-2025 06:09:07 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:09:07 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:09:07 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php78CB.tmp","error":0,"size":618}
+[01-May-2025 06:09:07 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3e3584596.11971144.csv
+[01-May-2025 06:09:07 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3e3584596.11971144.csv
+[01-May-2025 06:09:07 Europe/Berlin] Upload recorded with ID: 19
+[01-May-2025 06:09:07 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:09:07 Europe/Berlin] Cleaned Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:09:07 Europe/Berlin] Mapping header: '﻿"employee_id' to index: 0
+[01-May-2025 06:09:07 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 06:09:07 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 06:09:07 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 06:09:07 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 06:09:07 Europe/Berlin] Mapping header: 'division_id"' to index: 5
+[01-May-2025 06:09:07 Europe/Berlin] Final Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 06:09:07 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 06:09:07 Europe/Berlin] Column 'employee_id' not found in headers
+[01-May-2025 06:09:07 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 06:09:07 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 06:09:07 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 06:09:07 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 06:09:07 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 06:09:07 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 06:09:07 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 06:09:07 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 06:09:07 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 06:09:07 Europe/Berlin] Column 'division_id' not found in headers
+[01-May-2025 06:09:07 Europe/Berlin] Missing columns: employee_id, division_id
+[01-May-2025 06:09:07 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 06:09:07 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f3e3584596.11971144.csv
+[01-May-2025 06:09:07 Europe/Berlin] Fatal error: Missing required columns: employee_id, division_id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 06:09:07 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:09:07 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: employee_id, division_id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 06:10:08 Europe/Berlin] Starting file upload process
+[01-May-2025 06:10:08 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:10:08 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php684C.tmp","error":0,"size":618}}
+[01-May-2025 06:10:08 Europe/Berlin] Database connection successful
+[01-May-2025 06:10:08 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:10:08 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:10:08 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php684C.tmp","error":0,"size":618}
+[01-May-2025 06:10:08 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f420a66650.78863354.csv
+[01-May-2025 06:10:08 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f420a66650.78863354.csv
+[01-May-2025 06:10:08 Europe/Berlin] Upload recorded with ID: 20
+[01-May-2025 06:10:08 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:10:08 Europe/Berlin] Cleaned Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:10:08 Europe/Berlin] Mapping header: '﻿"employee_id' to index: 0
+[01-May-2025 06:10:08 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 06:10:08 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 06:10:08 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 06:10:08 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 06:10:08 Europe/Berlin] Mapping header: 'division_id"' to index: 5
+[01-May-2025 06:10:08 Europe/Berlin] Final Header Map: {"\ufeff\"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id\"":5}
+[01-May-2025 06:10:08 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 06:10:08 Europe/Berlin] Column 'employee_id' not found in headers
+[01-May-2025 06:10:08 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 06:10:08 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 06:10:08 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 06:10:08 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 06:10:08 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 06:10:08 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 06:10:08 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 06:10:08 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 06:10:08 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 06:10:08 Europe/Berlin] Column 'division_id' not found in headers
+[01-May-2025 06:10:08 Europe/Berlin] Missing columns: employee_id, division_id
+[01-May-2025 06:10:08 Europe/Berlin] Available headers: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 06:10:08 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f420a66650.78863354.csv
+[01-May-2025 06:10:08 Europe/Berlin] Fatal error: Missing required columns: employee_id, division_id. Available columns: ﻿"employee_id, name, position, salary_grade, status, division_id"
+[01-May-2025 06:10:08 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:10:08 Europe/Berlin] Sending error response: {"success":false,"error":"Missing required columns: employee_id, division_id. Available columns: \ufeff\"employee_id, name, position, salary_grade, status, division_id\""}
+[01-May-2025 06:11:47 Europe/Berlin] Starting file upload process
+[01-May-2025 06:11:47 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:11:47 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpEA59.tmp","error":0,"size":618}}
+[01-May-2025 06:11:47 Europe/Berlin] Database connection successful
+[01-May-2025 06:11:47 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:11:47 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:11:47 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpEA59.tmp","error":0,"size":618}
+[01-May-2025 06:11:47 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f4837d0ed3.88930434.csv
+[01-May-2025 06:11:47 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f4837d0ed3.88930434.csv
+[01-May-2025 06:11:47 Europe/Berlin] Upload recorded with ID: 21
+[01-May-2025 06:11:47 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:11:47 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 06:11:47 Europe/Berlin] Mapping header: 'employee_id' to index: 0
+[01-May-2025 06:11:47 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 06:11:47 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 06:11:47 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 06:11:47 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 06:11:47 Europe/Berlin] Mapping header: 'division_id' to index: 5
+[01-May-2025 06:11:47 Europe/Berlin] Final Header Map: {"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id":5}
+[01-May-2025 06:11:47 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 06:11:47 Europe/Berlin] Column 'employee_id' found at index: 0
+[01-May-2025 06:11:47 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 06:11:47 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 06:11:47 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 06:11:47 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 06:11:47 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 06:11:47 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 06:11:47 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 06:11:47 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 06:11:47 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 06:11:47 Europe/Berlin] Column 'division_id' found at index: 5
+[01-May-2025 06:11:47 Europe/Berlin] Starting database transaction
+[01-May-2025 06:11:47 Europe/Berlin] Processing row 2: ["EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"]
+[01-May-2025 06:11:47 Europe/Berlin] PHP Error [2]: Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 218
+[01-May-2025 06:12:47 Europe/Berlin] Starting file upload process
+[01-May-2025 06:12:47 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:12:47 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpD4BA.tmp","error":0,"size":618}}
+[01-May-2025 06:12:47 Europe/Berlin] Database connection successful
+[01-May-2025 06:12:47 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:12:47 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:12:47 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpD4BA.tmp","error":0,"size":618}
+[01-May-2025 06:12:47 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f4bf7b3ee1.05560703.csv
+[01-May-2025 06:12:47 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f4bf7b3ee1.05560703.csv
+[01-May-2025 06:12:47 Europe/Berlin] Upload recorded with ID: 22
+[01-May-2025 06:12:47 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:12:47 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 06:12:47 Europe/Berlin] Mapping header: 'employee_id' to index: 0
+[01-May-2025 06:12:47 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 06:12:47 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 06:12:47 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 06:12:47 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 06:12:47 Europe/Berlin] Mapping header: 'division_id' to index: 5
+[01-May-2025 06:12:47 Europe/Berlin] Final Header Map: {"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id":5}
+[01-May-2025 06:12:47 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 06:12:47 Europe/Berlin] Column 'employee_id' found at index: 0
+[01-May-2025 06:12:47 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 06:12:47 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 06:12:47 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 06:12:47 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 06:12:47 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 06:12:47 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 06:12:47 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 06:12:47 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 06:12:47 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 06:12:47 Europe/Berlin] Column 'division_id' found at index: 5
+[01-May-2025 06:12:47 Europe/Berlin] Starting database transaction
+[01-May-2025 06:12:47 Europe/Berlin] Processing row 2: ["EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"]
+[01-May-2025 06:12:47 Europe/Berlin] PHP Error [2]: Undefined array key 1 in D:\xampp\htdocs\Plantilla\admin\api\simple_upload.php on line 223
+[01-May-2025 06:13:51 Europe/Berlin] Starting file upload process
+[01-May-2025 06:13:51 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:13:51 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpCDA2.tmp","error":0,"size":618}}
+[01-May-2025 06:13:51 Europe/Berlin] Database connection successful
+[01-May-2025 06:13:51 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:13:51 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:13:51 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpCDA2.tmp","error":0,"size":618}
+[01-May-2025 06:13:51 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f4ff351258.51332350.csv
+[01-May-2025 06:13:51 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f4ff351258.51332350.csv
+[01-May-2025 06:13:51 Europe/Berlin] Upload recorded with ID: 23
+[01-May-2025 06:13:51 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:13:51 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 06:13:51 Europe/Berlin] Mapping header: 'employee_id' to index: 0
+[01-May-2025 06:13:51 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 06:13:51 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 06:13:51 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 06:13:51 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 06:13:51 Europe/Berlin] Mapping header: 'division_id' to index: 5
+[01-May-2025 06:13:51 Europe/Berlin] Final Header Map: {"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id":5}
+[01-May-2025 06:13:51 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 06:13:51 Europe/Berlin] Column 'employee_id' found at index: 0
+[01-May-2025 06:13:51 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 06:13:51 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 06:13:51 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 06:13:51 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 06:13:51 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 06:13:51 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 06:13:51 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 06:13:51 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 06:13:51 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 06:13:51 Europe/Berlin] Column 'division_id' found at index: 5
+[01-May-2025 06:13:51 Europe/Berlin] Starting database transaction
+[01-May-2025 06:13:51 Europe/Berlin] Processing row 2: ["EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"]
+[01-May-2025 06:13:51 Europe/Berlin] Split row into columns: ["EMP-001","Juan Dela Cruz","Administrative Officer","SG-11","Active","2"]
+[01-May-2025 06:13:51 Europe/Berlin] Mapped data for row 2: {"employee_id":"EMP-001","name":"Juan Dela Cruz","position":"Administrative Officer","salary_grade":"SG-11","status":"active","division_id":2}
+[01-May-2025 06:13:51 Europe/Berlin] Successfully imported row 2
+[01-May-2025 06:13:51 Europe/Berlin] Processing row 3: ["EMP-002,Maria Santos,HR Specialist,SG-12,Active,3"]
+[01-May-2025 06:13:51 Europe/Berlin] Split row into columns: ["EMP-002","Maria Santos","HR Specialist","SG-12","Active","3"]
+[01-May-2025 06:13:51 Europe/Berlin] Mapped data for row 3: {"employee_id":"EMP-002","name":"Maria Santos","position":"HR Specialist","salary_grade":"SG-12","status":"active","division_id":3}
+[01-May-2025 06:13:51 Europe/Berlin] Successfully imported row 3
+[01-May-2025 06:13:51 Europe/Berlin] Processing row 4: ["EMP-003,Robert Lim,Accountant,SG-15,Active,8"]
+[01-May-2025 06:13:51 Europe/Berlin] Split row into columns: ["EMP-003","Robert Lim","Accountant","SG-15","Active","8"]
+[01-May-2025 06:13:51 Europe/Berlin] Mapped data for row 4: {"employee_id":"EMP-003","name":"Robert Lim","position":"Accountant","salary_grade":"SG-15","status":"active","division_id":8}
+[01-May-2025 06:13:51 Europe/Berlin] Successfully imported row 4
+[01-May-2025 06:13:51 Europe/Berlin] Processing row 5: ["EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15"]
+[01-May-2025 06:13:51 Europe/Berlin] Split row into columns: ["EMP-004","Sofia Reyes","Weather Forecaster","SG-14","Active","15"]
+[01-May-2025 06:13:51 Europe/Berlin] Mapped data for row 5: {"employee_id":"EMP-004","name":"Sofia Reyes","position":"Weather Forecaster","salary_grade":"SG-14","status":"active","division_id":15}
+[01-May-2025 06:13:51 Europe/Berlin] Successfully imported row 5
+[01-May-2025 06:13:51 Europe/Berlin] Processing row 6: ["EMP-005,James Wilson,Research Specialist,SG-13,Active,30"]
+[01-May-2025 06:13:51 Europe/Berlin] Split row into columns: ["EMP-005","James Wilson","Research Specialist","SG-13","Active","30"]
+[01-May-2025 06:13:51 Europe/Berlin] Mapped data for row 6: {"employee_id":"EMP-005","name":"James Wilson","position":"Research Specialist","salary_grade":"SG-13","status":"active","division_id":30}
+[01-May-2025 06:13:51 Europe/Berlin] Successfully imported row 6
+[01-May-2025 06:13:51 Europe/Berlin] Processing row 7: ["EMP-006,Anna Torres,Field Technician,SG-10,Active,43"]
+[01-May-2025 06:13:51 Europe/Berlin] Split row into columns: ["EMP-006","Anna Torres","Field Technician","SG-10","Active","43"]
+[01-May-2025 06:13:51 Europe/Berlin] Mapped data for row 7: {"employee_id":"EMP-006","name":"Anna Torres","position":"Field Technician","salary_grade":"SG-10","status":"active","division_id":43}
+[01-May-2025 06:13:51 Europe/Berlin] Successfully imported row 7
+[01-May-2025 06:13:51 Europe/Berlin] Processing row 8: ["EMP-007,Michael Tan,IT Specialist,SG-12,Active,10"]
+[01-May-2025 06:13:51 Europe/Berlin] Split row into columns: ["EMP-007","Michael Tan","IT Specialist","SG-12","Active","10"]
+[01-May-2025 06:13:51 Europe/Berlin] Mapped data for row 8: {"employee_id":"EMP-007","name":"Michael Tan","position":"IT Specialist","salary_grade":"SG-12","status":"active","division_id":10}
+[01-May-2025 06:13:51 Europe/Berlin] Successfully imported row 8
+[01-May-2025 06:13:51 Europe/Berlin] Processing row 9: ["EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6"]
+[01-May-2025 06:13:51 Europe/Berlin] Split row into columns: ["EMP-008","Lisa Gomez","Procurement Officer","SG-11","Active","6"]
+[01-May-2025 06:13:51 Europe/Berlin] Mapped data for row 9: {"employee_id":"EMP-008","name":"Lisa Gomez","position":"Procurement Officer","salary_grade":"SG-11","status":"active","division_id":6}
+[01-May-2025 06:13:51 Europe/Berlin] Successfully imported row 9
+[01-May-2025 06:13:51 Europe/Berlin] Processing row 10: ["EMP-009,David Chen,Engineer,SG-14,Active,11"]
+[01-May-2025 06:13:51 Europe/Berlin] Split row into columns: ["EMP-009","David Chen","Engineer","SG-14","Active","11"]
+[01-May-2025 06:13:51 Europe/Berlin] Mapped data for row 10: {"employee_id":"EMP-009","name":"David Chen","position":"Engineer","salary_grade":"SG-14","status":"active","division_id":11}
+[01-May-2025 06:13:51 Europe/Berlin] Successfully imported row 10
+[01-May-2025 06:13:51 Europe/Berlin] Processing row 11: ["EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19"]
+[01-May-2025 06:13:51 Europe/Berlin] Split row into columns: ["EMP-010","Sarah Lee","Marine Meteorologist","SG-13","Active","19"]
+[01-May-2025 06:13:51 Europe/Berlin] Mapped data for row 11: {"employee_id":"EMP-010","name":"Sarah Lee","position":"Marine Meteorologist","salary_grade":"SG-13","status":"active","division_id":19}
+[01-May-2025 06:13:51 Europe/Berlin] Successfully imported row 11
+[01-May-2025 06:13:51 Europe/Berlin] Finished processing CSV file. Total rows: 10, Imported: 10, Errors: 0
+[01-May-2025 06:13:51 Europe/Berlin] Transaction committed - 10 records imported
+[01-May-2025 06:13:51 Europe/Berlin] Sending success response: {"success":true,"imported":10,"total_rows":10,"errors":[],"message":"Successfully imported 10 records"}
+[01-May-2025 06:13:51 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f4ff351258.51332350.csv
+[01-May-2025 06:21:57 Europe/Berlin] Starting file upload process
+[01-May-2025 06:21:57 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:21:57 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php3823.tmp","error":0,"size":618}}
+[01-May-2025 06:21:57 Europe/Berlin] Database connection successful
+[01-May-2025 06:21:57 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:21:57 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:21:57 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php3823.tmp","error":0,"size":618}
+[01-May-2025 06:21:57 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f6e5392b87.40195457.csv
+[01-May-2025 06:21:57 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f6e5392b87.40195457.csv
+[01-May-2025 06:21:57 Europe/Berlin] Upload recorded with ID: 24
+[01-May-2025 06:21:57 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:21:57 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 06:21:57 Europe/Berlin] Mapping header: 'employee_id' to index: 0
+[01-May-2025 06:21:57 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 06:21:57 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 06:21:57 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 06:21:57 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 06:21:57 Europe/Berlin] Mapping header: 'division_id' to index: 5
+[01-May-2025 06:21:57 Europe/Berlin] Final Header Map: {"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id":5}
+[01-May-2025 06:21:57 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Column 'employee_id' found at index: 0
+[01-May-2025 06:21:57 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 06:21:57 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 06:21:57 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 06:21:57 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 06:21:57 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 06:21:57 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 06:21:57 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 06:21:57 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 06:21:57 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 06:21:57 Europe/Berlin] Column 'division_id' found at index: 5
+[01-May-2025 06:21:57 Europe/Berlin] Starting database transaction
+[01-May-2025 06:21:57 Europe/Berlin] Processing row 2: ["EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"]
+[01-May-2025 06:21:57 Europe/Berlin] Split row into columns: ["EMP-001","Juan Dela Cruz","Administrative Officer","SG-11","Active","2"]
+[01-May-2025 06:21:57 Europe/Berlin] Mapped data for row 2: {"employee_id":"EMP-001","name":"Juan Dela Cruz","position":"Administrative Officer","salary_grade":"SG-11","status":"active","division_id":2}
+[01-May-2025 06:21:57 Europe/Berlin] Error - Row 2: Duplicate entry 'EMP-001' for key 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Processing row 3: ["EMP-002,Maria Santos,HR Specialist,SG-12,Active,3"]
+[01-May-2025 06:21:57 Europe/Berlin] Split row into columns: ["EMP-002","Maria Santos","HR Specialist","SG-12","Active","3"]
+[01-May-2025 06:21:57 Europe/Berlin] Mapped data for row 3: {"employee_id":"EMP-002","name":"Maria Santos","position":"HR Specialist","salary_grade":"SG-12","status":"active","division_id":3}
+[01-May-2025 06:21:57 Europe/Berlin] Error - Row 3: Duplicate entry 'EMP-002' for key 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Processing row 4: ["EMP-003,Robert Lim,Accountant,SG-15,Active,8"]
+[01-May-2025 06:21:57 Europe/Berlin] Split row into columns: ["EMP-003","Robert Lim","Accountant","SG-15","Active","8"]
+[01-May-2025 06:21:57 Europe/Berlin] Mapped data for row 4: {"employee_id":"EMP-003","name":"Robert Lim","position":"Accountant","salary_grade":"SG-15","status":"active","division_id":8}
+[01-May-2025 06:21:57 Europe/Berlin] Error - Row 4: Duplicate entry 'EMP-003' for key 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Processing row 5: ["EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15"]
+[01-May-2025 06:21:57 Europe/Berlin] Split row into columns: ["EMP-004","Sofia Reyes","Weather Forecaster","SG-14","Active","15"]
+[01-May-2025 06:21:57 Europe/Berlin] Mapped data for row 5: {"employee_id":"EMP-004","name":"Sofia Reyes","position":"Weather Forecaster","salary_grade":"SG-14","status":"active","division_id":15}
+[01-May-2025 06:21:57 Europe/Berlin] Error - Row 5: Duplicate entry 'EMP-004' for key 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Processing row 6: ["EMP-005,James Wilson,Research Specialist,SG-13,Active,30"]
+[01-May-2025 06:21:57 Europe/Berlin] Split row into columns: ["EMP-005","James Wilson","Research Specialist","SG-13","Active","30"]
+[01-May-2025 06:21:57 Europe/Berlin] Mapped data for row 6: {"employee_id":"EMP-005","name":"James Wilson","position":"Research Specialist","salary_grade":"SG-13","status":"active","division_id":30}
+[01-May-2025 06:21:57 Europe/Berlin] Error - Row 6: Duplicate entry 'EMP-005' for key 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Processing row 7: ["EMP-006,Anna Torres,Field Technician,SG-10,Active,43"]
+[01-May-2025 06:21:57 Europe/Berlin] Split row into columns: ["EMP-006","Anna Torres","Field Technician","SG-10","Active","43"]
+[01-May-2025 06:21:57 Europe/Berlin] Mapped data for row 7: {"employee_id":"EMP-006","name":"Anna Torres","position":"Field Technician","salary_grade":"SG-10","status":"active","division_id":43}
+[01-May-2025 06:21:57 Europe/Berlin] Error - Row 7: Duplicate entry 'EMP-006' for key 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Processing row 8: ["EMP-007,Michael Tan,IT Specialist,SG-12,Active,10"]
+[01-May-2025 06:21:57 Europe/Berlin] Split row into columns: ["EMP-007","Michael Tan","IT Specialist","SG-12","Active","10"]
+[01-May-2025 06:21:57 Europe/Berlin] Mapped data for row 8: {"employee_id":"EMP-007","name":"Michael Tan","position":"IT Specialist","salary_grade":"SG-12","status":"active","division_id":10}
+[01-May-2025 06:21:57 Europe/Berlin] Error - Row 8: Duplicate entry 'EMP-007' for key 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Processing row 9: ["EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6"]
+[01-May-2025 06:21:57 Europe/Berlin] Split row into columns: ["EMP-008","Lisa Gomez","Procurement Officer","SG-11","Active","6"]
+[01-May-2025 06:21:57 Europe/Berlin] Mapped data for row 9: {"employee_id":"EMP-008","name":"Lisa Gomez","position":"Procurement Officer","salary_grade":"SG-11","status":"active","division_id":6}
+[01-May-2025 06:21:57 Europe/Berlin] Error - Row 9: Duplicate entry 'EMP-008' for key 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Processing row 10: ["EMP-009,David Chen,Engineer,SG-14,Active,11"]
+[01-May-2025 06:21:57 Europe/Berlin] Split row into columns: ["EMP-009","David Chen","Engineer","SG-14","Active","11"]
+[01-May-2025 06:21:57 Europe/Berlin] Mapped data for row 10: {"employee_id":"EMP-009","name":"David Chen","position":"Engineer","salary_grade":"SG-14","status":"active","division_id":11}
+[01-May-2025 06:21:57 Europe/Berlin] Error - Row 10: Duplicate entry 'EMP-009' for key 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Processing row 11: ["EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19"]
+[01-May-2025 06:21:57 Europe/Berlin] Split row into columns: ["EMP-010","Sarah Lee","Marine Meteorologist","SG-13","Active","19"]
+[01-May-2025 06:21:57 Europe/Berlin] Mapped data for row 11: {"employee_id":"EMP-010","name":"Sarah Lee","position":"Marine Meteorologist","salary_grade":"SG-13","status":"active","division_id":19}
+[01-May-2025 06:21:57 Europe/Berlin] Error - Row 11: Duplicate entry 'EMP-010' for key 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Finished processing CSV file. Total rows: 10, Imported: 0, Errors: 10
+[01-May-2025 06:21:57 Europe/Berlin] No records were successfully imported. Total rows processed: 10
+[01-May-2025 06:21:57 Europe/Berlin] Errors encountered: Row 2: Duplicate entry 'EMP-001' for key 'employee_id'
+Row 3: Duplicate entry 'EMP-002' for key 'employee_id'
+Row 4: Duplicate entry 'EMP-003' for key 'employee_id'
+Row 5: Duplicate entry 'EMP-004' for key 'employee_id'
+Row 6: Duplicate entry 'EMP-005' for key 'employee_id'
+Row 7: Duplicate entry 'EMP-006' for key 'employee_id'
+Row 8: Duplicate entry 'EMP-007' for key 'employee_id'
+Row 9: Duplicate entry 'EMP-008' for key 'employee_id'
+Row 10: Duplicate entry 'EMP-009' for key 'employee_id'
+Row 11: Duplicate entry 'EMP-010' for key 'employee_id'
+[01-May-2025 06:21:57 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f6e5392b87.40195457.csv
+[01-May-2025 06:21:57 Europe/Berlin] Fatal error: No records were successfully imported. Please check your data and try again.
+[01-May-2025 06:21:57 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:21:57 Europe/Berlin] Sending error response: {"success":false,"error":"No records were successfully imported. Please check your data and try again."}
+[01-May-2025 06:22:10 Europe/Berlin] Starting file upload process
+[01-May-2025 06:22:10 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:22:10 Europe/Berlin] FILES data: {"file":{"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php6AAD.tmp","error":0,"size":62}}
+[01-May-2025 06:22:10 Europe/Berlin] Database connection successful
+[01-May-2025 06:22:10 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:22:10 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:22:10 Europe/Berlin] Processing uploaded file: {"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php6AAD.tmp","error":0,"size":62}
+[01-May-2025 06:22:10 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f6f2299581.49176879.csv
+[01-May-2025 06:22:10 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f6f2299581.49176879.csv
+[01-May-2025 06:22:10 Europe/Berlin] Upload recorded with ID: 25
+[01-May-2025 06:22:10 Europe/Berlin] Raw CSV Headers: ["\ufeffemployee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 06:22:10 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 06:22:10 Europe/Berlin] Mapping header: 'employee_id' to index: 0
+[01-May-2025 06:22:10 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 06:22:10 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 06:22:10 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 06:22:10 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 06:22:10 Europe/Berlin] Mapping header: 'division_id' to index: 5
+[01-May-2025 06:22:10 Europe/Berlin] Final Header Map: {"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id":5}
+[01-May-2025 06:22:10 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 06:22:10 Europe/Berlin] Column 'employee_id' found at index: 0
+[01-May-2025 06:22:10 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 06:22:10 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 06:22:10 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 06:22:10 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 06:22:10 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 06:22:10 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 06:22:10 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 06:22:10 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 06:22:10 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 06:22:10 Europe/Berlin] Column 'division_id' found at index: 5
+[01-May-2025 06:22:10 Europe/Berlin] Starting database transaction
+[01-May-2025 06:22:10 Europe/Berlin] Finished processing CSV file. Total rows: 0, Imported: 0, Errors: 0
+[01-May-2025 06:22:10 Europe/Berlin] No records were successfully imported. Total rows processed: 0
+[01-May-2025 06:22:10 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f6f2299581.49176879.csv
+[01-May-2025 06:22:10 Europe/Berlin] Fatal error: No records were successfully imported. Please check your data and try again.
+[01-May-2025 06:22:10 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:22:10 Europe/Berlin] Sending error response: {"success":false,"error":"No records were successfully imported. Please check your data and try again."}
+[01-May-2025 06:22:49 Europe/Berlin] Starting file upload process
+[01-May-2025 06:22:49 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:22:49 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php5D5.tmp","error":0,"size":618}}
+[01-May-2025 06:22:49 Europe/Berlin] Database connection successful
+[01-May-2025 06:22:49 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:22:49 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:22:49 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php5D5.tmp","error":0,"size":618}
+[01-May-2025 06:22:49 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f719db6852.79699498.csv
+[01-May-2025 06:22:49 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f719db6852.79699498.csv
+[01-May-2025 06:22:49 Europe/Berlin] Upload recorded with ID: 26
+[01-May-2025 06:22:49 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:22:49 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 06:22:49 Europe/Berlin] Mapping header: 'employee_id' to index: 0
+[01-May-2025 06:22:49 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 06:22:49 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 06:22:49 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 06:22:49 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 06:22:49 Europe/Berlin] Mapping header: 'division_id' to index: 5
+[01-May-2025 06:22:49 Europe/Berlin] Final Header Map: {"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id":5}
+[01-May-2025 06:22:49 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 06:22:49 Europe/Berlin] Column 'employee_id' found at index: 0
+[01-May-2025 06:22:49 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 06:22:49 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 06:22:49 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 06:22:49 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 06:22:49 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 06:22:49 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 06:22:49 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 06:22:49 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 06:22:49 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 06:22:49 Europe/Berlin] Column 'division_id' found at index: 5
+[01-May-2025 06:22:49 Europe/Berlin] Starting database transaction
+[01-May-2025 06:22:49 Europe/Berlin] Processing row 2: ["EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"]
+[01-May-2025 06:22:49 Europe/Berlin] Split row into columns: ["EMP-001","Juan Dela Cruz","Administrative Officer","SG-11","Active","2"]
+[01-May-2025 06:22:49 Europe/Berlin] Mapped data for row 2: {"employee_id":"EMP-001","name":"Juan Dela Cruz","position":"Administrative Officer","salary_grade":"SG-11","status":"active","division_id":2}
+[01-May-2025 06:22:49 Europe/Berlin] Error - Row 2: Duplicate entry 'EMP-001' for key 'employee_id'
+[01-May-2025 06:22:49 Europe/Berlin] Processing row 3: ["EMP-002,Maria Santos,HR Specialist,SG-12,Active,3"]
+[01-May-2025 06:22:49 Europe/Berlin] Split row into columns: ["EMP-002","Maria Santos","HR Specialist","SG-12","Active","3"]
+[01-May-2025 06:22:49 Europe/Berlin] Mapped data for row 3: {"employee_id":"EMP-002","name":"Maria Santos","position":"HR Specialist","salary_grade":"SG-12","status":"active","division_id":3}
+[01-May-2025 06:22:49 Europe/Berlin] Error - Row 3: Duplicate entry 'EMP-002' for key 'employee_id'
+[01-May-2025 06:22:49 Europe/Berlin] Processing row 4: ["EMP-003,Robert Lim,Accountant,SG-15,Active,8"]
+[01-May-2025 06:22:49 Europe/Berlin] Split row into columns: ["EMP-003","Robert Lim","Accountant","SG-15","Active","8"]
+[01-May-2025 06:22:49 Europe/Berlin] Mapped data for row 4: {"employee_id":"EMP-003","name":"Robert Lim","position":"Accountant","salary_grade":"SG-15","status":"active","division_id":8}
+[01-May-2025 06:22:50 Europe/Berlin] Error - Row 4: Duplicate entry 'EMP-003' for key 'employee_id'
+[01-May-2025 06:22:50 Europe/Berlin] Processing row 5: ["EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15"]
+[01-May-2025 06:22:50 Europe/Berlin] Split row into columns: ["EMP-004","Sofia Reyes","Weather Forecaster","SG-14","Active","15"]
+[01-May-2025 06:22:50 Europe/Berlin] Mapped data for row 5: {"employee_id":"EMP-004","name":"Sofia Reyes","position":"Weather Forecaster","salary_grade":"SG-14","status":"active","division_id":15}
+[01-May-2025 06:22:50 Europe/Berlin] Error - Row 5: Duplicate entry 'EMP-004' for key 'employee_id'
+[01-May-2025 06:22:50 Europe/Berlin] Processing row 6: ["EMP-005,James Wilson,Research Specialist,SG-13,Active,30"]
+[01-May-2025 06:22:50 Europe/Berlin] Split row into columns: ["EMP-005","James Wilson","Research Specialist","SG-13","Active","30"]
+[01-May-2025 06:22:50 Europe/Berlin] Mapped data for row 6: {"employee_id":"EMP-005","name":"James Wilson","position":"Research Specialist","salary_grade":"SG-13","status":"active","division_id":30}
+[01-May-2025 06:22:50 Europe/Berlin] Error - Row 6: Duplicate entry 'EMP-005' for key 'employee_id'
+[01-May-2025 06:22:50 Europe/Berlin] Processing row 7: ["EMP-006,Anna Torres,Field Technician,SG-10,Active,43"]
+[01-May-2025 06:22:50 Europe/Berlin] Split row into columns: ["EMP-006","Anna Torres","Field Technician","SG-10","Active","43"]
+[01-May-2025 06:22:50 Europe/Berlin] Mapped data for row 7: {"employee_id":"EMP-006","name":"Anna Torres","position":"Field Technician","salary_grade":"SG-10","status":"active","division_id":43}
+[01-May-2025 06:22:50 Europe/Berlin] Error - Row 7: Duplicate entry 'EMP-006' for key 'employee_id'
+[01-May-2025 06:22:50 Europe/Berlin] Processing row 8: ["EMP-007,Michael Tan,IT Specialist,SG-12,Active,10"]
+[01-May-2025 06:22:50 Europe/Berlin] Split row into columns: ["EMP-007","Michael Tan","IT Specialist","SG-12","Active","10"]
+[01-May-2025 06:22:50 Europe/Berlin] Mapped data for row 8: {"employee_id":"EMP-007","name":"Michael Tan","position":"IT Specialist","salary_grade":"SG-12","status":"active","division_id":10}
+[01-May-2025 06:22:50 Europe/Berlin] Error - Row 8: Duplicate entry 'EMP-007' for key 'employee_id'
+[01-May-2025 06:22:50 Europe/Berlin] Processing row 9: ["EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6"]
+[01-May-2025 06:22:50 Europe/Berlin] Split row into columns: ["EMP-008","Lisa Gomez","Procurement Officer","SG-11","Active","6"]
+[01-May-2025 06:22:50 Europe/Berlin] Mapped data for row 9: {"employee_id":"EMP-008","name":"Lisa Gomez","position":"Procurement Officer","salary_grade":"SG-11","status":"active","division_id":6}
+[01-May-2025 06:22:50 Europe/Berlin] Error - Row 9: Duplicate entry 'EMP-008' for key 'employee_id'
+[01-May-2025 06:22:50 Europe/Berlin] Processing row 10: ["EMP-009,David Chen,Engineer,SG-14,Active,11"]
+[01-May-2025 06:22:50 Europe/Berlin] Split row into columns: ["EMP-009","David Chen","Engineer","SG-14","Active","11"]
+[01-May-2025 06:22:50 Europe/Berlin] Mapped data for row 10: {"employee_id":"EMP-009","name":"David Chen","position":"Engineer","salary_grade":"SG-14","status":"active","division_id":11}
+[01-May-2025 06:22:50 Europe/Berlin] Error - Row 10: Duplicate entry 'EMP-009' for key 'employee_id'
+[01-May-2025 06:22:50 Europe/Berlin] Processing row 11: ["EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19"]
+[01-May-2025 06:22:50 Europe/Berlin] Split row into columns: ["EMP-010","Sarah Lee","Marine Meteorologist","SG-13","Active","19"]
+[01-May-2025 06:22:50 Europe/Berlin] Mapped data for row 11: {"employee_id":"EMP-010","name":"Sarah Lee","position":"Marine Meteorologist","salary_grade":"SG-13","status":"active","division_id":19}
+[01-May-2025 06:22:50 Europe/Berlin] Error - Row 11: Duplicate entry 'EMP-010' for key 'employee_id'
+[01-May-2025 06:22:50 Europe/Berlin] Finished processing CSV file. Total rows: 10, Imported: 0, Errors: 10
+[01-May-2025 06:22:50 Europe/Berlin] No records were successfully imported. Total rows processed: 10
+[01-May-2025 06:22:50 Europe/Berlin] Errors encountered: Row 2: Duplicate entry 'EMP-001' for key 'employee_id'
+Row 3: Duplicate entry 'EMP-002' for key 'employee_id'
+Row 4: Duplicate entry 'EMP-003' for key 'employee_id'
+Row 5: Duplicate entry 'EMP-004' for key 'employee_id'
+Row 6: Duplicate entry 'EMP-005' for key 'employee_id'
+Row 7: Duplicate entry 'EMP-006' for key 'employee_id'
+Row 8: Duplicate entry 'EMP-007' for key 'employee_id'
+Row 9: Duplicate entry 'EMP-008' for key 'employee_id'
+Row 10: Duplicate entry 'EMP-009' for key 'employee_id'
+Row 11: Duplicate entry 'EMP-010' for key 'employee_id'
+[01-May-2025 06:22:50 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812f719db6852.79699498.csv
+[01-May-2025 06:22:50 Europe/Berlin] Fatal error: No records were successfully imported. Please check your data and try again.
+[01-May-2025 06:22:50 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:22:50 Europe/Berlin] Sending error response: {"success":false,"error":"No records were successfully imported. Please check your data and try again."}
+[01-May-2025 06:35:25 Europe/Berlin] Starting file upload process
+[01-May-2025 06:35:25 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 06:35:25 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php8DDD.tmp","error":0,"size":618}}
+[01-May-2025 06:35:25 Europe/Berlin] Database connection successful
+[01-May-2025 06:35:25 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 06:35:25 Europe/Berlin] Using user_id: 1
+[01-May-2025 06:35:25 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php8DDD.tmp","error":0,"size":618}
+[01-May-2025 06:35:25 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812fa0d94e846.84020333.csv
+[01-May-2025 06:35:25 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812fa0d94e846.84020333.csv
+[01-May-2025 06:35:25 Europe/Berlin] Upload recorded with ID: 27
+[01-May-2025 06:35:25 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 06:35:25 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 06:35:25 Europe/Berlin] Mapping header: 'employee_id' to index: 0
+[01-May-2025 06:35:25 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 06:35:25 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 06:35:25 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 06:35:25 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 06:35:25 Europe/Berlin] Mapping header: 'division_id' to index: 5
+[01-May-2025 06:35:25 Europe/Berlin] Final Header Map: {"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id":5}
+[01-May-2025 06:35:25 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Column 'employee_id' found at index: 0
+[01-May-2025 06:35:25 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 06:35:25 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 06:35:25 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 06:35:25 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 06:35:25 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 06:35:25 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 06:35:25 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 06:35:25 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 06:35:25 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 06:35:25 Europe/Berlin] Column 'division_id' found at index: 5
+[01-May-2025 06:35:25 Europe/Berlin] Starting database transaction
+[01-May-2025 06:35:25 Europe/Berlin] Processing row 2: ["EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"]
+[01-May-2025 06:35:25 Europe/Berlin] Split row into columns: ["EMP-001","Juan Dela Cruz","Administrative Officer","SG-11","Active","2"]
+[01-May-2025 06:35:25 Europe/Berlin] Mapped data for row 2: {"employee_id":"EMP-001","name":"Juan Dela Cruz","position":"Administrative Officer","salary_grade":"SG-11","status":"active","division_id":2}
+[01-May-2025 06:35:25 Europe/Berlin] Error - Row 2: Duplicate entry 'EMP-001' for key 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Processing row 3: ["EMP-002,Maria Santos,HR Specialist,SG-12,Active,3"]
+[01-May-2025 06:35:25 Europe/Berlin] Split row into columns: ["EMP-002","Maria Santos","HR Specialist","SG-12","Active","3"]
+[01-May-2025 06:35:25 Europe/Berlin] Mapped data for row 3: {"employee_id":"EMP-002","name":"Maria Santos","position":"HR Specialist","salary_grade":"SG-12","status":"active","division_id":3}
+[01-May-2025 06:35:25 Europe/Berlin] Error - Row 3: Duplicate entry 'EMP-002' for key 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Processing row 4: ["EMP-003,Robert Lim,Accountant,SG-15,Active,8"]
+[01-May-2025 06:35:25 Europe/Berlin] Split row into columns: ["EMP-003","Robert Lim","Accountant","SG-15","Active","8"]
+[01-May-2025 06:35:25 Europe/Berlin] Mapped data for row 4: {"employee_id":"EMP-003","name":"Robert Lim","position":"Accountant","salary_grade":"SG-15","status":"active","division_id":8}
+[01-May-2025 06:35:25 Europe/Berlin] Error - Row 4: Duplicate entry 'EMP-003' for key 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Processing row 5: ["EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15"]
+[01-May-2025 06:35:25 Europe/Berlin] Split row into columns: ["EMP-004","Sofia Reyes","Weather Forecaster","SG-14","Active","15"]
+[01-May-2025 06:35:25 Europe/Berlin] Mapped data for row 5: {"employee_id":"EMP-004","name":"Sofia Reyes","position":"Weather Forecaster","salary_grade":"SG-14","status":"active","division_id":15}
+[01-May-2025 06:35:25 Europe/Berlin] Error - Row 5: Duplicate entry 'EMP-004' for key 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Processing row 6: ["EMP-005,James Wilson,Research Specialist,SG-13,Active,30"]
+[01-May-2025 06:35:25 Europe/Berlin] Split row into columns: ["EMP-005","James Wilson","Research Specialist","SG-13","Active","30"]
+[01-May-2025 06:35:25 Europe/Berlin] Mapped data for row 6: {"employee_id":"EMP-005","name":"James Wilson","position":"Research Specialist","salary_grade":"SG-13","status":"active","division_id":30}
+[01-May-2025 06:35:25 Europe/Berlin] Error - Row 6: Duplicate entry 'EMP-005' for key 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Processing row 7: ["EMP-006,Anna Torres,Field Technician,SG-10,Active,43"]
+[01-May-2025 06:35:25 Europe/Berlin] Split row into columns: ["EMP-006","Anna Torres","Field Technician","SG-10","Active","43"]
+[01-May-2025 06:35:25 Europe/Berlin] Mapped data for row 7: {"employee_id":"EMP-006","name":"Anna Torres","position":"Field Technician","salary_grade":"SG-10","status":"active","division_id":43}
+[01-May-2025 06:35:25 Europe/Berlin] Error - Row 7: Duplicate entry 'EMP-006' for key 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Processing row 8: ["EMP-007,Michael Tan,IT Specialist,SG-12,Active,10"]
+[01-May-2025 06:35:25 Europe/Berlin] Split row into columns: ["EMP-007","Michael Tan","IT Specialist","SG-12","Active","10"]
+[01-May-2025 06:35:25 Europe/Berlin] Mapped data for row 8: {"employee_id":"EMP-007","name":"Michael Tan","position":"IT Specialist","salary_grade":"SG-12","status":"active","division_id":10}
+[01-May-2025 06:35:25 Europe/Berlin] Error - Row 8: Duplicate entry 'EMP-007' for key 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Processing row 9: ["EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6"]
+[01-May-2025 06:35:25 Europe/Berlin] Split row into columns: ["EMP-008","Lisa Gomez","Procurement Officer","SG-11","Active","6"]
+[01-May-2025 06:35:25 Europe/Berlin] Mapped data for row 9: {"employee_id":"EMP-008","name":"Lisa Gomez","position":"Procurement Officer","salary_grade":"SG-11","status":"active","division_id":6}
+[01-May-2025 06:35:25 Europe/Berlin] Error - Row 9: Duplicate entry 'EMP-008' for key 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Processing row 10: ["EMP-009,David Chen,Engineer,SG-14,Active,11"]
+[01-May-2025 06:35:25 Europe/Berlin] Split row into columns: ["EMP-009","David Chen","Engineer","SG-14","Active","11"]
+[01-May-2025 06:35:25 Europe/Berlin] Mapped data for row 10: {"employee_id":"EMP-009","name":"David Chen","position":"Engineer","salary_grade":"SG-14","status":"active","division_id":11}
+[01-May-2025 06:35:25 Europe/Berlin] Error - Row 10: Duplicate entry 'EMP-009' for key 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Processing row 11: ["EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19"]
+[01-May-2025 06:35:25 Europe/Berlin] Split row into columns: ["EMP-010","Sarah Lee","Marine Meteorologist","SG-13","Active","19"]
+[01-May-2025 06:35:25 Europe/Berlin] Mapped data for row 11: {"employee_id":"EMP-010","name":"Sarah Lee","position":"Marine Meteorologist","salary_grade":"SG-13","status":"active","division_id":19}
+[01-May-2025 06:35:25 Europe/Berlin] Error - Row 11: Duplicate entry 'EMP-010' for key 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Finished processing CSV file. Total rows: 10, Imported: 0, Errors: 10
+[01-May-2025 06:35:25 Europe/Berlin] No records were successfully imported. Total rows processed: 10
+[01-May-2025 06:35:25 Europe/Berlin] Errors encountered: Row 2: Duplicate entry 'EMP-001' for key 'employee_id'
+Row 3: Duplicate entry 'EMP-002' for key 'employee_id'
+Row 4: Duplicate entry 'EMP-003' for key 'employee_id'
+Row 5: Duplicate entry 'EMP-004' for key 'employee_id'
+Row 6: Duplicate entry 'EMP-005' for key 'employee_id'
+Row 7: Duplicate entry 'EMP-006' for key 'employee_id'
+Row 8: Duplicate entry 'EMP-007' for key 'employee_id'
+Row 9: Duplicate entry 'EMP-008' for key 'employee_id'
+Row 10: Duplicate entry 'EMP-009' for key 'employee_id'
+Row 11: Duplicate entry 'EMP-010' for key 'employee_id'
+[01-May-2025 06:35:25 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_6812fa0d94e846.84020333.csv
+[01-May-2025 06:35:25 Europe/Berlin] Fatal error: No records were successfully imported. Please check your data and try again.
+[01-May-2025 06:35:25 Europe/Berlin] Transaction rolled back
+[01-May-2025 06:35:25 Europe/Berlin] Sending error response: {"success":false,"error":"No records were successfully imported. Please check your data and try again."}
+[01-May-2025 08:16:30 Europe/Berlin] Starting file upload process
+[01-May-2025 08:16:30 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 08:16:30 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpA97C.tmp","error":0,"size":618}}
+[01-May-2025 08:16:30 Europe/Berlin] Database connection successful
+[01-May-2025 08:16:30 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 08:16:30 Europe/Berlin] Using user_id: 1
+[01-May-2025 08:16:30 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpA97C.tmp","error":0,"size":618}
+[01-May-2025 08:16:30 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_681311bee3d8b2.34857823.csv
+[01-May-2025 08:16:30 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_681311bee3d8b2.34857823.csv
+[01-May-2025 08:16:30 Europe/Berlin] Upload recorded with ID: 28
+[01-May-2025 08:16:30 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 08:16:30 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 08:16:30 Europe/Berlin] Mapping header: 'employee_id' to index: 0
+[01-May-2025 08:16:30 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 08:16:30 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 08:16:30 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 08:16:30 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 08:16:30 Europe/Berlin] Mapping header: 'division_id' to index: 5
+[01-May-2025 08:16:30 Europe/Berlin] Final Header Map: {"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id":5}
+[01-May-2025 08:16:30 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 08:16:30 Europe/Berlin] Column 'employee_id' found at index: 0
+[01-May-2025 08:16:30 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 08:16:30 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 08:16:30 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 08:16:30 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 08:16:30 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 08:16:30 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 08:16:30 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 08:16:30 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 08:16:30 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 08:16:30 Europe/Berlin] Column 'division_id' found at index: 5
+[01-May-2025 08:16:30 Europe/Berlin] Starting database transaction
+[01-May-2025 08:16:30 Europe/Berlin] Processing row 2: ["EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"]
+[01-May-2025 08:16:30 Europe/Berlin] Split row into columns: ["EMP-001","Juan Dela Cruz","Administrative Officer","SG-11","Active","2"]
+[01-May-2025 08:16:30 Europe/Berlin] Mapped data for row 2: {"employee_id":"EMP-001","name":"Juan Dela Cruz","position":"Administrative Officer","salary_grade":"SG-11","status":"active","division_id":2}
+[01-May-2025 08:16:31 Europe/Berlin] Error - Row 2: Duplicate entry 'EMP-001' for key 'employee_id'
+[01-May-2025 08:16:31 Europe/Berlin] Processing row 3: ["EMP-002,Maria Santos,HR Specialist,SG-12,Active,3"]
+[01-May-2025 08:16:31 Europe/Berlin] Split row into columns: ["EMP-002","Maria Santos","HR Specialist","SG-12","Active","3"]
+[01-May-2025 08:16:31 Europe/Berlin] Mapped data for row 3: {"employee_id":"EMP-002","name":"Maria Santos","position":"HR Specialist","salary_grade":"SG-12","status":"active","division_id":3}
+[01-May-2025 08:16:31 Europe/Berlin] Error - Row 3: Duplicate entry 'EMP-002' for key 'employee_id'
+[01-May-2025 08:16:31 Europe/Berlin] Processing row 4: ["EMP-003,Robert Lim,Accountant,SG-15,Active,8"]
+[01-May-2025 08:16:31 Europe/Berlin] Split row into columns: ["EMP-003","Robert Lim","Accountant","SG-15","Active","8"]
+[01-May-2025 08:16:31 Europe/Berlin] Mapped data for row 4: {"employee_id":"EMP-003","name":"Robert Lim","position":"Accountant","salary_grade":"SG-15","status":"active","division_id":8}
+[01-May-2025 08:16:31 Europe/Berlin] Error - Row 4: Duplicate entry 'EMP-003' for key 'employee_id'
+[01-May-2025 08:16:31 Europe/Berlin] Processing row 5: ["EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15"]
+[01-May-2025 08:16:31 Europe/Berlin] Split row into columns: ["EMP-004","Sofia Reyes","Weather Forecaster","SG-14","Active","15"]
+[01-May-2025 08:16:31 Europe/Berlin] Mapped data for row 5: {"employee_id":"EMP-004","name":"Sofia Reyes","position":"Weather Forecaster","salary_grade":"SG-14","status":"active","division_id":15}
+[01-May-2025 08:16:31 Europe/Berlin] Error - Row 5: Duplicate entry 'EMP-004' for key 'employee_id'
+[01-May-2025 08:16:31 Europe/Berlin] Processing row 6: ["EMP-005,James Wilson,Research Specialist,SG-13,Active,30"]
+[01-May-2025 08:16:31 Europe/Berlin] Split row into columns: ["EMP-005","James Wilson","Research Specialist","SG-13","Active","30"]
+[01-May-2025 08:16:31 Europe/Berlin] Mapped data for row 6: {"employee_id":"EMP-005","name":"James Wilson","position":"Research Specialist","salary_grade":"SG-13","status":"active","division_id":30}
+[01-May-2025 08:16:31 Europe/Berlin] Error - Row 6: Duplicate entry 'EMP-005' for key 'employee_id'
+[01-May-2025 08:16:31 Europe/Berlin] Processing row 7: ["EMP-006,Anna Torres,Field Technician,SG-10,Active,43"]
+[01-May-2025 08:16:31 Europe/Berlin] Split row into columns: ["EMP-006","Anna Torres","Field Technician","SG-10","Active","43"]
+[01-May-2025 08:16:31 Europe/Berlin] Mapped data for row 7: {"employee_id":"EMP-006","name":"Anna Torres","position":"Field Technician","salary_grade":"SG-10","status":"active","division_id":43}
+[01-May-2025 08:16:31 Europe/Berlin] Error - Row 7: Duplicate entry 'EMP-006' for key 'employee_id'
+[01-May-2025 08:16:31 Europe/Berlin] Processing row 8: ["EMP-007,Michael Tan,IT Specialist,SG-12,Active,10"]
+[01-May-2025 08:16:31 Europe/Berlin] Split row into columns: ["EMP-007","Michael Tan","IT Specialist","SG-12","Active","10"]
+[01-May-2025 08:16:31 Europe/Berlin] Mapped data for row 8: {"employee_id":"EMP-007","name":"Michael Tan","position":"IT Specialist","salary_grade":"SG-12","status":"active","division_id":10}
+[01-May-2025 08:16:31 Europe/Berlin] Error - Row 8: Duplicate entry 'EMP-007' for key 'employee_id'
+[01-May-2025 08:16:31 Europe/Berlin] Processing row 9: ["EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6"]
+[01-May-2025 08:16:31 Europe/Berlin] Split row into columns: ["EMP-008","Lisa Gomez","Procurement Officer","SG-11","Active","6"]
+[01-May-2025 08:16:31 Europe/Berlin] Mapped data for row 9: {"employee_id":"EMP-008","name":"Lisa Gomez","position":"Procurement Officer","salary_grade":"SG-11","status":"active","division_id":6}
+[01-May-2025 08:16:31 Europe/Berlin] Error - Row 9: Duplicate entry 'EMP-008' for key 'employee_id'
+[01-May-2025 08:16:31 Europe/Berlin] Processing row 10: ["EMP-009,David Chen,Engineer,SG-14,Active,11"]
+[01-May-2025 08:16:31 Europe/Berlin] Split row into columns: ["EMP-009","David Chen","Engineer","SG-14","Active","11"]
+[01-May-2025 08:16:31 Europe/Berlin] Mapped data for row 10: {"employee_id":"EMP-009","name":"David Chen","position":"Engineer","salary_grade":"SG-14","status":"active","division_id":11}
+[01-May-2025 08:16:31 Europe/Berlin] Error - Row 10: Duplicate entry 'EMP-009' for key 'employee_id'
+[01-May-2025 08:16:31 Europe/Berlin] Processing row 11: ["EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19"]
+[01-May-2025 08:16:31 Europe/Berlin] Split row into columns: ["EMP-010","Sarah Lee","Marine Meteorologist","SG-13","Active","19"]
+[01-May-2025 08:16:31 Europe/Berlin] Mapped data for row 11: {"employee_id":"EMP-010","name":"Sarah Lee","position":"Marine Meteorologist","salary_grade":"SG-13","status":"active","division_id":19}
+[01-May-2025 08:16:31 Europe/Berlin] Error - Row 11: Duplicate entry 'EMP-010' for key 'employee_id'
+[01-May-2025 08:16:31 Europe/Berlin] Finished processing CSV file. Total rows: 10, Imported: 0, Errors: 10
+[01-May-2025 08:16:31 Europe/Berlin] No records were successfully imported. Total rows processed: 10
+[01-May-2025 08:16:31 Europe/Berlin] Errors encountered: Row 2: Duplicate entry 'EMP-001' for key 'employee_id'
+Row 3: Duplicate entry 'EMP-002' for key 'employee_id'
+Row 4: Duplicate entry 'EMP-003' for key 'employee_id'
+Row 5: Duplicate entry 'EMP-004' for key 'employee_id'
+Row 6: Duplicate entry 'EMP-005' for key 'employee_id'
+Row 7: Duplicate entry 'EMP-006' for key 'employee_id'
+Row 8: Duplicate entry 'EMP-007' for key 'employee_id'
+Row 9: Duplicate entry 'EMP-008' for key 'employee_id'
+Row 10: Duplicate entry 'EMP-009' for key 'employee_id'
+Row 11: Duplicate entry 'EMP-010' for key 'employee_id'
+[01-May-2025 08:16:31 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_681311bee3d8b2.34857823.csv
+[01-May-2025 08:16:31 Europe/Berlin] Fatal error: No records were successfully imported. Please check your data and try again.
+[01-May-2025 08:16:31 Europe/Berlin] Transaction rolled back
+[01-May-2025 08:16:31 Europe/Berlin] Sending error response: {"success":false,"error":"No records were successfully imported. Please check your data and try again."}
+[01-May-2025 08:16:41 Europe/Berlin] Starting file upload process
+[01-May-2025 08:16:41 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 08:16:41 Europe/Berlin] FILES data: {"file":{"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpD39A.tmp","error":0,"size":618}}
+[01-May-2025 08:16:41 Europe/Berlin] Database connection successful
+[01-May-2025 08:16:41 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 08:16:41 Europe/Berlin] Using user_id: 1
+[01-May-2025 08:16:41 Europe/Berlin] Processing uploaded file: {"name":"testscb.csv","full_path":"testscb.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\phpD39A.tmp","error":0,"size":618}
+[01-May-2025 08:16:41 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_681311c9a8cc68.07185380.csv
+[01-May-2025 08:16:41 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_681311c9a8cc68.07185380.csv
+[01-May-2025 08:16:41 Europe/Berlin] Upload recorded with ID: 29
+[01-May-2025 08:16:41 Europe/Berlin] Raw CSV Headers: ["\ufeff\"employee_id","name","position","salary_grade","status","division_id\""]
+[01-May-2025 08:16:41 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 08:16:41 Europe/Berlin] Mapping header: 'employee_id' to index: 0
+[01-May-2025 08:16:41 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 08:16:41 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 08:16:41 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 08:16:41 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 08:16:41 Europe/Berlin] Mapping header: 'division_id' to index: 5
+[01-May-2025 08:16:41 Europe/Berlin] Final Header Map: {"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id":5}
+[01-May-2025 08:16:41 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Column 'employee_id' found at index: 0
+[01-May-2025 08:16:41 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 08:16:41 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 08:16:41 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 08:16:41 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 08:16:41 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 08:16:41 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 08:16:41 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 08:16:41 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 08:16:41 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 08:16:41 Europe/Berlin] Column 'division_id' found at index: 5
+[01-May-2025 08:16:41 Europe/Berlin] Starting database transaction
+[01-May-2025 08:16:41 Europe/Berlin] Processing row 2: ["EMP-001,Juan Dela Cruz,Administrative Officer,SG-11,Active,2"]
+[01-May-2025 08:16:41 Europe/Berlin] Split row into columns: ["EMP-001","Juan Dela Cruz","Administrative Officer","SG-11","Active","2"]
+[01-May-2025 08:16:41 Europe/Berlin] Mapped data for row 2: {"employee_id":"EMP-001","name":"Juan Dela Cruz","position":"Administrative Officer","salary_grade":"SG-11","status":"active","division_id":2}
+[01-May-2025 08:16:41 Europe/Berlin] Error - Row 2: Duplicate entry 'EMP-001' for key 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Processing row 3: ["EMP-002,Maria Santos,HR Specialist,SG-12,Active,3"]
+[01-May-2025 08:16:41 Europe/Berlin] Split row into columns: ["EMP-002","Maria Santos","HR Specialist","SG-12","Active","3"]
+[01-May-2025 08:16:41 Europe/Berlin] Mapped data for row 3: {"employee_id":"EMP-002","name":"Maria Santos","position":"HR Specialist","salary_grade":"SG-12","status":"active","division_id":3}
+[01-May-2025 08:16:41 Europe/Berlin] Error - Row 3: Duplicate entry 'EMP-002' for key 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Processing row 4: ["EMP-003,Robert Lim,Accountant,SG-15,Active,8"]
+[01-May-2025 08:16:41 Europe/Berlin] Split row into columns: ["EMP-003","Robert Lim","Accountant","SG-15","Active","8"]
+[01-May-2025 08:16:41 Europe/Berlin] Mapped data for row 4: {"employee_id":"EMP-003","name":"Robert Lim","position":"Accountant","salary_grade":"SG-15","status":"active","division_id":8}
+[01-May-2025 08:16:41 Europe/Berlin] Error - Row 4: Duplicate entry 'EMP-003' for key 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Processing row 5: ["EMP-004,Sofia Reyes,Weather Forecaster,SG-14,Active,15"]
+[01-May-2025 08:16:41 Europe/Berlin] Split row into columns: ["EMP-004","Sofia Reyes","Weather Forecaster","SG-14","Active","15"]
+[01-May-2025 08:16:41 Europe/Berlin] Mapped data for row 5: {"employee_id":"EMP-004","name":"Sofia Reyes","position":"Weather Forecaster","salary_grade":"SG-14","status":"active","division_id":15}
+[01-May-2025 08:16:41 Europe/Berlin] Error - Row 5: Duplicate entry 'EMP-004' for key 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Processing row 6: ["EMP-005,James Wilson,Research Specialist,SG-13,Active,30"]
+[01-May-2025 08:16:41 Europe/Berlin] Split row into columns: ["EMP-005","James Wilson","Research Specialist","SG-13","Active","30"]
+[01-May-2025 08:16:41 Europe/Berlin] Mapped data for row 6: {"employee_id":"EMP-005","name":"James Wilson","position":"Research Specialist","salary_grade":"SG-13","status":"active","division_id":30}
+[01-May-2025 08:16:41 Europe/Berlin] Error - Row 6: Duplicate entry 'EMP-005' for key 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Processing row 7: ["EMP-006,Anna Torres,Field Technician,SG-10,Active,43"]
+[01-May-2025 08:16:41 Europe/Berlin] Split row into columns: ["EMP-006","Anna Torres","Field Technician","SG-10","Active","43"]
+[01-May-2025 08:16:41 Europe/Berlin] Mapped data for row 7: {"employee_id":"EMP-006","name":"Anna Torres","position":"Field Technician","salary_grade":"SG-10","status":"active","division_id":43}
+[01-May-2025 08:16:41 Europe/Berlin] Error - Row 7: Duplicate entry 'EMP-006' for key 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Processing row 8: ["EMP-007,Michael Tan,IT Specialist,SG-12,Active,10"]
+[01-May-2025 08:16:41 Europe/Berlin] Split row into columns: ["EMP-007","Michael Tan","IT Specialist","SG-12","Active","10"]
+[01-May-2025 08:16:41 Europe/Berlin] Mapped data for row 8: {"employee_id":"EMP-007","name":"Michael Tan","position":"IT Specialist","salary_grade":"SG-12","status":"active","division_id":10}
+[01-May-2025 08:16:41 Europe/Berlin] Error - Row 8: Duplicate entry 'EMP-007' for key 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Processing row 9: ["EMP-008,Lisa Gomez,Procurement Officer,SG-11,Active,6"]
+[01-May-2025 08:16:41 Europe/Berlin] Split row into columns: ["EMP-008","Lisa Gomez","Procurement Officer","SG-11","Active","6"]
+[01-May-2025 08:16:41 Europe/Berlin] Mapped data for row 9: {"employee_id":"EMP-008","name":"Lisa Gomez","position":"Procurement Officer","salary_grade":"SG-11","status":"active","division_id":6}
+[01-May-2025 08:16:41 Europe/Berlin] Error - Row 9: Duplicate entry 'EMP-008' for key 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Processing row 10: ["EMP-009,David Chen,Engineer,SG-14,Active,11"]
+[01-May-2025 08:16:41 Europe/Berlin] Split row into columns: ["EMP-009","David Chen","Engineer","SG-14","Active","11"]
+[01-May-2025 08:16:41 Europe/Berlin] Mapped data for row 10: {"employee_id":"EMP-009","name":"David Chen","position":"Engineer","salary_grade":"SG-14","status":"active","division_id":11}
+[01-May-2025 08:16:41 Europe/Berlin] Error - Row 10: Duplicate entry 'EMP-009' for key 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Processing row 11: ["EMP-010,Sarah Lee,Marine Meteorologist,SG-13,Active,19"]
+[01-May-2025 08:16:41 Europe/Berlin] Split row into columns: ["EMP-010","Sarah Lee","Marine Meteorologist","SG-13","Active","19"]
+[01-May-2025 08:16:41 Europe/Berlin] Mapped data for row 11: {"employee_id":"EMP-010","name":"Sarah Lee","position":"Marine Meteorologist","salary_grade":"SG-13","status":"active","division_id":19}
+[01-May-2025 08:16:41 Europe/Berlin] Error - Row 11: Duplicate entry 'EMP-010' for key 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Finished processing CSV file. Total rows: 10, Imported: 0, Errors: 10
+[01-May-2025 08:16:41 Europe/Berlin] No records were successfully imported. Total rows processed: 10
+[01-May-2025 08:16:41 Europe/Berlin] Errors encountered: Row 2: Duplicate entry 'EMP-001' for key 'employee_id'
+Row 3: Duplicate entry 'EMP-002' for key 'employee_id'
+Row 4: Duplicate entry 'EMP-003' for key 'employee_id'
+Row 5: Duplicate entry 'EMP-004' for key 'employee_id'
+Row 6: Duplicate entry 'EMP-005' for key 'employee_id'
+Row 7: Duplicate entry 'EMP-006' for key 'employee_id'
+Row 8: Duplicate entry 'EMP-007' for key 'employee_id'
+Row 9: Duplicate entry 'EMP-008' for key 'employee_id'
+Row 10: Duplicate entry 'EMP-009' for key 'employee_id'
+Row 11: Duplicate entry 'EMP-010' for key 'employee_id'
+[01-May-2025 08:16:41 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_681311c9a8cc68.07185380.csv
+[01-May-2025 08:16:41 Europe/Berlin] Fatal error: No records were successfully imported. Please check your data and try again.
+[01-May-2025 08:16:41 Europe/Berlin] Transaction rolled back
+[01-May-2025 08:16:41 Europe/Berlin] Sending error response: {"success":false,"error":"No records were successfully imported. Please check your data and try again."}
+[01-May-2025 08:28:58 Europe/Berlin] Starting file upload process
+[01-May-2025 08:28:58 Europe/Berlin] POST data: {"division":"8"}
+[01-May-2025 08:28:58 Europe/Berlin] FILES data: {"file":{"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php1198.tmp","error":0,"size":62}}
+[01-May-2025 08:28:58 Europe/Berlin] Database connection successful
+[01-May-2025 08:28:58 Europe/Berlin] Session data: {"user_id":1,"username":"admin","role":"admin","user_role":"admin","first_name":"System","last_name":"Administrator","name":"System Administrator"}
+[01-May-2025 08:28:58 Europe/Berlin] Using user_id: 1
+[01-May-2025 08:28:58 Europe/Berlin] Processing uploaded file: {"name":"recordsccvutf8.csv","full_path":"recordsccvutf8.csv","type":"text\/csv","tmp_name":"D:\\xampp\\tmp\\php1198.tmp","error":0,"size":62}
+[01-May-2025 08:28:58 Europe/Berlin] Attempting to move file to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_681314aa725f06.41643311.csv
+[01-May-2025 08:28:58 Europe/Berlin] File saved successfully to: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_681314aa725f06.41643311.csv
+[01-May-2025 08:28:58 Europe/Berlin] Upload recorded with ID: 30
+[01-May-2025 08:28:58 Europe/Berlin] Raw CSV Headers: ["\ufeffemployee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 08:28:58 Europe/Berlin] Cleaned Headers: ["employee_id","name","position","salary_grade","status","division_id"]
+[01-May-2025 08:28:58 Europe/Berlin] Mapping header: 'employee_id' to index: 0
+[01-May-2025 08:28:58 Europe/Berlin] Mapping header: 'name' to index: 1
+[01-May-2025 08:28:58 Europe/Berlin] Mapping header: 'position' to index: 2
+[01-May-2025 08:28:58 Europe/Berlin] Mapping header: 'salary_grade' to index: 3
+[01-May-2025 08:28:58 Europe/Berlin] Mapping header: 'status' to index: 4
+[01-May-2025 08:28:58 Europe/Berlin] Mapping header: 'division_id' to index: 5
+[01-May-2025 08:28:58 Europe/Berlin] Final Header Map: {"employee_id":0,"name":1,"position":2,"salary_grade":3,"status":4,"division_id":5}
+[01-May-2025 08:28:58 Europe/Berlin] Checking for column: 'employee_id'
+[01-May-2025 08:28:58 Europe/Berlin] Column 'employee_id' found at index: 0
+[01-May-2025 08:28:58 Europe/Berlin] Checking for column: 'name'
+[01-May-2025 08:28:58 Europe/Berlin] Column 'name' found at index: 1
+[01-May-2025 08:28:58 Europe/Berlin] Checking for column: 'position'
+[01-May-2025 08:28:58 Europe/Berlin] Column 'position' found at index: 2
+[01-May-2025 08:28:58 Europe/Berlin] Checking for column: 'salary_grade'
+[01-May-2025 08:28:58 Europe/Berlin] Column 'salary_grade' found at index: 3
+[01-May-2025 08:28:58 Europe/Berlin] Checking for column: 'status'
+[01-May-2025 08:28:58 Europe/Berlin] Column 'status' found at index: 4
+[01-May-2025 08:28:58 Europe/Berlin] Checking for column: 'division_id'
+[01-May-2025 08:28:58 Europe/Berlin] Column 'division_id' found at index: 5
+[01-May-2025 08:28:58 Europe/Berlin] Starting database transaction
+[01-May-2025 08:28:58 Europe/Berlin] Finished processing CSV file. Total rows: 0, Imported: 0, Errors: 0
+[01-May-2025 08:28:58 Europe/Berlin] No records were successfully imported. Total rows processed: 0
+[01-May-2025 08:28:58 Europe/Berlin] Cleaned up temporary file: D:\xampp\htdocs\Plantilla\admin\api/../../uploads/upload_681314aa725f06.41643311.csv
+[01-May-2025 08:28:58 Europe/Berlin] Fatal error: No records were successfully imported. Please check your data and try again.
+[01-May-2025 08:28:58 Europe/Berlin] Transaction rolled back
+[01-May-2025 08:28:58 Europe/Berlin] Sending error response: {"success":false,"error":"No records were successfully imported. Please check your data and try again."}
