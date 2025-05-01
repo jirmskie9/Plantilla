@@ -421,16 +421,23 @@ $monthly_files = getMonthlyFiles($selected_month);
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Spreadsheet Editor</h5>
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-outline-primary" id="saveSpreadsheet">
-                                <i class="bi bi-save me-1"></i>Save
+                            <button type="button" class="btn btn-primary" id="newWorkbookBtn">
+                                <i class="fas fa-file-excel"></i> New Workbook
                             </button>
-                            <button class="btn btn-sm btn-outline-secondary" id="exportExcel">
-                                <i class="bi bi-file-earmark-excel me-1"></i>Export
+                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
                             </button>
-                            <button class="btn btn-sm btn-outline-danger" id="clearSpreadsheet">
-                                <i class="bi bi-trash me-1"></i>Clear
-                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" id="importExcel">Import Excel</a></li>
+                                <li><a class="dropdown-item" href="#" id="exportExcel">Export Excel</a></li>
+                            </ul>
                         </div>
+                        
+                        <!-- Export Excel Form -->
+                        <form id="exportForm" class="d-none">
+                            <input type="hidden" name="month" id="exportMonth">
+                            <input type="hidden" name="division" id="exportDivision">
+                        </form>
                     </div>
                     <div class="card-body">
                         <div class="row mb-3">
