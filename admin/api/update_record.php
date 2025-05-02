@@ -2,86 +2,110 @@
 session_start();
 require '../../dbconnection.php';
 
-// Check if user is logged in and has admin role
-if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+// Check admin permissions
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+    header('Content-Type: application/json');
     echo json_encode(['success' => false, 'error' => 'Unauthorized access']);
     exit();
 }
 
-// Get POST data
-$employee_id = $_POST['employee_id'] ?? '';
-$name = $_POST['name'] ?? '';
-$position = $_POST['position'] ?? '';
-$salary_grade = $_POST['salary_grade'] ?? '';
-$status = $_POST['status'] ?? '';
-$division_id = $_POST['division_id'] ?? '';
-
-// Debug log
-error_log("Update attempt - Employee ID: $employee_id, Name: $name, Position: $position, Salary Grade: $salary_grade, Status: $status, Division ID: $division_id");
+// Get the update data
+$id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+$field = isset($_POST['field']) ? $_POST['field'] : '';
+$value = isset($_POST['value']) ? $_POST['value'] : null;
 
 // Validate required fields
-if (empty($employee_id) || empty($name) || empty($position) || empty($salary_grade) || empty($status) || empty($division_id)) {
-    echo json_encode(['success' => false, 'error' => 'All fields are required']);
+if (!$id || !$field) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'error' => 'Missing required fields']);
     exit();
 }
 
-try {
-    // First check if the record exists
-    $check_stmt = $conn->prepare("SELECT id FROM records WHERE employee_id = ?");
-    $check_stmt->bind_param("s", $employee_id);
+// Map field names to database columns
+$fieldMap = [
+    'plantilla_no' => 'plantilla_no',
+    'plantilla_division' => 'plantilla_division',
+    'equivalent_division' => 'equivalent_division',
+    'plantilla_division_definition' => 'plantilla_division_definition',
+    'fullname' => 'fullname',
+    'last_name' => 'last_name',
+    'first_name' => 'first_name',
+    'middle_name' => 'middle_name',
+    'ext_name' => 'ext_name',
+    'mi' => 'mi',
+    'sex' => 'sex',
+    'position_title' => 'position_title',
+    'item_number' => 'item_number',
+    'tech_code' => 'tech_code',
+    'level' => 'level',
+    'appointment_status' => 'appointment_status',
+    'sg' => 'sg',
+    'step' => 'step',
+    'monthly_salary' => 'monthly_salary',
+    'date_of_birth' => 'date_of_birth',
+    'date_orig_appt' => 'date_orig_appt',
+    'date_govt_srvc' => 'date_govt_srvc',
+    'date_last_promotion' => 'date_last_promotion',
+    'date_last_increment' => 'date_last_increment',
+    'date_longevity' => 'date_longevity',
+    'date_vacated' => 'date_vacated',
+    'vacated_due_to' => 'vacated_due_to',
+    'vacated_by' => 'vacated_by',
+    'id_no' => 'id_no'
+];
+
+// Check if the field is valid
+if (!isset($fieldMap[$field])) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'error' => 'Invalid field']);
+    exit();
+}
+
+// Get the database column name
+$column = $fieldMap[$field];
+
+// Special handling for plantilla_no
+if ($field === 'plantilla_no') {
+    // Check if plantilla_no is empty
+    if (empty($value)) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'error' => 'Plantilla number cannot be empty']);
+        exit();
+    }
+
+    // Check if plantilla_no already exists for another record
+    $check_stmt = $conn->prepare("SELECT id FROM records WHERE plantilla_no = ? AND id != ?");
+    $check_stmt->bind_param("si", $value, $id);
     $check_stmt->execute();
     $result = $check_stmt->get_result();
     
-    if ($result->num_rows === 0) {
-        throw new Exception('Record not found');
+    if ($result->num_rows > 0) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'error' => 'Plantilla number already exists']);
+        exit();
     }
-    
-    $record = $result->fetch_assoc();
-    $record_id = $record['id'];
+}
 
-    // Prepare the update statement
-    $stmt = $conn->prepare("UPDATE records SET 
-        name = ?, 
-        position = ?, 
-        salary_grade = ?, 
-        status = ?, 
-        division_id = ?,
-        updated_by = ?,
-        updated_at = CURRENT_TIMESTAMP
-        WHERE id = ?");
+// Prepare the update query
+$query = "UPDATE records SET $column = ?, updated_at = NOW() WHERE id = ?";
+$stmt = $conn->prepare($query);
 
-    if (!$stmt) {
-        throw new Exception('Database error: ' . $conn->error);
-    }
+if (!$stmt) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'error' => 'Database error: ' . $conn->error]);
+    exit();
+}
 
-    // Bind parameters
-    $stmt->bind_param("sssssii", 
-        $name,
-        $position,
-        $salary_grade,
-        $status,
-        $division_id,
-        $_SESSION['user_id'],
-        $record_id
-    );
+// Bind parameters
+$stmt->bind_param('si', $value, $id);
 
-    // Execute the update
-    if (!$stmt->execute()) {
-        throw new Exception('Failed to update record: ' . $stmt->error);
-    }
-
-    // Log the activity
-    $activity_stmt = $conn->prepare("INSERT INTO activity_logs (user_id, activity_type, description, ip_address) VALUES (?, 'update', ?, ?)");
-    $description = "Updated record for employee: $employee_id";
-    $ip_address = $_SERVER['REMOTE_ADDR'];
-    $activity_stmt->bind_param("iss", $_SESSION['user_id'], $description, $ip_address);
-    $activity_stmt->execute();
-
+// Execute the update
+if ($stmt->execute()) {
+    header('Content-Type: application/json');
     echo json_encode(['success' => true]);
-
-} catch (Exception $e) {
-    error_log("Update error: " . $e->getMessage());
-    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+} else {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'error' => 'Update failed: ' . $stmt->error]);
 }
 
 $stmt->close();

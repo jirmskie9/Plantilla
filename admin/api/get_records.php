@@ -4,38 +4,27 @@ header('Content-Type: application/json');
 
 try {
     // Get division filter if provided
-    $division_id = isset($_GET['division']) ? (int)$_GET['division'] : 0;
+    $division = isset($_GET['division']) ? $_GET['division'] : '';
     
     // Build query
     $query = "SELECT 
-        r.id,
-        r.employee_id,
-        r.name,
-        r.position,
-        r.salary_grade,
-        r.status,
-        r.division_id,
-        r.created_at,
+        r.*, 
         d.name as division_name,
         d.code as division_code
     FROM records r
-    LEFT JOIN divisions d ON r.division_id = d.id
-    WHERE r.status = 'active'";
+    LEFT JOIN divisions d ON r.plantilla_division = d.code";
     
     $params = [];
     $types = '';
     
     // Add division filter if specified
-    if ($division_id > 0) {
-        $query .= " AND r.division_id = ? AND d.status = 'active'";
-        $params[] = $division_id;
-        $types .= 'i';
-    } else {
-        // For 'All Divisions', ensure we only get records from active divisions
-        $query .= " AND d.status = 'active'";
+    if (!empty($division)) {
+        $query .= " WHERE r.plantilla_division_definition = ?";
+        $params[] = $division;
+        $types .= 's';
     }
     
-    $query .= " ORDER BY r.name ASC";
+    $query .= " ORDER BY r.plantilla_no ASC";
     
     // Debug output
     error_log("Executing query: $query");
@@ -62,7 +51,7 @@ try {
         'debug' => [
             'query' => $query,
             'params' => $params,
-            'division_id' => $division_id,
+            'division' => $division,
             'num_rows' => $result->num_rows
         ]
     ]);

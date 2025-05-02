@@ -1,41 +1,36 @@
 <?php
 session_start();
+include '../dbconnection.php';
+
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     header('Location: ../login.php');
     exit();
 }
 
-// Static data for demonstration
-$stats = [
-    'on_process' => 25,
-    'on_hold' => 12,
-    'not_yet_filing' => 8,
-    'total_applicants' => 45
-];
+// Get real-time status counts
+$stmt = $conn->prepare("
+    SELECT 
+        COUNT(CASE WHEN remarks = 'On Process' THEN 1 END) as on_process,
+        COUNT(CASE WHEN remarks = 'On-Hold' THEN 1 END) as on_hold,
+        COUNT(CASE WHEN remarks = 'Not Yet for Filling up' THEN 1 END) as not_yet_filing,
+        COUNT(*) as total_applicants
+    FROM records
+");
+$stmt->execute();
+$stats = $stmt->get_result()->fetch_assoc();
+$stmt->close();
 
-$recent_activities = [
-    [
-        'title' => 'New Application Received',
-        'description' => 'John Doe submitted a new application',
-        'timestamp' => '2 hours ago',
-        'icon' => 'bi-person-plus',
-        'color' => '#00C853'
-    ],
-    [
-        'title' => 'Status Updated',
-        'description' => 'Application #12345 moved to On Process',
-        'timestamp' => '4 hours ago',
-        'icon' => 'bi-arrow-repeat',
-        'color' => '#2962FF'
-    ],
-    [
-        'title' => 'File Uploaded',
-        'description' => 'New spreadsheet file uploaded by Admin',
-        'timestamp' => '1 day ago',
-        'icon' => 'bi-file-earmark-arrow-up',
-        'color' => '#FF6D00'
-    ]
-];
+// Get recent activities
+$stmt = $conn->prepare("
+    SELECT al.*, u.first_name, u.last_name 
+    FROM activity_logs al
+    JOIN users u ON al.user_id = u.id
+    ORDER BY al.created_at DESC 
+    LIMIT 5
+");
+$stmt->execute();
+$recent_activities = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +44,47 @@ $recent_activities = [
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        .dashboard-card {
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .card-on-process {
+            border-left: 4px solid #2962FF;
+        }
+        .card-on-hold {
+            border-left: 4px solid #FF6D00;
+        }
+        .card-not-filing {
+            border-left: 4px solid #00C853;
+        }
+        .card-total {
+            border-left: 4px solid #9C27B0;
+        }
+        .status-box {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        .status-on-process {
+            border-left: 4px solid #2962FF;
+        }
+        .status-on-hold {
+            border-left: 4px solid #FF6D00;
+        }
+        .status-not-filing {
+            border-left: 4px solid #00C853;
+        }
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+    </style>
 </head>
 <body>
     <!-- Sidebar -->
@@ -105,7 +141,7 @@ $recent_activities = [
                 </div>
             </div>
             <div class="logout-btn">
-                <a class="nav-link" href="../logout.php">
+            <a class="nav-link" onclick="return confirm('Are you sure you want to logout?')" href="logout.php">
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Logout</span>
                 </a>
@@ -130,7 +166,7 @@ $recent_activities = [
         <!-- Summary Cards -->
         <div class="row g-4 mb-4">
             <div class="col-md-3">
-                <div class="card dashboard-card card-on-process">
+                <div class="card dashboard-card card-on-process" onclick="window.location.href='applicant_records.php?remarks=On Process'">
                     <div class="card-body">
                         <h5 class="card-title">On Process</h5>
                         <h2 class="card-value"><?php echo $stats['on_process']; ?></h2>
@@ -142,7 +178,7 @@ $recent_activities = [
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card dashboard-card card-on-hold">
+                <div class="card dashboard-card card-on-hold" onclick="window.location.href='applicant_records.php?remarks=On-Hold'">
                     <div class="card-body">
                         <h5 class="card-title">On Hold</h5>
                         <h2 class="card-value"><?php echo $stats['on_hold']; ?></h2>
@@ -154,7 +190,7 @@ $recent_activities = [
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card dashboard-card card-not-filing">
+                <div class="card dashboard-card card-not-filing" onclick="window.location.href='applicant_records.php?remarks=Not Yet for Filling up'">
                     <div class="card-body">
                         <h5 class="card-title">Not Yet for Filing</h5>
                         <h2 class="card-value"><?php echo $stats['not_yet_filing']; ?></h2>
@@ -166,7 +202,7 @@ $recent_activities = [
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card dashboard-card card-total">
+                <div class="card dashboard-card card-total" onclick="window.location.href='applicant_records.php'">
                     <div class="card-body">
                         <h5 class="card-title">Total Applicants</h5>
                         <h2 class="card-value"><?php echo $stats['total_applicants']; ?></h2>
@@ -185,31 +221,31 @@ $recent_activities = [
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title mb-4">Status Overview</h5>
-                        <div class="status-box status-on-process">
+                        <div class="status-box status-on-process" onclick="window.location.href='applicant_records.php?remarks=On Process'">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h6 class="mb-1">On Process Applications</h6>
                                     <small>Last updated: <?php echo date('M d, Y'); ?></small>
                                 </div>
-                                <span class="badge"><?php echo $stats['on_process']; ?> items</span>
+                                <span class="badge bg-primary"><?php echo $stats['on_process']; ?> items</span>
                             </div>
                         </div>
-                        <div class="status-box status-on-hold">
+                        <div class="status-box status-on-hold" onclick="window.location.href='applicant_records.php?remarks=On-Hold'">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h6 class="mb-1">On Hold Applications</h6>
                                     <small>Last updated: <?php echo date('M d, Y'); ?></small>
                                 </div>
-                                <span class="badge"><?php echo $stats['on_hold']; ?> items</span>
+                                <span class="badge bg-warning"><?php echo $stats['on_hold']; ?> items</span>
                             </div>
                         </div>
-                        <div class="status-box status-not-filing">
+                        <div class="status-box status-not-filing" onclick="window.location.href='applicant_records.php?remarks=Not Yet for Filling up'">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h6 class="mb-1">Not Yet for Filing</h6>
                                     <small>Last updated: <?php echo date('M d, Y'); ?></small>
                                 </div>
-                                <span class="badge"><?php echo $stats['not_yet_filing']; ?> items</span>
+                                <span class="badge bg-success"><?php echo $stats['not_yet_filing']; ?> items</span>
                             </div>
                         </div>
                     </div>
@@ -221,11 +257,33 @@ $recent_activities = [
                         <?php foreach ($recent_activities as $activity): ?>
                             <div class="activity-item">
                                 <div class="d-flex align-items-start">
-                                    <i class="bi <?php echo $activity['icon']; ?>" style="color: <?php echo $activity['color']; ?>"></i>
-                                    <div>
-                                        <h6 class="mb-1"><?php echo htmlspecialchars($activity['title']); ?></h6>
-                                        <p class="text-muted mb-0"><?php echo htmlspecialchars($activity['description']); ?></p>
-                                        <small class="text-muted"><?php echo $activity['timestamp']; ?></small>
+                                    <i class="bi <?php 
+                                        echo match($activity['activity_type']) {
+                                            'login' => 'bi-box-arrow-in-right',
+                                            'logout' => 'bi-box-arrow-right',
+                                            'create' => 'bi-plus-circle',
+                                            'update' => 'bi-pencil',
+                                            'delete' => 'bi-trash',
+                                            'upload' => 'bi-upload',
+                                            'download' => 'bi-download',
+                                            default => 'bi-circle'
+                                        };
+                                    ?>" style="color: <?php 
+                                        echo match($activity['activity_type']) {
+                                            'login' => '#00C853',
+                                            'logout' => '#FF6D00',
+                                            'create' => '#2962FF',
+                                            'update' => '#FFD600',
+                                            'delete' => '#D50000',
+                                            'upload' => '#9C27B0',
+                                            'download' => '#00BCD4',
+                                            default => '#9E9E9E'
+                                        };
+                                    ?>"></i>
+                                    <div class="ms-3">
+                                        <h6 class="mb-1"><?php echo htmlspecialchars($activity['description']); ?></h6>
+                                        <p class="text-muted mb-0">By <?php echo htmlspecialchars($activity['first_name'] . ' ' . $activity['last_name']); ?></p>
+                                        <small class="text-muted"><?php echo date('M d, Y H:i', strtotime($activity['created_at'])); ?></small>
                                     </div>
                                 </div>
                             </div>
@@ -257,66 +315,216 @@ $recent_activities = [
                 </div>
             </div>
         </div>
+
+        <!-- File Management Section -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Monthly Files</h5>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                            <i class="bi bi-upload me-2"></i>Upload File
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="filesTable">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Month</th>
+                                        <th>Uploaded By</th>
+                                        <th>Upload Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    // Get uploaded files
+                                    $stmt = $conn->prepare("
+                                        SELECT f.*, u.first_name, u.last_name 
+                                        FROM file_uploads f
+                                        JOIN users u ON f.user_id = u.id
+                                        ORDER BY f.created_at DESC
+                                    ");
+                                    $stmt->execute();
+                                    $files = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+                                    $stmt->close();
+
+                                    foreach ($files as $file) {
+                                        $month = date('F Y', strtotime($file['created_at']));
+                                        echo "<tr>";
+                                        echo "<td>" . htmlspecialchars($file['file_name']) . "</td>";
+                                        echo "<td>" . $month . "</td>";
+                                        echo "<td>" . htmlspecialchars($file['first_name'] . ' ' . $file['last_name']) . "</td>";
+                                        echo "<td>" . date('M d, Y H:i', strtotime($file['created_at'])) . "</td>";
+                                        echo "<td>
+                                            <a href='data_management.php?file=" . urlencode($file['file_path']) . "&month=" . date('Y-m', strtotime($file['created_at'])) . "' class='btn btn-sm btn-primary me-2'>
+                                                <i class='bi bi-eye'></i> Open
+                                            </a>
+                                            <button class='btn btn-sm btn-danger delete-file' data-id='" . $file['id'] . "' data-name='" . htmlspecialchars($file['file_name']) . "'>
+                                                <i class='bi bi-trash'></i> Delete
+                                            </button>
+                                        </td>";
+                                        echo "</tr>";
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Monthly Calendar</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Modal -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadModalLabel">Upload Monthly File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="uploadForm" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="month" class="form-label">Select Month</label>
+                                <input type="month" class="form-control" id="month" name="month" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Select File</label>
+                                <input type="file" class="form-control" id="file" name="file" accept=".csv,.xlsx,.xls" required>
+                                <div class="form-text">Accepted formats: CSV, Excel (.xlsx, .xls)</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="uploadBtn">
+                            <i class="bi bi-upload me-2"></i>Upload
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <script>
-        // Initialize calendar
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+        $(document).ready(function() {
+            // Initialize calendar
+            var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
                 initialView: 'dayGridMonth',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'dayGridMonth'
                 },
-                events: [
-                    {
-                        title: 'Application Deadline',
-                        start: '2024-03-15',
-                        color: '#D50000'
-                    },
-                    {
-                        title: 'Monthly Review',
-                        start: '2024-03-20',
-                        color: '#2962FF'
-                    }
-                ]
+                events: 'api/get_calendar_events.php',
+                eventClick: function(info) {
+                    window.location.href = 'data_management.php?month=' + info.event.start.toISOString().slice(0, 7);
+                }
             });
             calendar.render();
-        });
 
-        // File upload drag and drop
-        const fileUpload = document.querySelector('.custom-file-upload');
-        const fileInput = document.querySelector('input[type="file"]');
+            // File upload handling
+            $('#uploadBtn').on('click', function() {
+                const form = $('#uploadForm')[0];
+                const formData = new FormData(form);
+                const uploadBtn = $(this);
+                
+                uploadBtn.prop('disabled', true);
+                uploadBtn.html('<span class="spinner-border spinner-border-sm me-2"></span>Uploading...');
+                
+                $.ajax({
+                    url: 'api/upload_file.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Upload Failed',
+                                text: response.error || 'An error occurred during upload',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Upload Failed',
+                            text: 'An error occurred during upload. Please try again.',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    complete: function() {
+                        uploadBtn.prop('disabled', false);
+                        uploadBtn.html('<i class="bi bi-upload me-2"></i>Upload');
+                        $('#uploadModal').modal('hide');
+                    }
+                });
+            });
 
-        fileUpload.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            fileUpload.style.borderColor = '#2962FF';
-            fileUpload.style.backgroundColor = 'rgba(41, 98, 255, 0.05)';
-        });
-
-        fileUpload.addEventListener('dragleave', () => {
-            fileUpload.style.borderColor = '#e2e8f0';
-            fileUpload.style.backgroundColor = '#f8fafc';
-        });
-
-        fileUpload.addEventListener('drop', (e) => {
-            e.preventDefault();
-            fileUpload.style.borderColor = '#e2e8f0';
-            fileUpload.style.backgroundColor = '#f8fafc';
-            fileInput.files = e.dataTransfer.files;
-        });
-
-        fileUpload.addEventListener('click', () => {
-            fileInput.click();
-        });
-
-        // Toggle sidebar
-        document.getElementById('sidebarToggle').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('active');
+            // Delete file handling
+            $(document).on('click', '.delete-file', function() {
+                const id = $(this).data('id');
+                const name = $(this).data('name');
+                
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'api/delete_file.php',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire('Deleted!', 'File has been deleted.', 'success');
+                                    location.reload();
+                                } else {
+                                    Swal.fire('Error', response.error || 'Delete failed', 'error');
+                                }
+                            },
+                            error: function() {
+                                Swal.fire('Error', 'An error occurred during deletion', 'error');
+                            }
+                        });
+                    }
+                });
+            });
         });
     </script>
 </body>

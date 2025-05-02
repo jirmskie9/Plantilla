@@ -184,6 +184,9 @@ try {
         $conn->begin_transaction();
         error_log("Starting database transaction");
 
+        // Get current user ID from session
+        $created_by = $_SESSION['user_id'] ?? 1; // Default to admin if not set
+
         // Prepare insert statement
         $stmt = $conn->prepare("
             INSERT INTO records (
@@ -272,22 +275,22 @@ try {
                 }
 
                 // Prepare additional data
-                $additional_data = json_encode([
+                $data = json_encode([
                     'upload_id' => $upload_id,
                     'row_number' => $row_number,
                     'imported_at' => date('Y-m-d H:i:s')
                 ]);
 
                 // Insert record
-                $stmt->bind_param('sssssiss',
+                $stmt->bind_param("ssssssis",
                     $employee_id,
                     $name,
                     $position,
                     $salary_grade,
                     $status,
                     $division_id,
-                    $user_id,
-                    $additional_data
+                    $created_by,
+                    $data
                 );
                 
                 if (!$stmt->execute()) {

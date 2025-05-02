@@ -7,11 +7,12 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
 }
 
 // Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_user') {
-    $success = false;
-    $message = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $response = ['success' => false, 'message' => ''];
     
-    try {
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'add_user':
         // Get form data
         $username = trim($_POST['username']);
         $email = trim($_POST['email']);
@@ -22,27 +23,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         
         // Validate input
         if (empty($username) || empty($email) || empty($password) || empty($first_name) || empty($last_name) || empty($role)) {
-            throw new Exception('All fields are required');
+                    $response['message'] = 'All fields are required';
+                    break;
         }
         
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception('Invalid email format');
+                    $response['message'] = 'Invalid email format';
+                    break;
         }
         
         // Check if username or email already exists
         $stmt = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
         if (!$stmt) {
-            throw new Exception('Database error: ' . $conn->error);
+                    $response['message'] = 'Database error: ' . $conn->error;
+                    break;
         }
         
         $stmt->bind_param("ss", $username, $email);
         if (!$stmt->execute()) {
-            throw new Exception('Database error: ' . $stmt->error);
+                    $response['message'] = 'Database error: ' . $stmt->error;
+                    break;
         }
         
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
-            throw new Exception('Username or email already exists');
+                    $response['message'] = 'Username or email already exists';
+                    break;
         }
         
         // Hash password
@@ -96,27 +102,138 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             // Commit transaction
             $conn->commit();
             
-            $success = true;
-            $message = 'User added successfully';
+                    $response['success'] = true;
+                    $response['message'] = 'User added successfully';
             
         } catch (Exception $e) {
             // Rollback transaction on error
             $conn->rollback();
             throw $e;
         }
-        
-    } catch (Exception $e) {
-        $message = $e->getMessage();
+                break;
+                
+            case 'edit_user':
+                $userId = (int)$_POST['id'];
+                $username = trim($_POST['username']);
+                $email = trim($_POST['email']);
+                $first_name = trim($_POST['first_name']);
+                $last_name = trim($_POST['last_name']);
+                $role = $_POST['role'];
+                $status = $_POST['status'];
+                
+                // Validate input
+                if (empty($username) || empty($email) || empty($first_name) || empty($last_name) || empty($role) || empty($status)) {
+                    $response['message'] = 'All fields are required';
+                    break;
+                }
+                
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $response['message'] = 'Invalid email format';
+                    break;
+                }
+                
+                // Check if username or email already exists for other users
+                $stmt = $conn->prepare("SELECT id FROM users WHERE (username = ? OR email = ?) AND id != ?");
+                $stmt->bind_param("ssi", $username, $email, $userId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                
+                if ($result->num_rows > 0) {
+                    $response['message'] = 'Username or email already exists';
+                    break;
+                }
+                
+                // Update user
+                $stmt = $conn->prepare("UPDATE users SET username = ?, email = ?, first_name = ?, last_name = ?, role = ?, status = ? WHERE id = ?");
+                $stmt->bind_param("ssssssi", $username, $email, $first_name, $last_name, $role, $status, $userId);
+                
+                if ($stmt->execute()) {
+                    $response['success'] = true;
+                    $response['message'] = 'User updated successfully';
+                    
+                    // Log activity
+                    $stmt = $conn->prepare("INSERT INTO activity_logs (user_id, activity_type, description, ip_address) VALUES (?, 'update', ?, ?)");
+                    $description = "Updated user: $username";
+                    $ip_address = $_SERVER['REMOTE_ADDR'];
+                    $stmt->bind_param("iss", $_SESSION['user_id'], $description, $ip_address);
+                    $stmt->execute();
+                } else {
+                    $response['message'] = 'Failed to update user';
+                }
+                break;
+                
+            case 'delete_user':
+                $userId = (int)$_POST['id'];
+                
+                // Prevent deleting own account
+                if ($userId === $_SESSION['user_id']) {
+                    $response['message'] = 'You cannot delete your own account';
+                    break;
+                }
+                
+                // Get user info for logging
+                $stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
+                $stmt->bind_param("i", $userId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $user = $result->fetch_assoc();
+                
+                // Delete user
+                $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+                $stmt->bind_param("i", $userId);
+                
+                if ($stmt->execute()) {
+                    $response['success'] = true;
+                    $response['message'] = 'User deleted successfully';
+                    
+                    // Log activity
+                    $stmt = $conn->prepare("INSERT INTO activity_logs (user_id, activity_type, description, ip_address) VALUES (?, 'delete', ?, ?)");
+                    $description = "Deleted user: " . $user['username'];
+                    $ip_address = $_SERVER['REMOTE_ADDR'];
+                    $stmt->bind_param("iss", $_SESSION['user_id'], $description, $ip_address);
+                    $stmt->execute();
+                } else {
+                    $response['message'] = 'Failed to delete user';
+                }
+                break;
+                
+            case 'update_permissions':
+                $userId = (int)$_POST['user_id'];
+                $permissions = $_POST['permissions'];
+                
+                // Delete existing permissions
+                $stmt = $conn->prepare("DELETE FROM user_permissions WHERE user_id = ?");
+                $stmt->bind_param("i", $userId);
+                $stmt->execute();
+                
+                // Insert new permissions
+                $stmt = $conn->prepare("INSERT INTO user_permissions (user_id, module, can_view, can_create, can_edit, can_delete) VALUES (?, ?, ?, ?, ?, ?)");
+                
+                foreach ($permissions as $module => $perms) {
+                    $can_view = isset($perms['view']) ? 1 : 0;
+                    $can_create = isset($perms['create']) ? 1 : 0;
+                    $can_edit = isset($perms['edit']) ? 1 : 0;
+                    $can_delete = isset($perms['delete']) ? 1 : 0;
+                    
+                    $stmt->bind_param("isiiii", $userId, $module, $can_view, $can_create, $can_edit, $can_delete);
+                    $stmt->execute();
+                }
+                
+                $response['success'] = true;
+                $response['message'] = 'Permissions updated successfully';
+                
+                // Log activity
+                $stmt = $conn->prepare("INSERT INTO activity_logs (user_id, activity_type, description, ip_address) VALUES (?, 'update', ?, ?)");
+                $description = "Updated permissions for user ID: $userId";
+                $ip_address = $_SERVER['REMOTE_ADDR'];
+                $stmt->bind_param("iss", $_SESSION['user_id'], $description, $ip_address);
+                $stmt->execute();
+                break;
+        }
     }
     
-    // Store the result in session for SweetAlert
-    $_SESSION['alert'] = [
-        'success' => $success,
-        'message' => $message
-    ];
-    
-    // Redirect to prevent form resubmission
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header('Content-Type: application/json');
+    echo json_encode($response);
     exit();
 }
 
@@ -126,12 +243,15 @@ $role = isset($_GET['role']) ? $_GET['role'] : '';
 $status = isset($_GET['status']) ? $_GET['status'] : '';
 
 // Build query with prepared statements
-$query = "SELECT * FROM users WHERE 1=1";
+$query = "SELECT u.*, 
+          (SELECT COUNT(*) FROM activity_logs WHERE user_id = u.id) as activity_count,
+          (SELECT MAX(created_at) FROM activity_logs WHERE user_id = u.id) as last_activity
+          FROM users u WHERE 1=1";
 $params = [];
 $types = '';
 
 if (!empty($search)) {
-    $query .= " AND (username LIKE ? OR email LIKE ? OR first_name LIKE ? OR last_name LIKE ?)";
+    $query .= " AND (u.username LIKE ? OR u.email LIKE ? OR u.first_name LIKE ? OR u.last_name LIKE ?)";
     $params[] = "%$search%";
     $params[] = "%$search%";
     $params[] = "%$search%";
@@ -140,16 +260,18 @@ if (!empty($search)) {
 }
 
 if (!empty($role)) {
-    $query .= " AND role = ?";
+    $query .= " AND u.role = ?";
     $params[] = $role;
     $types .= 's';
 }
 
 if (!empty($status)) {
-    $query .= " AND status = ?";
+    $query .= " AND u.status = ?";
     $params[] = $status;
     $types .= 's';
 }
+
+$query .= " ORDER BY u.created_at DESC";
 
 // Execute query with prepared statement
 $stmt = $conn->prepare($query);
@@ -237,7 +359,7 @@ $stmt->close();
                 </div>
             </div>
             <div class="logout-btn">
-                <a class="nav-link" href="../logout.php">
+                <a class="nav-link" onclick="return confirm('Are you sure you want to logout?')" href="logout.php">
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Logout</span>
                 </a>
@@ -247,34 +369,30 @@ $stmt->close();
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="dashboard-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h2 class="mb-1">User Management</h2>
-                    <p class="text-muted mb-0">Manage system users and their permissions</p>
+        <div class="container-fluid">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h2 class="mb-0">User Management</h2>
+                    <p class="text-muted">Manage system users and their permissions</p>
                 </div>
+                <div class="col-md-6 text-end">
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
-                    <i class="bi bi-person-plus me-2"></i>Add New User
+                        <i class="bi bi-plus-lg me-2"></i>Add New User
                 </button>
             </div>
         </div>
 
-        <!-- Search and Filter Section -->
+            <!-- Filters -->
         <div class="card mb-4">
             <div class="card-body">
                 <form method="GET" class="row g-3">
                     <div class="col-md-4">
-                        <div class="input-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <input type="text" class="form-control" name="search" placeholder="Search by name, username or email..." value="<?php echo htmlspecialchars($search); ?>">
-                        </div>
+                            <input type="text" class="form-control" name="search" placeholder="Search users..." value="<?php echo htmlspecialchars($search); ?>">
                     </div>
                     <div class="col-md-3">
                         <select class="form-select" name="role">
                             <option value="">All Roles</option>
-                          
+                                <option value="admin" <?php echo $role === 'admin' ? 'selected' : ''; ?>>Admin</option>
                             <option value="manager" <?php echo $role === 'manager' ? 'selected' : ''; ?>>Manager</option>
                             <option value="user" <?php echo $role === 'user' ? 'selected' : ''; ?>>User</option>
                         </select>
@@ -287,29 +405,28 @@ $stmt->close();
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-outline-secondary w-100">
-                            <i class="bi bi-funnel me-2"></i>Filter
-                        </button>
+                            <button type="submit" class="btn btn-primary w-100">Filter</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Data Table -->
+            <!-- Users Table -->
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="userTable" class="table table-striped table-hover">
+                        <table class="table table-hover" id="usersTable">
                         <thead>
                             <tr>
                                 <th>Photo</th>
+                                    <th>Username</th>
                                 <th>Name</th>
-                                <th>Username</th>
                                 <th>Email</th>
                                 <th>Role</th>
-                                <th>Division</th>
                                 <th>Status</th>
                                 <th>Last Login</th>
+                                    <th>Activity Count</th>
+                                    <th>Created At</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -317,47 +434,36 @@ $stmt->close();
                             <?php foreach ($users as $user): ?>
                                 <tr>
                                     <td>
-                                        <img src="<?php echo !empty($user['photo']) ? htmlspecialchars($user['photo']) : 'https://ui-avatars.com/api/?name=' . urlencode($user['first_name'] . '+' . $user['last_name']); ?>" 
-                                             class="user-photo" 
-                                             alt="User Photo">
+                                        <img src="<?php echo !empty($user['photo']) ? '../' . htmlspecialchars($user['photo']) : 'https://ui-avatars.com/api/?name=' . urlencode($user['first_name'] . '+' . $user['last_name']); ?>" 
+                                             alt="User Photo" 
+                                             class="rounded-circle"
+                                             style="width: 40px; height: 40px; object-fit: cover;">
                                     </td>
-                                    <td><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></td>
                                     <td><?php echo htmlspecialchars($user['username']); ?></td>
+                                    <td><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></td>
                                     <td><?php echo htmlspecialchars($user['email']); ?></td>
                                     <td>
-                                        <span class="role-badge"><?php echo ucfirst($user['role']); ?></span>
+                                        <span class="badge bg-<?php echo $user['role'] === 'admin' ? 'danger' : ($user['role'] === 'manager' ? 'warning' : 'info'); ?>">
+                                            <?php echo ucfirst($user['role']); ?>
+                                        </span>
                                     </td>
                                     <td>
-                                        <?php 
-                                        $division_name = 'N/A';
-                                        if ($user['division_id']) {
-                                            $stmt = $conn->prepare("SELECT name FROM divisions WHERE id = ?");
-                                            $stmt->bind_param("i", $user['division_id']);
-                                            $stmt->execute();
-                                            $result = $stmt->get_result();
-                                            if ($result->num_rows > 0) {
-                                                $division = $result->fetch_assoc();
-                                                $division_name = $division['name'];
-                                            }
-                                        }
-                                        ?>
-                                        <span class="badge bg-info"><?php echo $division_name; ?></span>
-                                    </td>
-                                    <td>
-                                        <span class="status-badge bg-<?php echo $user['status'] === 'active' ? 'success' : 'danger'; ?>">
+                                        <span class="badge bg-<?php echo $user['status'] === 'active' ? 'success' : 'secondary'; ?>">
                                             <?php echo ucfirst($user['status']); ?>
                                         </span>
                                     </td>
                                     <td><?php echo $user['last_login'] ? date('M d, Y H:i', strtotime($user['last_login'])) : 'Never'; ?></td>
-                                    <td class="text-center">
-                                        <div class="d-flex flex-nowrap gap-1">
-                                            <button class="btn btn-sm btn-outline-primary p-1 view-user" data-id="<?php echo $user['id']; ?>" data-bs-toggle="modal" data-bs-target="#viewUserModal" title="View">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-warning p-1 edit-user" data-id="<?php echo $user['id']; ?>" data-bs-toggle="modal" data-bs-target="#editUserModal" title="Edit">
+                                    <td><?php echo $user['activity_count']; ?></td>
+                                    <td><?php echo date('M d, Y', strtotime($user['created_at'])); ?></td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="editUser(<?php echo $user['id']; ?>)">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-outline-danger p-1 delete-user" data-id="<?php echo $user['id']; ?>" title="Delete">
+                                            <button type="button" class="btn btn-sm btn-outline-info" onclick="viewPermissions(<?php echo $user['id']; ?>)">
+                                                <i class="bi bi-shield-lock"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteUser(<?php echo $user['id']; ?>)">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </div>
@@ -366,32 +472,23 @@ $stmt->close();
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Add User Modal -->
-    <div class="modal fade" id="addUserModal" tabindex="-1">
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add New User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form method="POST" id="addUserForm">
                 <div class="modal-body">
-                    <form id="addUserForm" method="POST" action="">
                         <input type="hidden" name="action" value="add_user">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">First Name</label>
-                                <input type="text" class="form-control" name="first_name" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Last Name</label>
-                                <input type="text" class="form-control" name="last_name" required>
-                            </div>
-                        </div>
                         <div class="mb-3">
                             <label class="form-label">Username</label>
                             <input type="text" class="form-control" name="username" required>
@@ -404,113 +501,30 @@ $stmt->close();
                             <label class="form-label">Password</label>
                             <input type="password" class="form-control" name="password" required>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" name="first_name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" name="last_name" required>
+                            </div>
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">Role</label>
                             <select class="form-select" name="role" required>
                                 <option value="user">User</option>
                                 <option value="manager">Manager</option>
-                              
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" form="addUserForm" class="btn btn-primary">Add User</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- View User Modal -->
-    <div class="modal fade" id="viewUserModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">User Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center mb-3">
-                        <img id="viewPhoto" src="" class="img-fluid rounded-circle mb-2" style="max-width: 150px;">
-                        <h5 id="viewName" class="mb-1"></h5>
-                        <p id="viewRole" class="text-muted"></p>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <p id="viewUsername" class="form-control-static"></p>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <p id="viewEmail" class="form-control-static"></p>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <p id="viewStatus" class="form-control-static"></p>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Last Login</label>
-                        <p id="viewLastLogin" class="form-control-static"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit User Modal -->
-    <div class="modal fade" id="editUserModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editUserForm">
-                        <input type="hidden" name="id" id="editId">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">First Name</label>
-                                <input type="text" class="form-control" name="first_name" id="editFirstName" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Last Name</label>
-                                <input type="text" class="form-control" name="last_name" id="editLastName" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Username</label>
-                            <input type="text" class="form-control" name="username" id="editUsername" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" id="editEmail" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" class="form-control" name="password" placeholder="Leave blank to keep current password">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Role</label>
-                            <select class="form-select" name="role" id="editRole" required>
-                                <option value="user">User</option>
-                                <option value="manager">Manager</option>
                                 <option value="admin">Admin</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" name="status" id="editStatus" required>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
-                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="updateUser">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add User</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -526,9 +540,10 @@ $stmt->close();
         
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize DataTable
-            const table = $('#userTable').DataTable({
-                order: [[6, 'desc']],
-                pageLength: 25,
+            const table = $('#usersTable').DataTable({
+                order: [[8, 'desc']],
+                pageLength: 10,
+                responsive: true,
                 language: {
                     search: "",
                     searchPlaceholder: "Search...",
@@ -558,116 +573,385 @@ $stmt->close();
                 <?php unset($_SESSION['alert']); ?>
             <?php endif; ?>
 
-            // View User Details
-            document.querySelectorAll('.view-user').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.dataset.id;
-                    fetch(`get_user.php?id=${id}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                const user = data.user;
-                                document.getElementById('viewPhoto').src = user.photo || 
-                                    `https://ui-avatars.com/api/?name=${encodeURIComponent(user.first_name + '+' + user.last_name)}`;
-                                document.getElementById('viewName').textContent = `${user.first_name} ${user.last_name}`;
-                                document.getElementById('viewRole').textContent = user.role;
-                                document.getElementById('viewUsername').textContent = user.username;
-                                document.getElementById('viewEmail').textContent = user.email;
-                                document.getElementById('viewStatus').innerHTML = 
-                                    `<span class="status-badge bg-${user.status === 'active' ? 'success' : 'danger'}">${user.status}</span>`;
-                                document.getElementById('viewLastLogin').textContent = 
-                                    user.last_login ? new Date(user.last_login).toLocaleString() : 'Never';
-                            }
+            // Handle form submission
+            $('#addUserForm').on('submit', function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const submitBtn = form.find('button[type="submit"]');
+                
+                // Show loading state
+                submitBtn.prop('disabled', true);
+                submitBtn.html('<span class="spinner-border spinner-border-sm me-2"></span>Adding...');
+                
+                // Submit form
+                $.ajax({
+                    url: window.location.href,
+                    type: 'POST',
+                    data: new FormData(this),
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while adding the user. Please try again.'
                         });
-                });
-            });
-
-            // Edit User
-            document.querySelectorAll('.edit-user').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.dataset.id;
-                    fetch(`get_user.php?id=${id}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                const user = data.user;
-                                document.getElementById('editId').value = user.id;
-                                document.getElementById('editFirstName').value = user.first_name;
-                                document.getElementById('editLastName').value = user.last_name;
-                                document.getElementById('editUsername').value = user.username;
-                                document.getElementById('editEmail').value = user.email;
-                                document.getElementById('editRole').value = user.role;
-                                document.getElementById('editStatus').value = user.status;
-                            }
-                        });
-                });
-            });
-
-            // Update User
-            document.getElementById('updateUser').addEventListener('click', function() {
-                const form = document.getElementById('editUserForm');
-                const formData = new FormData(form);
-
-                fetch('update_user.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert('Error updating user');
+                    },
+                    complete: function() {
+                        submitBtn.prop('disabled', false);
+                        submitBtn.html('Add User');
                     }
                 });
             });
 
-            // Delete User
-            document.querySelectorAll('.delete-user').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.dataset.id;
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: 'This action will permanently delete this user.',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            fetch('delete_user.php', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded',
-                                },
-                                body: `id=${id}`
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success!',
-                                        text: 'User has been deleted successfully.',
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    }).then(() => {
-                                        location.reload();
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error!',
-                                        text: 'Failed to delete user.',
-                                        showConfirmButton: true
-                                    });
-                                }
+            // Edit User
+            function editUser(userId) {
+                // Fetch user data
+                $.ajax({
+                    url: 'get_user.php',
+                    type: 'GET',
+                    data: { id: userId },
+                    success: function(response) {
+                        if (response.success) {
+                            const user = response.user;
+                            // Create modal HTML
+                            const modalHtml = `
+                                <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form id="editUserForm">
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="action" value="edit_user">
+                                                    <input type="hidden" name="id" value="${user.id}">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Username</label>
+                                                        <input type="text" class="form-control" name="username" value="${user.username}" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Email</label>
+                                                        <input type="email" class="form-control" name="email" value="${user.email}" required>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-3">
+                                                            <label class="form-label">First Name</label>
+                                                            <input type="text" class="form-control" name="first_name" value="${user.first_name}" required>
+                                                        </div>
+                                                        <div class="col-md-6 mb-3">
+                                                            <label class="form-label">Last Name</label>
+                                                            <input type="text" class="form-control" name="last_name" value="${user.last_name}" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Role</label>
+                                                        <select class="form-select" name="role" required>
+                                                            <option value="user" ${user.role === 'user' ? 'selected' : ''}>User</option>
+                                                            <option value="manager" ${user.role === 'manager' ? 'selected' : ''}>Manager</option>
+                                                            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Status</label>
+                                                        <select class="form-select" name="status" required>
+                                                            <option value="active" ${user.status === 'active' ? 'selected' : ''}>Active</option>
+                                                            <option value="inactive" ${user.status === 'inactive' ? 'selected' : ''}>Inactive</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+
+                            // Remove existing modal if any
+                            $('#editUserModal').remove();
+                            
+                            // Add new modal to body
+                            $('body').append(modalHtml);
+                            
+                            // Initialize modal
+                            const editModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                            editModal.show();
+
+                            // Handle form submission
+                            $('#editUserForm').on('submit', function(e) {
+                                e.preventDefault();
+                                const form = $(this);
+                                const submitBtn = form.find('button[type="submit"]');
+                                
+                                // Show loading state
+                                submitBtn.prop('disabled', true);
+                                submitBtn.html('<span class="spinner-border spinner-border-sm me-2"></span>Saving...');
+                                
+                                // Submit form
+                                $.ajax({
+                                    url: window.location.href,
+                                    type: 'POST',
+                                    data: new FormData(this),
+                                    processData: false,
+                                    contentType: false,
+                                    success: function(response) {
+                                        if (response.success) {
+                                            editModal.hide();
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Success',
+                                                text: 'User updated successfully',
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            }).then(() => {
+                                                window.location.reload();
+                                            });
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error',
+                                                text: response.message || 'Failed to update user'
+                                            });
+                                        }
+                                    },
+                                    error: function() {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: 'Failed to update user'
+                                        });
+                                    },
+                                    complete: function() {
+                                        submitBtn.prop('disabled', false);
+                                        submitBtn.html('Save Changes');
+                                    }
+                                });
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to fetch user data'
                             });
                         }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to fetch user data'
+                        });
+                    }
+                });
+            }
+
+            // View Permissions
+            function viewPermissions(userId) {
+                // Fetch user permissions
+                $.ajax({
+                    url: 'get_permissions.php',
+                    type: 'GET',
+                    data: { user_id: userId },
+                    success: function(response) {
+                        if (response.success) {
+                            const permissions = response.permissions;
+                            const modules = ['dashboard', 'organizational_codes', 'applicants', 'records', 'users'];
+                            
+                            let html = `
+                                <form id="permissionsForm">
+                                    <input type="hidden" name="action" value="update_permissions">
+                                    <input type="hidden" name="user_id" value="${userId}">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Module</th>
+                                                    <th>View</th>
+                                                    <th>Create</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                            `;
+                            
+                            modules.forEach(module => {
+                                const modulePerms = permissions[module] || { can_view: 0, can_create: 0, can_edit: 0, can_delete: 0 };
+                                html += `
+                                    <tr>
+                                        <td>${module.replace('_', ' ').toUpperCase()}</td>
+                                        <td><input type="checkbox" name="permissions[${module}][view]" ${modulePerms.can_view ? 'checked' : ''}></td>
+                                        <td><input type="checkbox" name="permissions[${module}][create]" ${modulePerms.can_create ? 'checked' : ''}></td>
+                                        <td><input type="checkbox" name="permissions[${module}][edit]" ${modulePerms.can_edit ? 'checked' : ''}></td>
+                                        <td><input type="checkbox" name="permissions[${module}][delete]" ${modulePerms.can_delete ? 'checked' : ''}></td>
+                                    </tr>
+                                `;
+                            });
+                            
+                            html += `
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </form>
+                            `;
+                            
+                            Swal.fire({
+                                title: 'User Permissions',
+                                html: html,
+                                showCancelButton: true,
+                                confirmButtonText: 'Save Changes',
+                                cancelButtonText: 'Cancel',
+                                preConfirm: () => {
+                                    const form = document.getElementById('permissionsForm');
+                const formData = new FormData(form);
+
+                                    return $.ajax({
+                                        url: window.location.href,
+                                        type: 'POST',
+                                        data: formData,
+                                        processData: false,
+                                        contentType: false
+                                    }).then(response => {
+                                        if (!response.success) {
+                                            throw new Error(response.message);
+                                        }
+                                        return response;
+                                    });
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success',
+                                        text: 'Permissions updated successfully',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                }
+                            }).catch(error => {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: error.message || 'Failed to update permissions'
+                                });
+                            });
+                    } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to fetch permissions'
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to fetch permissions'
+                        });
+                    }
+                });
+            }
+
+            // Delete User
+            function deleteUser(userId) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        const formData = new FormData();
+                        formData.append('action', 'delete_user');
+                        formData.append('id', userId);
+                        
+                        return $.ajax({
+                            url: window.location.href,
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false
+                        }).then(response => {
+                            if (!response.success) {
+                                throw new Error(response.message);
+                            }
+                            return response;
+                        });
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'User deleted successfully',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
+                }).catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.message || 'Failed to delete user'
                     });
                 });
-            });
+            }
+
+            function confirmLogout() {
+                // Check if running on localhost
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You will be logged out of the system.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, logout',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '../logout.php';
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Logout is only available on localhost'
+                    });
+                }
+            }
         });
     </script>
 </body>

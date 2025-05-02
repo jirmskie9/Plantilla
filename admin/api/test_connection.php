@@ -14,6 +14,11 @@ try {
         $columns[] = $row['Field'];
     }
     
+    // Check if remarks column exists, if not add it
+    if (!in_array('remarks', $columns)) {
+        $conn->query("ALTER TABLE records ADD COLUMN remarks TEXT DEFAULT NULL AFTER date_longevity");
+    }
+    
     echo json_encode([
         'success' => true,
         'divisions_count' => $divisions,

@@ -10,6 +10,10 @@ try {
         throw new Exception('No records provided');
     }
     
+    // Get current user ID from session
+    session_start();
+    $created_by = $_SESSION['user_id'] ?? 1; // Default to admin if not set
+    
     // Start transaction
     $conn->begin_transaction();
     
@@ -17,8 +21,8 @@ try {
     $insertStmt = $conn->prepare("
         INSERT INTO records (
             employee_id, name, position, salary_grade, status, division_id,
-            created_by, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+            remarks, created_by, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
     ");
     
     $updateStmt = $conn->prepare("
@@ -29,6 +33,8 @@ try {
             salary_grade = ?,
             status = ?,
             division_id = ?,
+            remarks = ?,
+            updated_by = ?,
             updated_at = NOW()
         WHERE id = ?
     ");
@@ -44,6 +50,7 @@ try {
             $salary_grade = $record['salary_grade'] ?? '';
             $status = $record['status'] ?? '';
             $division_id = $record['division_id'] ?? null;
+            $remarks = $record['remarks'] ?? null;
             
             // Validate required fields
             if (empty($employee_id) || empty($name) || empty($position) || empty($salary_grade) || empty($status) || empty($division_id)) {
@@ -53,25 +60,29 @@ try {
             // Check if record exists
             if (isset($record['id']) && !empty($record['id'])) {
                 // Update existing record
-                $updateStmt->bind_param('sssssii',
+                $updateStmt->bind_param('sssssssii',
                     $employee_id,
                     $name,
                     $position,
                     $salary_grade,
                     $status,
                     $division_id,
+                    $remarks,
+                    $created_by,
                     $record['id']
                 );
                 $updateStmt->execute();
             } else {
                 // Insert new record
-                $insertStmt->bind_param('sssssi',
+                $insertStmt->bind_param('ssssssii',
                     $employee_id,
                     $name,
                     $position,
                     $salary_grade,
                     $status,
-                    $division_id
+                    $division_id,
+                    $remarks,
+                    $created_by
                 );
                 $insertStmt->execute();
             }

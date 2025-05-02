@@ -175,7 +175,8 @@ try {
             $checkStmt->close();
             
             // Prepare the query
-            $query = "INSERT INTO records (division_id, employee_id, name, position, salary_grade, status, created_by, updated_by) 
+            $query = "INSERT INTO records (division_id, plantilla_no , plantilla_division, plantilla_section, equivalent_division, plantilla_division_definition,plantilla_section_definition,
+            fullname,last_name,first_name,middle_name,ext_name,mi,sex, position_title ,item_number,tech_code,level,,appointment_status,sg,step,monthly_salary,date_of_birth,,date_orig_appt,date_govt_srvc,date_last_promotion,date_last_increment, date_longevity,date_vacated,	vacated_due_to, vacated_by, id_no,remarks,  created_by, updated_by) 
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             
             // Prepare and execute the statement
@@ -275,6 +276,9 @@ try {
     $worksheet = $spreadsheet->getActiveSheet();
     $highestRow = $worksheet->getHighestRow();
 
+    // Get current user ID from session
+    $created_by = $_SESSION['user_id'] ?? 1; // Default to admin if not set
+
     // Begin transaction
     $conn->begin_transaction();
     $stmt = $conn->prepare("INSERT INTO records (employee_id, name, position, salary_grade, status, division_id, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)");
@@ -294,14 +298,13 @@ try {
             $salary_grade = trim($worksheet->getCellByColumnAndRow(4, $row)->getValue());
             $status = trim(strtolower($worksheet->getCellByColumnAndRow(5, $row)->getValue() ?? 'active'));
             $division_id = (int)($worksheet->getCellByColumnAndRow(6, $row)->getValue() ?? $division);
-            $created_by = $_SESSION['user_id'] ?? 1;
 
             if (empty($employee_id) || empty($name) || empty($position) || empty($salary_grade)) {
                 $errors[] = "Row $row: Missing required fields";
                 continue;
             }
 
-            $stmt->bind_param("sssssii", 
+            $stmt->bind_param("ssssssi", 
                 $employee_id,
                 $name,
                 $position,

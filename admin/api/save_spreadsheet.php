@@ -28,6 +28,7 @@ try {
             salary_grade = ?,
             status = ?,
             division_id = ?,
+            remarks = ?,
             updated_at = CURRENT_TIMESTAMP
         WHERE employee_id = ?
     ");
@@ -62,12 +63,13 @@ try {
         
         // Bind parameters and execute
         $stmt->bind_param(
-            "sssssi",
+            "sssssss",
             $record['name'],
             $record['position'],
             $record['salary_grade'],
             $record['status'],
             $record['division_id'],
+            $record['remarks'] ?? null,
             $record['employee_id']
         );
         

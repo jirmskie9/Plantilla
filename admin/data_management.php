@@ -8,6 +8,155 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     exit();
 }
 
+// Handle file upload first
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
+    // Clear any previous output
+    ob_clean();
+    
+    $file = $_FILES['csv_file'];
+    $errors = [];
+    $success = false;
+    $message = '';
+    
+    // Validate file
+    if ($file['error'] === UPLOAD_ERR_OK) {
+        $fileType = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        
+        // Check if file is CSV
+        if ($fileType !== 'csv') {
+            $errors[] = "Only CSV files are allowed.";
+        } else {
+            // Create uploads directory if it doesn't exist
+            $uploadDir = '../uploads/';
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+            
+            // Generate unique filename
+            $fileName = uniqid('upload_') . '.' . $fileType;
+            $filePath = $uploadDir . $fileName;
+            
+            // Move uploaded file
+            if (move_uploaded_file($file['tmp_name'], $filePath)) {
+                // Record file upload
+                $stmt = $conn->prepare("INSERT INTO file_uploads (user_id, file_name, file_path, file_type, file_size) VALUES (?, ?, ?, 'csv', ?)");
+                $stmt->bind_param("issi", $_SESSION['user_id'], $file['name'], $filePath, $file['size']);
+                $stmt->execute();
+                $uploadId = $stmt->insert_id;
+                
+                // Process CSV file
+                if (($handle = fopen($filePath, "r")) !== FALSE) {
+                    // Skip header row
+                    fgetcsv($handle);
+                    
+                    // Prepare insert statement
+                    $sql = "INSERT INTO records (
+                        plantilla_no, plantilla_division, plantilla_section,
+                        equivalent_division, plantilla_division_definition, plantilla_section_definition,
+                        fullname, last_name, first_name, middle_name, ext_name, mi, sex,
+                        position_title, item_number, tech_code, level, appointment_status,
+                        sg, step, monthly_salary, date_of_birth, date_orig_appt, date_govt_srvc,
+                        date_last_promotion, date_last_increment, date_longevity, date_vacated,
+                        vacated_due_to, vacated_by, id_no, created_by
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    
+                    $insertStmt = $conn->prepare($sql);
+                    
+                    if (!$insertStmt) {
+                        throw new Exception("Prepare failed: " . $conn->error);
+                    }
+
+                    $rowCount = 0;
+                    while (($data = fgetcsv($handle)) !== FALSE) {
+                        // Map CSV columns to database fields
+                        $plantillaNo = $data[0] ?? null;
+                        $plantillaDivision = $data[1] ?? null;
+                        $plantillaSection = $data[2] ?? null;
+                        $equivalentDivision = $data[3] ?? null;
+                        $plantillaDivisionDefinition = $data[4] ?? null;
+                        $plantillaSectionDefinition = $data[5] ?? null;
+                        $fullname = $data[6] ?? null;
+                        $lastName = $data[7] ?? null;
+                        $firstName = $data[8] ?? null;
+                        $middleName = $data[9] ?? null;
+                        $extName = $data[10] ?? null;
+                        $mi = $data[11] ?? null;
+                        $sex = $data[12] ?? null;
+                        $positionTitle = $data[13] ?? null;
+                        $itemNumber = $data[14] ?? null;
+                        $techCode = $data[15] ?? null;
+                        $level = $data[16] ?? null;
+                        $appointmentStatus = $data[17] ?? null;
+                        $sg = $data[18] ?? null;
+                        $step = $data[19] ?? null;
+                        $monthlySalary = $data[20] ?? null;
+                        $dateOfBirth = $data[21] ?? null;
+                        $dateOrigAppt = $data[22] ?? null;
+                        $dateGovtSrvc = $data[23] ?? null;
+                        $dateLastPromotion = $data[24] ?? null;
+                        $dateLastIncrement = $data[25] ?? null;
+                        $dateLongevity = $data[26] ?? null;
+                        $dateVacated = $data[27] ?? null;
+                        $vacatedDueTo = $data[28] ?? null;
+                        $vacatedBy = $data[29] ?? null;
+                        $idNo = $data[30] ?? null;
+                        
+                        // Bind parameters
+                        $insertStmt->bind_param(
+                            "sssssssssssssssssssssssssssssssi",
+                            $plantillaNo, $plantillaDivision, $plantillaSection,
+                            $equivalentDivision, $plantillaDivisionDefinition, $plantillaSectionDefinition,
+                            $fullname, $lastName, $firstName, $middleName, $extName, $mi, $sex,
+                            $positionTitle, $itemNumber, $techCode, $level, $appointmentStatus,
+                            $sg, $step, $monthlySalary, $dateOfBirth, $dateOrigAppt, $dateGovtSrvc,
+                            $dateLastPromotion, $dateLastIncrement, $dateLongevity, $dateVacated,
+                            $vacatedDueTo, $vacatedBy, $idNo, $_SESSION['user_id']
+                        );
+                        
+                        if (!$insertStmt->execute()) {
+                            throw new Exception("Execute failed: " . $insertStmt->error);
+                        }
+                        
+                        $rowCount++;
+                    }
+                    
+                    fclose($handle);
+                    $insertStmt->close();
+                    
+                    // Update file upload status
+                    $updateStmt = $conn->prepare("UPDATE file_uploads SET status = ? WHERE id = ?");
+                    $status = empty($errors) ? 'processed' : 'failed';
+                    $updateStmt->bind_param("si", $status, $uploadId);
+                    $updateStmt->execute();
+                    
+                    $success = true;
+                    $message = "Successfully imported $rowCount records.";
+                } else {
+                    $errors[] = "Could not open the uploaded file.";
+                }
+            } else {
+                $errors[] = "Failed to move uploaded file.";
+            }
+        }
+    } else {
+        $errors[] = "Error uploading file: " . $file['error'];
+    }
+    
+    // Clear any output buffer
+    ob_clean();
+    
+    // Set proper headers for JSON response
+    header('Content-Type: application/json');
+    
+    // Return JSON response
+    echo json_encode([
+        'success' => $success,
+        'message' => $message,
+        'error' => !empty($errors) ? implode("\n", $errors) : null
+    ]);
+    exit();
+}
+
 // Initialize variables
 $selected_division = isset($_GET['division']) ? (int)$_GET['division'] : 0;
 $selected_month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
@@ -294,7 +443,7 @@ $monthly_files = getMonthlyFiles($selected_month);
                 </div>
             </div>
             <div class="logout-btn">
-                <a class="nav-link" href="../logout.php">
+            <a class="nav-link" onclick="return confirm('Are you sure you want to logout?')" href="logout.php">
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Logout</span>
                 </a>
@@ -317,6 +466,51 @@ $monthly_files = getMonthlyFiles($selected_month);
                     <button class="btn btn-success" id="newWorkbookBtn">
                         <i class="bi bi-file-earmark-plus me-2"></i>New Workbook
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <?php if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])): ?>
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    <?php foreach ($_SESSION['errors'] as $error): ?>
+                        <li><?php echo htmlspecialchars($error); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php unset($_SESSION['errors']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['success_message'])): ?>
+            <div class="alert alert-success">
+                <?php echo htmlspecialchars($_SESSION['success_message']); ?>
+            </div>
+            <?php unset($_SESSION['success_message']); ?>
+        <?php endif; ?>
+
+        <!-- Upload Modal -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadModalLabel">Upload CSV File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" enctype="multipart/form-data" id="uploadForm" onsubmit="return false;">
+                            <div class="mb-3">
+                                <label for="csv_file" class="form-label">Select CSV File</label>
+                                <input type="file" class="form-control" id="csv_file" name="csv_file" accept=".csv" required>
+                                <div class="form-text">Only CSV files are allowed. The file should match the sample format.</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="uploadBtn">
+                            <i class="bi bi-upload me-2"></i>Upload
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -394,13 +588,38 @@ $monthly_files = getMonthlyFiles($selected_month);
                                     <table class="table table-striped table-hover" id="recordsTable">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Salary Grade</th>
-                                                <th>Status</th>
-                                                <th>Division</th>
-                                                <th>Created At</th>
+                                                <th>PLANTILLA NO.</th>
+                                                <th>PLANTILLA DIVISION</th>
+                                                <th>EQUIVALENT DIVISION</th>
+                                                <th>PLANTILLA DIVISION DEFINITION</th>
+                                                <th>FULLNAME</th>
+                                                <th>LAST NAME</th>
+                                                <th>FIRST NAME</th>
+                                                <th>MIDDLE NAME</th>
+                                                <th>EXT NAME</th>
+                                                <th>MI</th>
+                                                <th>SEX</th>
+                                                <th>POSITION TITLE</th>
+                                                <th>ITEM NUMBER</th>
+                                                <th>TECH CODE</th>
+                                                <th>LEVEL</th>
+                                                <th>APPOINTMENT STATUS</th>
+                                                <th>SG</th>
+                                                <th>STEP</th>
+                                                <th>MONTHLY SALARY</th>
+                                                <th>DATE OF BIRTH</th>
+                                                <th>DATE ORIG. APPT.</th>
+                                                <th>DATE GOVT SRVC</th>
+                                                <th>DATE LAST PROMOTION</th>
+                                                <th>DATE LAST INCREMENT</th>
+                                                <th>DATE OF LONGEVITY</th>
+                                                <th>REMARKS</th>
+                                                <th>DATE VACATED</th>
+                                                <th>VACATED DUE TO</th>
+                                                <th>VACATED BY</th>
+                                                <th>ID NO.</th>
+                                                <th>CREATED AT</th>
+                                                <th>UPDATED AT</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -479,53 +698,6 @@ $monthly_files = getMonthlyFiles($selected_month);
                 </div>
             </div>
         </div>
-
-        <!-- Upload Modal -->
-        <div class="modal fade" id="uploadModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Upload Data File</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="uploadForm" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label class="form-label">Select File</label>
-                                <input type="file" class="form-control" id="file" name="file" accept=".csv, .xls, .xlsx" required>
-                                <small class="text-muted">Supported formats: CSV, Excel (XLS, XLSX)</small>
-                                <div id="fileHelp" class="form-text">
-                                    File should contain columns: Employee ID, Name, Position, Salary Grade, Status, Division ID
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Division</label>
-                                <select class="form-select" name="division" id="division" required>
-                                    <?php 
-                                    $divisions = $conn->query("SELECT * FROM divisions WHERE id != 0 ORDER BY name");
-                                    while ($division = $divisions->fetch_assoc()): ?>
-                                        <option value="<?= $division['id'] ?>"><?= $division['name'] ?></option>
-                                    <?php endwhile; ?>
-                                </select>
-                            </div>
-                            <div class="upload-progress d-none">
-                                <div class="progress mb-3">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                                </div>
-                                <div class="text-center text-muted small upload-status"></div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" form="uploadForm" class="btn btn-primary" id="uploadBtn">
-                            <span class="spinner-border spinner-border-sm d-none" role="status"></span>
-                            Upload
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- JavaScript Libraries -->
@@ -568,24 +740,113 @@ $monthly_files = getMonthlyFiles($selected_month);
                     url: 'api/get_records.php',
                     type: 'GET',
                     data: function(d) {
-                        d.division = $('#divisionFilter').val();
+                        const selectedDivision = $('#divisionFilter option:selected').text();
+                        d.division = selectedDivision === 'All Divisions' ? '' : selectedDivision;
                         d.month = $('#monthFilter').val();
                     }
                 },
                 columns: [
-                    { data: 'id' },
-                    { data: 'name' },
-                    { data: 'position' },
-                    { data: 'salary_grade' },
+                    { data: 'id', type: 'numeric', width: 50, readOnly: true },
+                    { data: 'plantilla_no', type: 'text', width: 100 },
                     { 
-                        data: 'status',
+                        data: 'plantilla_division',
+                        type: 'text',
+                        width: 150
+                    },
+                    { data: 'equivalent_division' },
+                    { data: 'plantilla_division_definition' },
+                    { data: 'fullname' },
+                    { data: 'last_name' },
+                    { data: 'first_name' },
+                    { data: 'middle_name' },
+                    { data: 'ext_name' },
+                    { data: 'mi' },
+                    { data: 'sex' },
+                    { data: 'position_title' },
+                    { data: 'item_number' },
+                    { data: 'tech_code' },
+                    { data: 'level' },
+                    { data: 'appointment_status' },
+                    { data: 'sg' },
+                    { data: 'step' },
+                    { data: 'monthly_salary' },
+                    { 
+                        data: 'date_of_birth',
                         render: function(data, type, row) {
-                            return `<span class="badge bg-${data === 'active' ? 'success' : 'danger'}">${data}</span>`;
+                            if (type === 'display' && data) {
+                                return new Date(data).toLocaleDateString();
+                            }
+                            return data;
                         }
                     },
-                    { data: 'division_name' },
+                    { 
+                        data: 'date_orig_appt',
+                        render: function(data, type, row) {
+                            if (type === 'display' && data) {
+                                return new Date(data).toLocaleDateString();
+                            }
+                            return data;
+                        }
+                    },
+                    { 
+                        data: 'date_govt_srvc',
+                        render: function(data, type, row) {
+                            if (type === 'display' && data) {
+                                return new Date(data).toLocaleDateString();
+                            }
+                            return data;
+                        }
+                    },
+                    { 
+                        data: 'date_last_promotion',
+                        render: function(data, type, row) {
+                            if (type === 'display' && data) {
+                                return new Date(data).toLocaleDateString();
+                            }
+                            return data;
+                        }
+                    },
+                    { 
+                        data: 'date_last_increment',
+                        render: function(data, type, row) {
+                            if (type === 'display' && data) {
+                                return new Date(data).toLocaleDateString();
+                            }
+                            return data;
+                        }
+                    },
+                    { 
+                        data: 'date_longevity',
+                        render: function(data, type, row) {
+                            if (type === 'display' && data) {
+                                return new Date(data).toLocaleDateString();
+                            }
+                            return data;
+                        }
+                    },
+                    { 
+                        data: 'date_vacated',
+                        render: function(data, type, row) {
+                            if (type === 'display' && data) {
+                                return new Date(data).toLocaleDateString();
+                            }
+                            return data;
+                        }
+                    },
+                    { data: 'vacated_due_to' },
+                    { data: 'vacated_by' },
+                    { data: 'id_no' },
                     { 
                         data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' && data) {
+                                return new Date(data).toLocaleString();
+                            }
+                            return data;
+                        }
+                    },
+                    { 
+                        data: 'updated_at',
                         render: function(data, type, row) {
                             if (type === 'display' && data) {
                                 return new Date(data).toLocaleString();
@@ -622,10 +883,10 @@ $monthly_files = getMonthlyFiles($selected_month);
 
             // Handle division filter change
             $('#divisionFilter').on('change', function() {
-                const divisionId = $(this).val();
+                const divisionName = $(this).find('option:selected').text();
                 // Update URL without page reload
                 const newUrl = new URL(window.location.href);
-                newUrl.searchParams.set('division', divisionId);
+                newUrl.searchParams.set('division', encodeURIComponent(divisionName));
                 window.history.pushState({}, '', newUrl);
                 recordsTable.ajax.reload();
             });
@@ -761,12 +1022,35 @@ $monthly_files = getMonthlyFiles($selected_month);
             $('#addRow').click(function() {
                 const currentData = hot.getData();
                 const newRow = {
-                    employee_id: '',
-                    name: '',
-                    position: '',
-                    salary_grade: '',
-                    status: 'active',
-                    division_id: $('#divisionFilter').val()
+                    plantilla_no: '',
+                    division_id: $('#divisionFilter').val(),
+                    equivalent_division: '',
+                    plantilla_division_definition: '',
+                    fullname: '',
+                    last_name: '',
+                    first_name: '',
+                    middle_name: '',
+                    ext_name: '',
+                    mi: '',
+                    sex: '',
+                    position_title: '',
+                    item_number: '',
+                    tech_code: '',
+                    level: '',
+                    appointment_status: '',
+                    sg: '',
+                    step: '',
+                    monthly_salary: '',
+                    date_of_birth: '',
+                    date_orig_appt: '',
+                    date_govt_srvc: '',
+                    date_last_promotion: '',
+                    date_last_increment: '',
+                    date_longevity: '',
+                    date_vacated: '',
+                    vacated_due_to: '',
+                    vacated_by: '',
+                    id_no: ''
                 };
                 hot.alter('insert_row', currentData.length, 1, newRow);
             });
@@ -789,51 +1073,82 @@ $monthly_files = getMonthlyFiles($selected_month);
                 });
             });
 
-            // Initialize Handsontable for Spreadsheet tab
-            const container = document.getElementById('spreadsheet');
-            const hot = new Handsontable(container, {
-                data: [], // Empty data to start
-                colHeaders: ['Employee ID', 'Name', 'Position', 'Salary Grade', 'Status', 'Division'],
+            const hot = new Handsontable(document.getElementById('spreadsheet'), {
+                colHeaders: [
+                    'ID',
+                    'PLANTILLA NO.',
+                    'PLANTILLA DIVISION',
+                    'EQUIVALENT DIVISION',
+                    'PLANTILLA DIVISION DEFINITION',
+                    'FULLNAME',
+                    'LAST NAME',
+                    'FIRST NAME',
+                    'MIDDLE NAME',
+                    'EXT NAME',
+                    'MI',
+                    'SEX',
+                    'POSITION TITLE',
+                    'ITEM NUMBER',
+                    'TECH CODE',
+                    'LEVEL',
+                    'APPOINTMENT STATUS',
+                    'SG',
+                    'STEP',
+                    'MONTHLY SALARY',
+                    'DATE OF BIRTH',
+                    'DATE ORIG. APPT.',
+                    'DATE GOVT SRVC',
+                    'DATE LAST PROMOTION',
+                    'DATE LAST INCREMENT',
+                    'DATE OF LONGEVITY',
+                    'REMARKS',
+                    'DATE VACATED',
+                    'VACATED DUE TO',
+                    'VACATED BY',
+                    'ID NO.',
+                    'CREATED AT',
+                    'UPDATED AT'
+                ],
                 columns: [
+                    { data: 'id', type: 'numeric', width: 50, readOnly: true },
+                    { data: 'plantilla_no', type: 'text', width: 100 },
                     { 
-                        data: 'employee_id', 
+                        data: 'plantilla_division',
                         type: 'text',
-                        readOnly: true
+                        width: 150
                     },
-                    { data: 'name', type: 'text', readOnly: false },
-                    { data: 'position', type: 'text', readOnly: false },
-                    { data: 'salary_grade', type: 'text', readOnly: false },
-                    { 
-                        data: 'status',
-                        type: 'dropdown',
-                        source: ['active', 'inactive'],
-                        readOnly: false
-                    },
-                    { 
-                        data: 'division_id',
-                        type: 'dropdown',
-                        source: <?php
-                            $divisions = [];
-                            $stmt = $conn->prepare("SELECT id, name FROM divisions WHERE status = 'active' ORDER BY name");
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-                            while ($row = $result->fetch_assoc()) {
-                                $divisions[] = ['id' => $row['id'], 'name' => $row['name']];
-                            }
-                            echo json_encode($divisions);
-                        ?>,
-                        renderer: function(instance, td, row, col, prop, value, cellProperties) {
-                            const division = cellProperties.source.find(d => d.id === value);
-                            Handsontable.renderers.TextRenderer.apply(this, arguments);
-                            if (division) {
-                                td.textContent = division.name;
-                            }
-                        },
-                        readOnly: false
-                    }
+                    { data: 'equivalent_division', type: 'text', width: 150 },
+                    { data: 'plantilla_division_definition', type: 'text', width: 200 },
+                    { data: 'fullname', type: 'text', width: 200 },
+                    { data: 'last_name', type: 'text', width: 150 },
+                    { data: 'first_name', type: 'text', width: 150 },
+                    { data: 'middle_name', type: 'text', width: 150 },
+                    { data: 'ext_name', type: 'text', width: 100 },
+                    { data: 'mi', type: 'text', width: 50 },
+                    { data: 'sex', type: 'text', width: 50 },
+                    { data: 'position_title', type: 'text', width: 200 },
+                    { data: 'item_number', type: 'text', width: 100 },
+                    { data: 'tech_code', type: 'text', width: 100 },
+                    { data: 'level', type: 'text', width: 100 },
+                    { data: 'appointment_status', type: 'text', width: 150 },
+                    { data: 'sg', type: 'text', width: 50 },
+                    { data: 'step', type: 'text', width: 50 },
+                    { data: 'monthly_salary', type: 'numeric', width: 100 },
+                    { data: 'date_of_birth', type: 'date', width: 100 },
+                    { data: 'date_orig_appt', type: 'date', width: 100 },
+                    { data: 'date_govt_srvc', type: 'date', width: 100 },
+                    { data: 'date_last_promotion', type: 'date', width: 100 },
+                    { data: 'date_last_increment', type: 'date', width: 100 },
+                    { data: 'date_longevity', type: 'date', width: 100 },
+                    { data: 'date_vacated', type: 'date', width: 100 },
+                    { data: 'vacated_due_to', type: 'text', width: 150 },
+                    { data: 'vacated_by', type: 'text', width: 150 },
+                    { data: 'id_no', type: 'text', width: 100 },
+                    { data: 'created_at', type: 'date', width: 150 },
+                    { data: 'updated_at', type: 'date', width: 150 }
                 ],
                 rowHeaders: true,
-                colWidths: [120, 200, 200, 120, 100, 150],
+                colWidths: [100, 150, 150, 200, 200, 150, 150, 150, 50, 50, 200, 100, 100, 100, 150, 50, 50, 100, 100, 100, 100, 100, 100, 100, 100, 150, 150, 100, 150, 150],
                 height: 'calc(100vh - 300px)',
                 licenseKey: 'non-commercial-and-evaluation',
                 contextMenu: true,
@@ -852,21 +1167,11 @@ $monthly_files = getMonthlyFiles($selected_month);
                         const rowData = hot.getSourceDataAtRow(changes[0][0]);
                         console.log('Row data:', rowData);
                         
-                        // Validate the data before sending
-                        if (!rowData || !rowData.employee_id) {
+                        // Only validate if the row exists
+                        if (!rowData) {
                             console.error('Invalid row data:', rowData);
                             return;
                         }
-
-                        const record = {
-                            employee_id: rowData.employee_id,
-                            name: rowData.name || '',
-                            position: rowData.position || '',
-                            salary_grade: rowData.salary_grade || '',
-                            status: rowData.status || 'active',
-                            division_id: rowData.division_id || 0
-                        };
-                        console.log('Prepared record for update:', record);
 
                         // Store the old value for reverting if needed
                         const oldValue = changes[0][2];
@@ -881,17 +1186,34 @@ $monthly_files = getMonthlyFiles($selected_month);
                         }
                         hot.isUpdating = true;
 
+                        // Get the record ID from the data
+                        const recordId = hot.getDataAtRowProp(row, 'id');
+                        if (!recordId) {
+                            console.error('No record ID found for row:', row);
+                            hot.isUpdating = false;
+                            return;
+                        }
+
+                        // Create update data with only the changed field
+                        const updateData = {
+                            id: recordId,
+                            field: prop,
+                            value: changes[0][3] // The new value
+                        };
+
+                        console.log('Sending update data:', updateData);
+
                         // Update the database immediately
                         $.ajax({
                             url: 'api/update_record.php',
                             method: 'POST',
-                            data: record,
+                            data: updateData,
                             success: function(response) {
                                 console.log('Update response:', response);
                                 try {
                                     const result = typeof response === 'string' ? JSON.parse(response) : response;
                                     if (result.success) {
-                                        // Fetch latest data from database
+                                        // Fetch latest data from database for both spreadsheet and table
                                         $.ajax({
                                             url: 'api/get_records.php',
                                             method: 'GET',
@@ -899,35 +1221,59 @@ $monthly_files = getMonthlyFiles($selected_month);
                                                 division: $('#divisionFilter').val(),
                                                 month: $('#monthFilter').val()
                                             },
-                                            success: function(dataResponse) {
-                                                if (dataResponse.success) {
-                                                    // Transform response data to match Handsontable structure
-                                                    const data = dataResponse.data.map(record => ({
-                                                        employee_id: record.employee_id,
-                                                        name: record.name,
-                                                        position: record.position,
-                                                        salary_grade: record.salary_grade,
-                                                        status: record.status,
-                                                        division_id: record.division_id
+                                            success: function(response) {
+                                                if (response.success) {
+                                                    // Update spreadsheet
+                                                    const data = response.data.map(record => ({
+                                                        id: record.id,
+                                                        plantilla_no: record.plantilla_no,
+                                                        plantilla_division: record.plantilla_division,
+                                                        equivalent_division: record.equivalent_division,
+                                                        plantilla_division_definition: record.plantilla_division_definition,
+                                                        fullname: record.fullname,
+                                                        last_name: record.last_name,
+                                                        first_name: record.first_name,
+                                                        middle_name: record.middle_name,
+                                                        ext_name: record.ext_name,
+                                                        mi: record.mi,
+                                                        sex: record.sex,
+                                                        position_title: record.position_title,
+                                                        item_number: record.item_number,
+                                                        tech_code: record.tech_code,
+                                                        level: record.level,
+                                                        appointment_status: record.appointment_status,
+                                                        sg: record.sg,
+                                                        step: record.step,
+                                                        monthly_salary: record.monthly_salary,
+                                                        date_of_birth: record.date_of_birth,
+                                                        date_orig_appt: record.date_orig_appt,
+                                                        date_govt_srvc: record.date_govt_srvc,
+                                                        date_last_promotion: record.date_last_promotion,
+                                                        date_last_increment: record.date_last_increment,
+                                                        date_longevity: record.date_longevity,
+                                                        date_vacated: record.date_vacated,
+                                                        vacated_due_to: record.vacated_due_to,
+                                                        vacated_by: record.vacated_by,
+                                                        id_no: record.id_no
                                                     }));
-                                                    
-                                                    // Load data into Handsontable
                                                     hot.loadData(data);
                                                     hot.render();
                                                     
+                                                    // Update records table
+                                                    recordsTable.ajax.reload();
+                                                    
+                                                    // Show success message
                                                     if (!Swal.isVisible()) {
                                                         Swal.fire({
                                                             icon: 'success',
                                                             title: 'Success',
                                                             text: 'Record updated successfully',
                                                             showConfirmButton: false,
-                                                            timer: 1000,
+                                                            timer: 2000,
                                                             toast: true,
                                                             position: 'top-end'
                                                         });
                                                     }
-                                                } else {
-                                                    console.error('Failed to fetch updated data:', dataResponse.error);
                                                 }
                                             },
                                             error: function(xhr) {
@@ -979,26 +1325,51 @@ $monthly_files = getMonthlyFiles($selected_month);
 
             // Load initial data for Spreadsheet
             function loadSpreadsheetData() {
-                const divisionId = $('#divisionFilter').val();
+                const selectedDivision = $('#divisionFilter option:selected').text();
+                const division = selectedDivision === 'All Divisions' ? '' : selectedDivision;
                 const month = $('#monthFilter').val();
                 
                 $.ajax({
                     url: 'api/get_records.php',
                     method: 'GET',
                     data: { 
-                        division: divisionId,
+                        division: division,
                         month: month
                     },
                     success: function(response) {
                         if (response.success) {
                             // Transform response data to match Handsontable structure
                             const data = response.data.map(record => ({
-                                employee_id: record.employee_id,
-                                name: record.name,
-                                position: record.position,
-                                salary_grade: record.salary_grade,
-                                status: record.status,
-                                division_id: record.division_id
+                                id: record.id,
+                                plantilla_no: record.plantilla_no,
+                                plantilla_division: record.plantilla_division,
+                                equivalent_division: record.equivalent_division,
+                                plantilla_division_definition: record.plantilla_division_definition,
+                                fullname: record.fullname,
+                                last_name: record.last_name,
+                                first_name: record.first_name,
+                                middle_name: record.middle_name,
+                                ext_name: record.ext_name,
+                                mi: record.mi,
+                                sex: record.sex,
+                                position_title: record.position_title,
+                                item_number: record.item_number,
+                                tech_code: record.tech_code,
+                                level: record.level,
+                                appointment_status: record.appointment_status,
+                                sg: record.sg,
+                                step: record.step,
+                                monthly_salary: record.monthly_salary,
+                                date_of_birth: record.date_of_birth,
+                                date_orig_appt: record.date_orig_appt,
+                                date_govt_srvc: record.date_govt_srvc,
+                                date_last_promotion: record.date_last_promotion,
+                                date_last_increment: record.date_last_increment,
+                                date_longevity: record.date_longevity,
+                                date_vacated: record.date_vacated,
+                                vacated_due_to: record.vacated_due_to,
+                                vacated_by: record.vacated_by,
+                                id_no: record.id_no
                             }));
                             
                             // Load data into Handsontable
@@ -1054,94 +1425,57 @@ $monthly_files = getMonthlyFiles($selected_month);
             });
 
             // File upload handling
-            $('#uploadForm').on('submit', function(e) {
-                e.preventDefault();
+            $('#uploadBtn').on('click', function() {
+                const form = $('#uploadForm')[0];
+                const formData = new FormData(form);
+                const uploadBtn = $(this);
                 
-                const formData = new FormData(this);
-                const $progress = $('.upload-progress');
-                const $progressBar = $progress.find('.progress-bar');
-                const $uploadStatus = $progress.find('.upload-status');
-                const $uploadBtn = $('#uploadBtn');
-                
-                $progress.removeClass('d-none');
-                $uploadBtn.prop('disabled', true);
-                $uploadBtn.find('.spinner-border').removeClass('d-none');
+                uploadBtn.prop('disabled', true);
+                uploadBtn.html('<span class="spinner-border spinner-border-sm me-2"></span>Uploading...');
                 
                 $.ajax({
-                    url: 'api/upload_workbook.php',
+                    url: window.location.href,
                     type: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
-                    xhr: function() {
-                        const xhr = new XMLHttpRequest();
-                        xhr.upload.addEventListener('progress', function(e) {
-                            if (e.lengthComputable) {
-                                const percent = Math.round((e.loaded / e.total) * 100);
-                                $progressBar.css('width', percent + '%');
-                                $uploadStatus.text(`Uploading: ${percent}%`);
-                            }
-                        });
-                        return xhr;
-                    },
                     success: function(response) {
-                        console.log('Upload response:', response);
-                        try {
-                            const result = typeof response === 'string' ? JSON.parse(response) : response;
-                            console.log('Parsed response:', result);
-                            if (result.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Upload Complete',
-                                    text: result.message + ' (' + result.records_processed + ' records processed)'
-                                });
-                                
-                                // Refresh the data table
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                // Reload both table and spreadsheet data
                                 recordsTable.ajax.reload();
-                                
+                                loadSpreadsheetData();
+                                // Reset the form
+                                form.reset();
                                 // Close the modal
                                 $('#uploadModal').modal('hide');
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Upload Failed',
-                                    text: result.error || 'Unknown error occurred'
-                                });
-                            }
-                        } catch (e) {
-                            console.error('Error parsing response:', e);
+                            });
+                        } else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Upload Failed',
-                                text: 'Error parsing server response: ' + e.message
+                                text: response.error || 'An error occurred during upload',
+                                confirmButtonText: 'OK'
                             });
                         }
                     },
-                    error: function(xhr, status, error) {
-                        console.error('Upload error:', {
-                            status: status,
-                            error: error,
-                            response: xhr.responseText
-                        });
-                        
-                        let errorMessage = 'An error occurred during upload';
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            errorMessage = response.error || errorMessage;
-                        } catch (e) {
-                            console.error('Error parsing error response:', e);
-                            errorMessage = 'Server error: ' + xhr.status + ' ' + xhr.statusText;
-                        }
-
+                    error: function() {
                         Swal.fire({
                             icon: 'error',
                             title: 'Upload Failed',
-                            text: errorMessage
+                            text: 'An error occurred during upload. Please try again.',
+                            confirmButtonText: 'OK'
                         });
                     },
                     complete: function() {
-                        $uploadBtn.prop('disabled', false);
-                        $uploadBtn.find('.spinner-border').addClass('d-none');
+                        uploadBtn.prop('disabled', false);
+                        uploadBtn.html('<i class="bi bi-upload me-2"></i>Upload');
                     }
                 });
             });
@@ -1183,6 +1517,51 @@ $monthly_files = getMonthlyFiles($selected_month);
                         });
                     }
                 });
+            });
+
+            // Export button click handler
+            $('#exportBtn').on('click', function() {
+                const selectedDivision = $('#divisionFilter').val();
+                const month = $('#monthFilter').val();
+                
+                // Show loading state
+                Swal.fire({
+                    title: 'Exporting...',
+                    text: 'Please wait while we prepare your export',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                // Create a form for the export
+                const form = $('<form>', {
+                    method: 'POST',
+                    action: 'api/export_records.php',
+                    target: '_blank'
+                });
+                
+                // Add the division and month parameters
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'division',
+                    value: selectedDivision
+                }).appendTo(form);
+                
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'month',
+                    value: month
+                }).appendTo(form);
+                
+                // Add the form to the document and submit it
+                form.appendTo('body').submit();
+                
+                // Close the loading dialog after a short delay
+                setTimeout(() => {
+                    Swal.close();
+                }, 2000);
             });
         });
     </script>
