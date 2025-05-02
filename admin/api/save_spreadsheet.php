@@ -1,4 +1,5 @@
 <?php
+session_start();
 header('Content-Type: application/json');
 require '../../dbconnection.php';
 
@@ -23,14 +24,37 @@ try {
     // Prepare update statement
     $stmt = $conn->prepare("
         UPDATE records SET
-            name = ?,
-            position = ?,
-            salary_grade = ?,
-            status = ?,
-            division_id = ?,
-            remarks = ?,
+            plantilla_no = ?,
+            plantilla_division = ?,
+            equivalent_division = ?,
+            plantilla_division_definition = ?,
+            fullname = ?,
+            last_name = ?,
+            first_name = ?,
+            middle_name = ?,
+            ext_name = ?,
+            mi = ?,
+            sex = ?,
+            position_title = ?,
+            item_number = ?,
+            tech_code = ?,
+            level = ?,
+            appointment_status = ?,
+            sg = ?,
+            step = ?,
+            monthly_salary = ?,
+            date_of_birth = ?,
+            date_orig_appt = ?,
+            date_govt_srvc = ?,
+            date_last_promotion = ?,
+            date_last_increment = ?,
+            date_longevity = ?,
+            date_vacated = ?,
+            vacated_due_to = ?,
+            vacated_by = ?,
+            id_no = ?,
             updated_at = CURRENT_TIMESTAMP
-        WHERE employee_id = ?
+        WHERE id = ?
     ");
     
     if (!$stmt) {
@@ -39,38 +63,56 @@ try {
     
     // Process each record
     foreach ($data['records'] as $record) {
-        if (empty($record['employee_id'])) {
-            continue; // Skip records without employee_id
+        if (empty($record['id'])) {
+            continue; // Skip records without id
         }
         
-        // Validate status
-        if (!in_array($record['status'], ['active', 'inactive'])) {
-            throw new Exception("Invalid status value for employee ID: " . $record['employee_id']);
-        }
+        // Convert empty strings to null for date fields
+        $dateFields = [
+            'date_of_birth', 'date_orig_appt', 'date_govt_srvc',
+            'date_last_promotion', 'date_last_increment', 'date_longevity',
+            'date_vacated'
+        ];
         
-        // Validate division
-        if (!empty($record['division_id'])) {
-            $divisionStmt = $conn->prepare("SELECT id FROM divisions WHERE id = ? AND status = 'active'");
-            $divisionStmt->bind_param("i", $record['division_id']);
-            if (!$divisionStmt->execute()) {
-                throw new Exception('Database error: ' . $divisionStmt->error);
-            }
-            $result = $divisionStmt->get_result();
-            if ($result->num_rows === 0) {
-                throw new Exception("Invalid division ID for employee ID: " . $record['employee_id']);
+        foreach ($dateFields as $field) {
+            if (isset($record[$field]) && $record[$field] === '') {
+                $record[$field] = null;
             }
         }
         
         // Bind parameters and execute
         $stmt->bind_param(
-            "sssssss",
-            $record['name'],
-            $record['position'],
-            $record['salary_grade'],
-            $record['status'],
-            $record['division_id'],
-            $record['remarks'] ?? null,
-            $record['employee_id']
+            "ssssssssssssssssssssssssssssssi",
+            $record['plantilla_no'],
+            $record['plantilla_division'],
+            $record['equivalent_division'],
+            $record['plantilla_division_definition'],
+            $record['fullname'],
+            $record['last_name'],
+            $record['first_name'],
+            $record['middle_name'],
+            $record['ext_name'],
+            $record['mi'],
+            $record['sex'],
+            $record['position_title'],
+            $record['item_number'],
+            $record['tech_code'],
+            $record['level'],
+            $record['appointment_status'],
+            $record['sg'],
+            $record['step'],
+            $record['monthly_salary'],
+            $record['date_of_birth'],
+            $record['date_orig_appt'],
+            $record['date_govt_srvc'],
+            $record['date_last_promotion'],
+            $record['date_last_increment'],
+            $record['date_longevity'],
+            $record['date_vacated'],
+            $record['vacated_due_to'],
+            $record['vacated_by'],
+            $record['id_no'],
+            $record['id']
         );
         
         if (!$stmt->execute()) {
