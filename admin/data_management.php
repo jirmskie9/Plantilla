@@ -191,20 +191,20 @@ function getMonthlyFiles($month) {
     });
 }
 
-// Get available months from uploads directory
+// Get available months from records table
 function getAvailableMonths() {
-    $dir = '../uploads';
-    if (!file_exists($dir)) {
-        return [];
-    }
+    global $conn;
     $months = [];
-    $items = scandir($dir);
-    foreach ($items as $item) {
-        if ($item !== '.' && $item !== '..' && is_dir($dir . '/' . $item)) {
-            $months[] = $item;
+    $query = "SELECT DISTINCT DATE_FORMAT(created_at, '%Y-%m') as month 
+              FROM records 
+              ORDER BY month DESC";
+    $result = $conn->query($query);
+    
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $months[] = $row['month'];
         }
     }
-    rsort($months); // Sort in descending order (newest first)
     return $months;
 }
 
@@ -566,21 +566,48 @@ $monthly_files = getMonthlyFiles($selected_month);
                         <div class="card h-100">
                             <div class="card-header d-flex justify-content-between align-items-center mb-3">
                                 <h5>Records for <?= $selected_division == 0 ? 'All Divisions' : getDivisionName($selected_division) ?></h5>
-                                <div>
-                                    <select id="monthFilter" class="form-select me-2" style="width: 150px; display: inline-block;">
-                                        <option value="">All Months</option>
-                                        <?php 
-                                        $months = ['January', 'February', 'March', 'April', 'May', 'June', 
-                                                  'July', 'August', 'September', 'October', 'November', 'December'];
-                                        foreach ($months as $index => $month): ?>
-                                        <option value="<?= $index + 1 ?>" <?= date('n') == $index + 1 ? 'selected' : '' ?>>
-                                            <?= $month ?>
-                                        </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <button class="btn btn-outline-primary" id="exportBtn">
-                                        <i class="fas fa-download me-2"></i>Export
-                                    </button>
+                                <div class="filters-container">
+                                    <form method="GET" class="filter-form d-flex align-items-center gap-3">
+                                        <div class="form-group mb-0">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-end-0">
+                                                    <i class="bi bi-building"></i>
+                                                </span>
+                                                <select name="division" id="division" class="form-select border-start-0">
+                                                    <option value="0">All Divisions</option>
+                                                    <?php
+                                                    $stmt = $conn->prepare("SELECT id, name FROM divisions ORDER BY name");
+                                                    $stmt->execute();
+                                                    $result = $stmt->get_result();
+                                                    while ($row = $result->fetch_assoc()) {
+                                                        $selected = $selected_division == $row['id'] ? 'selected' : '';
+                                                        echo "<option value='{$row['id']}' {$selected}>{$row['name']}</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-end-0">
+                                                    <i class="bi bi-calendar"></i>
+                                                </span>
+                                                <select name="month" id="month" class="form-select border-start-0">
+                                                    <option value="">All Months</option>
+                                                    <?php
+                                                    $months = getAvailableMonths();
+                                                    foreach ($months as $month) {
+                                                        $selected = $selected_month === $month ? 'selected' : '';
+                                                        echo "<option value='{$month}' {$selected}>{$month}</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-funnel me-1"></i>Apply Filters
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                             <div class="card-body p-0">
@@ -740,9 +767,10 @@ $monthly_files = getMonthlyFiles($selected_month);
                     url: 'api/get_records.php',
                     type: 'GET',
                     data: function(d) {
-                        const selectedDivision = $('#divisionFilter option:selected').text();
-                        d.division = selectedDivision === 'All Divisions' ? '' : selectedDivision;
-                        d.month = $('#monthFilter').val();
+                        const divisionId = $('#division').val();
+                        const month = $('#month').val();
+                        d.division = divisionId;
+                        d.month = month;
                     }
                 },
                 columns: [
@@ -882,17 +910,17 @@ $monthly_files = getMonthlyFiles($selected_month);
             });
 
             // Handle division filter change
-            $('#divisionFilter').on('change', function() {
-                const divisionName = $(this).find('option:selected').text();
+            $('#division').on('change', function() {
+                const divisionId = $(this).val();
                 // Update URL without page reload
                 const newUrl = new URL(window.location.href);
-                newUrl.searchParams.set('division', encodeURIComponent(divisionName));
+                newUrl.searchParams.set('division', divisionId);
                 window.history.pushState({}, '', newUrl);
                 recordsTable.ajax.reload();
             });
 
             // Handle month filter change
-            $('#monthFilter').on('change', function() {
+            $('#month').on('change', function() {
                 const month = $(this).val();
                 // Update URL without page reload
                 const newUrl = new URL(window.location.href);
@@ -1325,15 +1353,14 @@ $monthly_files = getMonthlyFiles($selected_month);
 
             // Load initial data for Spreadsheet
             function loadSpreadsheetData() {
-                const selectedDivision = $('#divisionFilter option:selected').text();
-                const division = selectedDivision === 'All Divisions' ? '' : selectedDivision;
+                const divisionId = $('#divisionFilter').val();
                 const month = $('#monthFilter').val();
                 
                 $.ajax({
                     url: 'api/get_records.php',
                     method: 'GET',
                     data: { 
-                        division: division,
+                        division: divisionId,
                         month: month
                     },
                     success: function(response) {
@@ -1567,3 +1594,60 @@ $monthly_files = getMonthlyFiles($selected_month);
     </script>
 </body>
 </html>
+
+<style>
+.filters-container {
+    background: #fff;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.filter-form .form-group {
+    min-width: 200px;
+}
+
+.filter-form .input-group {
+    border-radius: 0.375rem;
+    overflow: hidden;
+}
+
+.filter-form .input-group-text {
+    padding: 0.375rem 0.75rem;
+    color: #6c757d;
+}
+
+.filter-form .form-select {
+    padding: 0.375rem 0.75rem;
+    border-left: none;
+}
+
+.filter-form .form-select:focus {
+    border-color: #ced4da;
+    box-shadow: none;
+}
+
+.filter-form .btn-primary {
+    padding: 0.375rem 1rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .filters-container {
+        width: 100%;
+    }
+    
+    .filter-form {
+        flex-direction: column;
+        gap: 1rem !important;
+    }
+    
+    .filter-form .form-group {
+        width: 100%;
+    }
+    
+    .filter-form .btn-primary {
+        width: 100%;
+    }
+}
+</style>

@@ -5,6 +5,7 @@ header('Content-Type: application/json');
 try {
     // Get division filter if provided
     $division = isset($_GET['division']) ? $_GET['division'] : '';
+    $month = isset($_GET['month']) ? $_GET['month'] : '';
     
     // Build query
     $query = "SELECT 
@@ -16,12 +17,25 @@ try {
     
     $params = [];
     $types = '';
+    $whereClauses = [];
     
     // Add division filter if specified
     if (!empty($division)) {
-        $query .= " WHERE r.plantilla_division_definition = ?";
+        $whereClauses[] = "r.plantilla_division_definition = ?";
         $params[] = $division;
         $types .= 's';
+    }
+    
+    // Add month filter if specified
+    if (!empty($month)) {
+        $whereClauses[] = "DATE_FORMAT(r.created_at, '%Y-%m') = ?";
+        $params[] = $month;
+        $types .= 's';
+    }
+    
+    // Add WHERE clause if we have any filters
+    if (!empty($whereClauses)) {
+        $query .= " WHERE " . implode(" AND ", $whereClauses);
     }
     
     $query .= " ORDER BY r.plantilla_no ASC";
@@ -52,6 +66,7 @@ try {
             'query' => $query,
             'params' => $params,
             'division' => $division,
+            'month' => $month,
             'num_rows' => $result->num_rows
         ]
     ]);

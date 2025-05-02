@@ -84,6 +84,25 @@ $stmt->close();
             border-radius: 20px;
             font-weight: 500;
         }
+        .file-upload-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px dashed #dee2e6;
+            transition: all 0.3s;
+        }
+        .file-upload-section:hover {
+            border-color: #2962FF;
+            background: #f0f7ff;
+        }
+        .custom-file-upload {
+            cursor: pointer;
+        }
+        .custom-file-upload i {
+            font-size: 3rem;
+            color: #2962FF;
+        }
     </style>
 </head>
 <body>
@@ -141,7 +160,7 @@ $stmt->close();
                 </div>
             </div>
             <div class="logout-btn">
-            <a class="nav-link" onclick="return confirm('Are you sure you want to logout?')" href="logout.php">
+                <a class="nav-link" onclick="return confirm('Are you sure you want to logout?')" href="logout.php">
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Logout</span>
                 </a>
@@ -301,13 +320,14 @@ $stmt->close();
 
                 <div class="file-upload-section">
                     <h5 class="mb-4">File Upload</h5>
-                    <form action="upload.php" method="post" enctype="multipart/form-data">
+                    <form id="uploadForm" action="api/upload_workbook.php" method="post" enctype="multipart/form-data">
                         <div class="custom-file-upload mb-3">
                             <i class="bi bi-cloud-upload"></i>
                             <p class="mt-3 mb-2">Drag and drop files here</p>
                             <small class="text-muted">or</small>
-                            <input type="file" class="form-control mt-3" name="file" accept=".csv,.xlsx">
+                            <input type="file" class="form-control mt-3" id="file" name="file" accept=".csv,.xlsx,.xls" required>
                         </div>
+                       
                         <button type="submit" class="btn btn-primary w-100">
                             <i class="bi bi-upload me-2"></i>Upload File
                         </button>
@@ -317,111 +337,12 @@ $stmt->close();
         </div>
 
         <!-- File Management Section -->
-        <div class="row g-4 mb-4">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Monthly Files</h5>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                            <i class="bi bi-upload me-2"></i>Upload File
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover" id="filesTable">
-                                <thead>
-                                    <tr>
-                                        <th>File Name</th>
-                                        <th>Month</th>
-                                        <th>Uploaded By</th>
-                                        <th>Upload Date</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    // Get uploaded files
-                                    $stmt = $conn->prepare("
-                                        SELECT f.*, u.first_name, u.last_name 
-                                        FROM file_uploads f
-                                        JOIN users u ON f.user_id = u.id
-                                        ORDER BY f.created_at DESC
-                                    ");
-                                    $stmt->execute();
-                                    $files = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-                                    $stmt->close();
-
-                                    foreach ($files as $file) {
-                                        $month = date('F Y', strtotime($file['created_at']));
-                                        echo "<tr>";
-                                        echo "<td>" . htmlspecialchars($file['file_name']) . "</td>";
-                                        echo "<td>" . $month . "</td>";
-                                        echo "<td>" . htmlspecialchars($file['first_name'] . ' ' . $file['last_name']) . "</td>";
-                                        echo "<td>" . date('M d, Y H:i', strtotime($file['created_at'])) . "</td>";
-                                        echo "<td>
-                                            <a href='data_management.php?file=" . urlencode($file['file_path']) . "&month=" . date('Y-m', strtotime($file['created_at'])) . "' class='btn btn-sm btn-primary me-2'>
-                                                <i class='bi bi-eye'></i> Open
-                                            </a>
-                                            <button class='btn btn-sm btn-danger delete-file' data-id='" . $file['id'] . "' data-name='" . htmlspecialchars($file['file_name']) . "'>
-                                                <i class='bi bi-trash'></i> Delete
-                                            </button>
-                                        </td>";
-                                        echo "</tr>";
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Monthly Calendar</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="calendar"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Upload Modal -->
-        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="uploadModalLabel">Upload Monthly File</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="uploadForm" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label for="month" class="form-label">Select Month</label>
-                                <input type="month" class="form-control" id="month" name="month" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="file" class="form-label">Select File</label>
-                                <input type="file" class="form-control" id="file" name="file" accept=".csv,.xlsx,.xls" required>
-                                <div class="form-text">Accepted formats: CSV, Excel (.xlsx, .xls)</div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="uploadBtn">
-                            <i class="bi bi-upload me-2"></i>Upload
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -441,86 +362,64 @@ $stmt->close();
             calendar.render();
 
             // File upload handling
-            $('#uploadBtn').on('click', function() {
-                const form = $('#uploadForm')[0];
-                const formData = new FormData(form);
-                const uploadBtn = $(this);
+            $('#uploadForm').on('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
                 
-                uploadBtn.prop('disabled', true);
-                uploadBtn.html('<span class="spinner-border spinner-border-sm me-2"></span>Uploading...');
-                
+                // Show loading state
+                Swal.fire({
+                    title: 'Uploading...',
+                    text: 'Please wait while we process your file',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
                 $.ajax({
-                    url: 'api/upload_file.php',
+                    url: 'api/upload_workbook.php',
                     type: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(() => {
-                                location.reload();
-                            });
-                        } else {
+                        try {
+                            const result = typeof response === 'string' ? JSON.parse(response) : response;
+                            if (result.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: result.message || 'File uploaded successfully',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                }).then(() => {
+                                    // Redirect to data management page
+                                    window.location.href = 'data_management.php?month=' + $('#month').val();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Upload Failed',
+                                    text: result.error || 'An error occurred during upload',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        } catch (e) {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Upload Failed',
-                                text: response.error || 'An error occurred during upload',
+                                title: 'Error',
+                                text: 'Failed to process server response',
                                 confirmButtonText: 'OK'
                             });
                         }
                     },
-                    error: function() {
+                    error: function(xhr) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Upload Failed',
                             text: 'An error occurred during upload. Please try again.',
                             confirmButtonText: 'OK'
-                        });
-                    },
-                    complete: function() {
-                        uploadBtn.prop('disabled', false);
-                        uploadBtn.html('<i class="bi bi-upload me-2"></i>Upload');
-                        $('#uploadModal').modal('hide');
-                    }
-                });
-            });
-
-            // Delete file handling
-            $(document).on('click', '.delete-file', function() {
-                const id = $(this).data('id');
-                const name = $(this).data('name');
-                
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: 'api/delete_file.php',
-                            type: 'POST',
-                            data: { id: id },
-                            success: function(response) {
-                                if (response.success) {
-                                    Swal.fire('Deleted!', 'File has been deleted.', 'success');
-                                    location.reload();
-                                } else {
-                                    Swal.fire('Error', response.error || 'Delete failed', 'error');
-                                }
-                            },
-                            error: function() {
-                                Swal.fire('Error', 'An error occurred during deletion', 'error');
-                            }
                         });
                     }
                 });
