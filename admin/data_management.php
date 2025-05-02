@@ -748,7 +748,7 @@ $monthly_files = getMonthlyFiles($selected_month);
             const urlParams = new URLSearchParams(window.location.search);
             const divisionId = urlParams.get('division');
             
-            // Set initial division filter value for Office tab
+            // Set initial division filter value for both Office and Spreadsheet tabs
             if (divisionId !== null) {
                 $('#divisionFilter').val(divisionId);
             }
@@ -910,23 +910,24 @@ $monthly_files = getMonthlyFiles($selected_month);
             });
 
             // Handle division filter change
-            $('#division').on('change', function() {
+            $('#divisionFilter').on('change', function() {
                 const divisionId = $(this).val();
                 // Update URL without page reload
                 const newUrl = new URL(window.location.href);
                 newUrl.searchParams.set('division', divisionId);
                 window.history.pushState({}, '', newUrl);
                 recordsTable.ajax.reload();
+                loadSpreadsheetData();
             });
 
-            // Handle month filter change
-            $('#month').on('change', function() {
+            // Handle month filter change for both Office and Spreadsheet
+            $('#monthFilter').on('change', function() {
                 const month = $(this).val();
-                // Update URL without page reload
                 const newUrl = new URL(window.location.href);
                 newUrl.searchParams.set('month', month);
                 window.history.pushState({}, '', newUrl);
                 recordsTable.ajax.reload();
+                loadSpreadsheetData();
             });
 
             // Handle search input

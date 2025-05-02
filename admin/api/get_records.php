@@ -13,17 +13,17 @@ try {
         d.name as division_name,
         d.code as division_code
     FROM records r
-    LEFT JOIN divisions d ON r.plantilla_division = d.code";
+    LEFT JOIN divisions d ON r.plantilla_division_definition = d.name";
     
     $params = [];
     $types = '';
     $whereClauses = [];
     
     // Add division filter if specified
-    if (!empty($division)) {
-        $whereClauses[] = "r.plantilla_division_definition = ?";
+    if (!empty($division) && $division != '0') {
+        $whereClauses[] = "d.id = ?";
         $params[] = $division;
-        $types .= 's';
+        $types .= 'i';
     }
     
     // Add month filter if specified
