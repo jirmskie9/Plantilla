@@ -386,12 +386,11 @@ $monthly_files = getMonthlyFiles($selected_month);
     <link rel="stylesheet" href="../assets/css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
-    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/x-icon">
 </head>
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
                 <i class="bi bi-building"></i>
@@ -452,63 +451,63 @@ $monthly_files = getMonthlyFiles($selected_month);
         </div>
     </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="dashboard-header">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
                         <h2 class="mb-1">New Workbook</h2>
                         <p class="text-muted mb-0">Create a new spreadsheet</p>
-                    </div>
-                    <div class="btn-group">
+                </div>
+                <div class="btn-group">
                         <button class="btn btn-primary" id="saveSpreadsheet">
                             <i class="bi bi-save me-2"></i>Save
-                        </button>
+                    </button>
                         <button class="btn btn-secondary" id="clearSpreadsheet">
                             <i class="bi bi-trash me-2"></i>Clear
-                        </button>
+                    </button>
                         <a href="data_management.php" class="btn btn-info">
                             <i class="bi bi-arrow-left me-2"></i>Return
-                        </a>
-                    </div>
+                    </a>
                 </div>
             </div>
+        </div>
 
             <!-- Spreadsheet Editor -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="row mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-3">
                         <!-- <div class="col-md-4">
-                            <select class="form-select" id="divisionFilter">
-                                <option value="0">All Divisions</option>
-                                <?php 
-                                $stmt = $conn->prepare("SELECT id, name FROM divisions ORDER BY name");
-                                $stmt->execute();
-                                $result = $stmt->get_result();
-                                while ($row = $result->fetch_assoc()) {
+                                <select class="form-select" id="divisionFilter">
+                                    <option value="0">All Divisions</option>
+                                    <?php 
+                                    $stmt = $conn->prepare("SELECT id, name FROM divisions ORDER BY name");
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                    while ($row = $result->fetch_assoc()) {
                                     echo "<option value='{$row['id']}'>{$row['name']}</option>";
-                                }
-                                ?>
-                            </select>
+                                    }
+                                    ?>
+                                </select>
                         </div> -->
-                        <div class="col-md-4">
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="bi bi-search"></i>
-                                </span>
-                                <input type="text" class="form-control" id="searchSpreadsheet" placeholder="Search...">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-search"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="searchSpreadsheet" placeholder="Search...">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="btn-group w-100">
-                                <button class="btn btn-outline-primary" id="addRow">
-                                    <i class="bi bi-plus-lg"></i> Add Row
-                                </button>
+                            <div class="col-md-4">
+                                <div class="btn-group w-100">
+                                    <button class="btn btn-outline-primary" id="addRow">
+                                        <i class="bi bi-plus-lg"></i> Add Row
+                                    </button>
                                
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div id="spreadsheet" class="hot-table"></div>
+                        <div id="spreadsheet" class="hot-table"></div>
                 </div>
             </div>
         </div>
@@ -600,26 +599,26 @@ $monthly_files = getMonthlyFiles($selected_month);
                                 }
                             });
 
-                            $.ajax({
+                        $.ajax({
                                 url: 'api/create_record.php',
-                                method: 'POST',
+                            method: 'POST',
                                 contentType: 'application/json',
                                 data: JSON.stringify(rowData),
-                                success: function(response) {
-                                    if (response.success) {
+                                            success: function(response) {
+                                                if (response.success) {
                                         // Update the row with the new ID
                                         hot.setDataAtRowProp(changes[0][0], 'id', response.id);
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Success',
+                                                        Swal.fire({
+                                                            icon: 'success',
+                                                            title: 'Success',
                                             text: 'Record saved successfully',
-                                            showConfirmButton: false,
+                                                            showConfirmButton: false,
                                             timer: 1500
                                         });
                                     } else {
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Error',
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error',
                                             text: response.error || 'Failed to save record'
                                         });
                                     }
@@ -634,15 +633,15 @@ $monthly_files = getMonthlyFiles($selected_month);
                             });
                         } else {
                             // Update existing record
-                            $.ajax({
+                $.ajax({
                                 url: 'api/update_record.php',
                                 method: 'POST',
-                                data: {
+                    data: { 
                                     id: rowData.id,
                                     field: changes[0][1],
                                     value: changes[0][3]
-                                },
-                                success: function(response) {
+                    },
+                    success: function(response) {
                                     if (!response.success) {
                                         Swal.fire({
                                             icon: 'error',
@@ -657,9 +656,9 @@ $monthly_files = getMonthlyFiles($selected_month);
                                         title: 'Error',
                                         text: 'Failed to update record: ' + error
                                     });
-                                }
-                            });
-                        }
+                    }
+                });
+            }
                     }
                 }
             });
@@ -711,8 +710,8 @@ $monthly_files = getMonthlyFiles($selected_month);
                     hot.scrollViewportTo(currentData.length, 0);
                 } catch (error) {
                     console.error('Error adding row:', error);
-                    Swal.fire({
-                        icon: 'error',
+                            Swal.fire({
+                                icon: 'error',
                         title: 'Error',
                         text: 'Failed to add new row: ' + error.message
                     });

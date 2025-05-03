@@ -38,7 +38,7 @@ try {
         $query .= " WHERE " . implode(" AND ", $whereClauses);
     }
     
-    $query .= " ORDER BY r.plantilla_no ASC";
+    $query .= " ORDER BY r.created_at DESC";
     
     // Debug output
     error_log("Executing query: $query");

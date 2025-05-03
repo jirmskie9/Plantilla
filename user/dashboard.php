@@ -445,5 +445,6 @@ $stmt->close();
             });
         });
     </script>
+    <script src="../includes/script.js"></script>
 </body>
 </html> 

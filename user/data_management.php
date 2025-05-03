@@ -493,17 +493,21 @@ $monthly_files = getMonthlyFiles($selected_month);
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" enctype="multipart/form-data" id="uploadForm" onsubmit="return false;">
+                        <form id="modalUploadForm" action="api/upload_file.php" method="POST" enctype="multipart/form-data">
                             <div class="mb-3">
-                                <label for="csv_file" class="form-label">Select CSV File</label>
-                                <input type="file" class="form-control" id="csv_file" name="csv_file" accept=".csv" required>
-                                <div class="form-text">Only CSV files are allowed. The file should match the sample format.</div>
+                                <label for="file" class="form-label">Select CSV File</label>
+                                <input type="file" class="form-control" id="file" name="file" accept=".csv,.xlsx,.xls" required>
+                                <div class="form-text">Only CSV and Excel files are allowed. Maximum file size: 10MB</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="month" class="form-label">Month</label>
+                                <input type="month" class="form-control" id="month" name="month" required>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="uploadBtn">
+                        <button type="submit" form="modalUploadForm" class="btn btn-primary">
                             <i class="bi bi-upload me-2"></i>Upload
                         </button>
                     </div>
@@ -737,6 +741,9 @@ $monthly_files = getMonthlyFiles($selected_month);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
     <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    <!-- Include file upload JavaScript -->
+    <script src="../assets/js/file-upload.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -1448,62 +1455,6 @@ $monthly_files = getMonthlyFiles($selected_month);
                 hot.render();
             });
 
-            // File upload handling
-            $('#uploadBtn').on('click', function() {
-                const form = $('#uploadForm')[0];
-                const formData = new FormData(form);
-                const uploadBtn = $(this);
-                
-                uploadBtn.prop('disabled', true);
-                uploadBtn.html('<span class="spinner-border spinner-border-sm me-2"></span>Uploading...');
-                
-                $.ajax({
-                    url: window.location.href,
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(() => {
-                                // Reload both table and spreadsheet data
-                                recordsTable.ajax.reload();
-                                loadSpreadsheetData();
-                                // Reset the form
-                                form.reset();
-                                // Close the modal
-                                $('#uploadModal').modal('hide');
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Upload Failed',
-                                text: response.error || 'An error occurred during upload',
-                                confirmButtonText: 'OK'
-                            });
-                        }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Upload Failed',
-                            text: 'An error occurred during upload. Please try again.',
-                            confirmButtonText: 'OK'
-                        });
-                    },
-                    complete: function() {
-                        uploadBtn.prop('disabled', false);
-                        uploadBtn.html('<i class="bi bi-upload me-2"></i>Upload');
-                    }
-                });
-            });
-
             // Edit record
             $(document).on('click', '.edit-record', function() {
                 const id = $(this).data('id');
@@ -1617,7 +1568,6 @@ $monthly_files = getMonthlyFiles($selected_month);
     </script>
 </body>
 </html>
-
 <style>
 .filters-container {
     background: #fff;
