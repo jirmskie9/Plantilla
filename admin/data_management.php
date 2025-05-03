@@ -463,9 +463,9 @@ $monthly_files = getMonthlyFiles($selected_month);
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
                         <i class="bi bi-upload me-2"></i>Upload File
                     </button>
-                    <button class="btn btn-success" id="newWorkbookBtn">
+                    <a href = 'new_workbook.php' class="btn btn-success" id="newWorkbookBtn">
                         <i class="bi bi-file-earmark-plus me-2"></i>New Workbook
-                    </button>
+                    </a>
                     <a href="export_records.php?division=<?php echo $selected_division; ?>&month=<?php echo $selected_month; ?>" class="btn btn-info">
                         <i class="bi bi-file-earmark-excel me-2"></i>Export Records
                     </a>
