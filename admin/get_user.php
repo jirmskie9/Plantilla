@@ -18,17 +18,20 @@ if (!isset($_GET['id'])) {
 
 $userId = (int)$_GET['id'];
 
-// Fetch user data
+// Get user data
 $stmt = $conn->prepare("SELECT id, username, email, first_name, last_name, role, status FROM users WHERE id = ?");
 $stmt->bind_param("i", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
 
-if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();
-    header('Content-Type: application/json');
-    echo json_encode(['success' => true, 'user' => $user]);
-} else {
+if ($result->num_rows === 0) {
     header('Content-Type: application/json');
     echo json_encode(['success' => false, 'message' => 'User not found']);
-} 
+    exit();
+}
+
+$user = $result->fetch_assoc();
+
+header('Content-Type: application/json');
+echo json_encode(['success' => true, 'user' => $user]);
+exit(); 

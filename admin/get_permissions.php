@@ -18,7 +18,7 @@ if (!isset($_GET['user_id'])) {
 
 $userId = (int)$_GET['user_id'];
 
-// Fetch user permissions
+// Get user permissions
 $stmt = $conn->prepare("SELECT module, can_view, can_create, can_edit, can_delete FROM user_permissions WHERE user_id = ?");
 $stmt->bind_param("i", $userId);
 $stmt->execute();
@@ -26,7 +26,8 @@ $result = $stmt->get_result();
 
 $permissions = [];
 while ($row = $result->fetch_assoc()) {
-    $permissions[$row['module']] = [
+    $module = $row['module'];
+    $permissions[$module] = [
         'can_view' => (bool)$row['can_view'],
         'can_create' => (bool)$row['can_create'],
         'can_edit' => (bool)$row['can_edit'],

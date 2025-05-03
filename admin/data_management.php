@@ -466,6 +466,9 @@ $monthly_files = getMonthlyFiles($selected_month);
                     <button class="btn btn-success" id="newWorkbookBtn">
                         <i class="bi bi-file-earmark-plus me-2"></i>New Workbook
                     </button>
+                    <a href="export_records.php?division=<?php echo $selected_division; ?>&month=<?php echo $selected_month; ?>" class="btn btn-info">
+                        <i class="bi bi-file-earmark-excel me-2"></i>Export Records
+                    </a>
                 </div>
             </div>
         </div>

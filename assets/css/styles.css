@@ -1,4 +1,3 @@
-
         :root {
             --primary-color: #1A237E;
             --primary-light: #534bae;
@@ -45,6 +44,89 @@
             border-right: 1px solid rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
+        }
+
+        .sidebar.minimized {
+            width: 80px;
+        }
+
+        .sidebar.minimized .sidebar-header h4,
+        .sidebar.minimized .sidebar-header p,
+        .sidebar.minimized .nav-link span,
+        .sidebar.minimized .user-details,
+        .sidebar.minimized .nav-item .collapse {
+            display: none;
+        }
+
+        .sidebar.minimized .nav-link {
+            justify-content: center;
+            padding: 0.7rem;
+        }
+
+        .sidebar.minimized .nav-link i {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .sidebar.minimized .sidebar-header {
+            justify-content: center;
+        }
+
+        .sidebar.minimized .sidebar-header .logo {
+            margin: 0;
+        }
+
+        .sidebar-toggle {
+            position: fixed;
+            top: 1rem;
+            left: calc(var(--sidebar-width) + 1rem);
+            background: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            color: white;
+            font-size: 1.2rem;
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .sidebar-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .sidebar-toggle i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.minimized + .sidebar-toggle {
+            left: 81px;
+        }
+
+        .sidebar.minimized + .sidebar-toggle i {
+            transform: rotate(180deg);
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 80px;
         }
 
         .sidebar-header {
@@ -230,13 +312,6 @@
         }
 
         /* Dashboard Styles */
-        .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 2rem;
-            min-height: 100vh;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
         .dashboard-header {
             background: white;
             padding: 1.5rem;

@@ -310,26 +310,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#dataManagement">
+                    <a class="nav-link " href="data_management.php">
                         <i class="bi bi-database"></i>
                         <span>Data Management</span>
                     </a>
-                    <div class="collapse" id="dataManagement">
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link" href="org_code.php">
-                                    <i class="bi bi-diagram-3"></i>
-                                    <span>Organizational Code</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="spreadsheet.php">
-                                    <i class="bi bi-table"></i>
-                                    <span>Spreadsheet View</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="applicant_records.php">
@@ -343,7 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <span>User Management</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item ">
                     <a class="nav-link active" href="my_account.php">
                         <i class="bi bi-person-circle"></i>
                         <span>My Account</span>
@@ -353,14 +337,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         </div>
         <div class="sidebar-footer">
             <div class="user-info">
-                <img src="<?php echo !empty($user['photo']) ? '../' . htmlspecialchars($user['photo']) : 'https://ui-avatars.com/api/?name=' . urlencode($user['first_name'] . '+' . $user['last_name']); ?>" alt="User">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=2962FF&color=fff" alt="Admin">
                 <div class="user-details">
-                    <h6><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h6>
-                    <p><?php echo ucfirst($user['role']); ?></p>
+                    <h6>Administrator</h6>
+                    <p>Super Admin</p>
                 </div>
             </div>
             <div class="logout-btn">
-                <a class="nav-link" href="../logout.php">
+            <a class="nav-link" onclick="return confirm('Are you sure you want to logout?')" href="logout.php">
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Logout</span>
                 </a>

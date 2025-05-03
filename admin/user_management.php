@@ -376,11 +376,11 @@ $stmt->close();
                     <p class="text-muted">Manage system users and their permissions</p>
                 </div>
                 <div class="col-md-6 text-end">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                    <button class="btn btn-primary add-user-btn" data-bs-toggle="modal" data-bs-target="#addUserModal">
                         <i class="bi bi-plus-lg me-2"></i>Add New User
-                </button>
+                    </button>
+                </div>
             </div>
-        </div>
 
             <!-- Filters -->
         <div class="card mb-4">
@@ -460,9 +460,6 @@ $stmt->close();
                                             <button type="button" class="btn btn-sm btn-outline-primary" onclick="editUser(<?php echo $user['id']; ?>)">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
-                                            <button type="button" class="btn btn-sm btn-outline-info" onclick="viewPermissions(<?php echo $user['id']; ?>)">
-                                                <i class="bi bi-shield-lock"></i>
-                                            </button>
                                             <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteUser(<?php echo $user['id']; ?>)">
                                                 <i class="bi bi-trash"></i>
                                             </button>
@@ -479,55 +476,271 @@ $stmt->close();
     </div>
 
     <!-- Add User Modal -->
-    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div id="addUserModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; width: 90%; max-width: 500px; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
+                <h3 style="margin: 0; font-size: 1.5rem; color: #333;">Add New User</h3>
+             
+            </div>
+            <form id="addUserForm">
+                <input type="hidden" name="action" value="add_user">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Username</label>
+                    <input type="text" name="username" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: #fff;" required>
                 </div>
-                <form method="POST" id="addUserForm">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Email</label>
+                    <input type="email" name="email" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: #fff;" required>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Password</label>
+                    <input type="password" name="password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: #fff;" required>
+                </div>
+                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">First Name</label>
+                        <input type="text" name="first_name" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: #fff;" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Last Name</label>
+                        <input type="text" name="last_name" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: #fff;" required>
+                    </div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Role</label>
+                    <select name="role" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: #fff;" required>
+                        <option value="user">User</option>
+                        <option value="manager">Manager</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; padding-top: 10px; border-top: 1px solid #eee;">
+                    <a href="user_management.php" class="close-modal" style="padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</a>
+                    <button type="submit" style="padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Add User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal" id="editUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit User</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="editUserForm">
                 <div class="modal-body">
-                        <input type="hidden" name="action" value="add_user">
-                        <div class="mb-3">
-                            <label class="form-label">Username</label>
-                            <input type="text" class="form-control" name="username" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" class="form-control" name="password" required>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">First Name</label>
-                                <input type="text" class="form-control" name="first_name" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Last Name</label>
-                                <input type="text" class="form-control" name="last_name" required>
+                    <input type="hidden" name="action" value="edit_user">
+                    <input type="hidden" name="id" id="editUserId">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" name="username" id="editUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" name="email" id="editEmail" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" name="first_name" id="editFirstName" required>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Role</label>
-                            <select class="form-select" name="role" required>
-                                <option value="user">User</option>
-                                <option value="manager">Manager</option>
-                                <option value="admin">Admin</option>
-                            </select>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" name="last_name" id="editLastName" required>
+                            </div>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select class="form-control" name="role" id="editRole" required>
+                            <option value="user">User</option>
+                            <option value="manager">Manager</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control" name="status" id="editStatus" required>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add User</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editUserModal')">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
-                </form>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div class="modal" id="deleteUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete User</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this user? This action cannot be undone.</p>
+                <input type="hidden" id="deleteUserId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('deleteUserModal')">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
             </div>
         </div>
     </div>
+
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            margin: 50px auto;
+            padding: 20px;
+            border: none;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1001;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Table styling for permissions */
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            background-color: transparent;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table td {
+            padding: 8px;
+            vertical-align: middle;
+        }
+
+        /* Checkbox styling */
+        .permission-checkbox {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 20px auto;
+            }
+        }
+    </style>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -535,97 +748,23 @@ $stmt->close();
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <script>
-        // Initialize SweetAlert
-        window.Swal = window.Swal || window.Swal2;
-        
-        document.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
             // Initialize DataTable
-            const table = $('#usersTable').DataTable({
-                order: [[8, 'desc']],
-                pageLength: 10,
+            $('#usersTable').DataTable({
                 responsive: true,
                 language: {
-                    search: "",
-                    searchPlaceholder: "Search...",
-                    lengthMenu: "Show _MENU_ entries",
-                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                    infoEmpty: "Showing 0 to 0 of 0 entries",
-                    infoFiltered: "(filtered from _MAX_ total entries)"
+                    search: "Search users:"
                 }
             });
 
-            // Show SweetAlert if there's a message in session
-            <?php if (isset($_SESSION['alert'])): ?>
-                const alert = <?php echo json_encode($_SESSION['alert']); ?>;
-                if (alert.message) {
-                    Swal.fire({
-                        icon: alert.success ? 'success' : 'error',
-                        title: alert.success ? 'Success!' : 'Error!',
-                        text: alert.message,
-                        showConfirmButton: false,
-                        timer: alert.success ? 1500 : 3000
-                    }).then(() => {
-                        if (alert.success) {
-                            location.reload();
-                        }
-                    });
-                }
-                <?php unset($_SESSION['alert']); ?>
-            <?php endif; ?>
-
-            // Handle form submission
-            $('#addUserForm').on('submit', function(e) {
-                e.preventDefault();
-                const form = $(this);
-                const submitBtn = form.find('button[type="submit"]');
-                
-                // Show loading state
-                submitBtn.prop('disabled', true);
-                submitBtn.html('<span class="spinner-border spinner-border-sm me-2"></span>Adding...');
-                
-                // Submit form
-                $.ajax({
-                    url: window.location.href,
-                    type: 'POST',
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message
-                            });
-                        }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'An error occurred while adding the user. Please try again.'
-                        });
-                    },
-                    complete: function() {
-                        submitBtn.prop('disabled', false);
-                        submitBtn.html('Add User');
-                    }
-                });
+            // Show Add User Modal
+            $('.add-user-btn').click(function() {
+                $('#addUserModal').fadeIn(200);
+                $('body').css('overflow', 'hidden');
             });
 
-            // Edit User
-            function editUser(userId) {
-                // Fetch user data
+            // Show Edit User Modal
+            window.editUser = function(userId) {
                 $.ajax({
                     url: 'get_user.php',
                     type: 'GET',
@@ -633,326 +772,141 @@ $stmt->close();
                     success: function(response) {
                         if (response.success) {
                             const user = response.user;
-                            // Create modal HTML
-                            const modalHtml = `
-                                <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <form id="editUserForm">
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="action" value="edit_user">
-                                                    <input type="hidden" name="id" value="${user.id}">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Username</label>
-                                                        <input type="text" class="form-control" name="username" value="${user.username}" required>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Email</label>
-                                                        <input type="email" class="form-control" name="email" value="${user.email}" required>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-3">
-                                                            <label class="form-label">First Name</label>
-                                                            <input type="text" class="form-control" name="first_name" value="${user.first_name}" required>
-                                                        </div>
-                                                        <div class="col-md-6 mb-3">
-                                                            <label class="form-label">Last Name</label>
-                                                            <input type="text" class="form-control" name="last_name" value="${user.last_name}" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Role</label>
-                                                        <select class="form-select" name="role" required>
-                                                            <option value="user" ${user.role === 'user' ? 'selected' : ''}>User</option>
-                                                            <option value="manager" ${user.role === 'manager' ? 'selected' : ''}>Manager</option>
-                                                            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Status</label>
-                                                        <select class="form-select" name="status" required>
-                                                            <option value="active" ${user.status === 'active' ? 'selected' : ''}>Active</option>
-                                                            <option value="inactive" ${user.status === 'inactive' ? 'selected' : ''}>Inactive</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-
-                            // Remove existing modal if any
-                            $('#editUserModal').remove();
-                            
-                            // Add new modal to body
-                            $('body').append(modalHtml);
-                            
-                            // Initialize modal
-                            const editModal = new bootstrap.Modal(document.getElementById('editUserModal'));
-                            editModal.show();
-
-                            // Handle form submission
-                            $('#editUserForm').on('submit', function(e) {
-                                e.preventDefault();
-                                const form = $(this);
-                                const submitBtn = form.find('button[type="submit"]');
-                                
-                                // Show loading state
-                                submitBtn.prop('disabled', true);
-                                submitBtn.html('<span class="spinner-border spinner-border-sm me-2"></span>Saving...');
-                                
-                                // Submit form
-                                $.ajax({
-                                    url: window.location.href,
-                                    type: 'POST',
-                                    data: new FormData(this),
-                                    processData: false,
-                                    contentType: false,
-                                    success: function(response) {
-                                        if (response.success) {
-                                            editModal.hide();
-                                            Swal.fire({
-                                                icon: 'success',
-                                                title: 'Success',
-                                                text: 'User updated successfully',
-                                                showConfirmButton: false,
-                                                timer: 1500
-                                            }).then(() => {
-                                                window.location.reload();
-                                            });
-                                        } else {
-                                            Swal.fire({
-                                                icon: 'error',
-                                                title: 'Error',
-                                                text: response.message || 'Failed to update user'
-                                            });
-                                        }
-                                    },
-                                    error: function() {
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Error',
-                                            text: 'Failed to update user'
-                                        });
-                                    },
-                                    complete: function() {
-                                        submitBtn.prop('disabled', false);
-                                        submitBtn.html('Save Changes');
-                                    }
-                                });
-                            });
+                            $('#editUserId').val(user.id);
+                            $('#editUsername').val(user.username);
+                            $('#editEmail').val(user.email);
+                            $('#editFirstName').val(user.first_name);
+                            $('#editLastName').val(user.last_name);
+                            $('#editRole').val(user.role);
+                            $('#editStatus').val(user.status);
+                            $('#editUserModal').show();
                         } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Failed to fetch user data'
-                            });
+                            alert(response.message || 'Failed to fetch user data');
                         }
                     },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Failed to fetch user data'
-                        });
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('Failed to fetch user data');
                     }
                 });
-            }
+            };
 
-            // View Permissions
-            function viewPermissions(userId) {
-                // Fetch user permissions
-                $.ajax({
-                    url: 'get_permissions.php',
-                    type: 'GET',
-                    data: { user_id: userId },
-                    success: function(response) {
-                        if (response.success) {
-                            const permissions = response.permissions;
-                            const modules = ['dashboard', 'organizational_codes', 'applicants', 'records', 'users'];
-                            
-                            let html = `
-                                <form id="permissionsForm">
-                                    <input type="hidden" name="action" value="update_permissions">
-                                    <input type="hidden" name="user_id" value="${userId}">
-                                    <div class="table-responsive">
-                                        <table class="table table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>Module</th>
-                                                    <th>View</th>
-                                                    <th>Create</th>
-                                                    <th>Edit</th>
-                                                    <th>Delete</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                            `;
-                            
-                            modules.forEach(module => {
-                                const modulePerms = permissions[module] || { can_view: 0, can_create: 0, can_edit: 0, can_delete: 0 };
-                                html += `
-                                    <tr>
-                                        <td>${module.replace('_', ' ').toUpperCase()}</td>
-                                        <td><input type="checkbox" name="permissions[${module}][view]" ${modulePerms.can_view ? 'checked' : ''}></td>
-                                        <td><input type="checkbox" name="permissions[${module}][create]" ${modulePerms.can_create ? 'checked' : ''}></td>
-                                        <td><input type="checkbox" name="permissions[${module}][edit]" ${modulePerms.can_edit ? 'checked' : ''}></td>
-                                        <td><input type="checkbox" name="permissions[${module}][delete]" ${modulePerms.can_delete ? 'checked' : ''}></td>
-                                    </tr>
-                                `;
-                            });
-                            
-                            html += `
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </form>
-                            `;
-                            
-                            Swal.fire({
-                                title: 'User Permissions',
-                                html: html,
-                                showCancelButton: true,
-                                confirmButtonText: 'Save Changes',
-                                cancelButtonText: 'Cancel',
-                                preConfirm: () => {
-                                    const form = document.getElementById('permissionsForm');
-                const formData = new FormData(form);
+            // Show Delete User Modal
+            window.deleteUser = function(userId) {
+                $('#deleteUserId').val(userId);
+                $('#deleteUserModal').show();
+            };
 
-                                    return $.ajax({
-                                        url: window.location.href,
-                                        type: 'POST',
-                                        data: formData,
-                                        processData: false,
-                                        contentType: false
-                                    }).then(response => {
-                                        if (!response.success) {
-                                            throw new Error(response.message);
-                                        }
-                                        return response;
-                                    });
-                                }
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success',
-                                        text: 'Permissions updated successfully',
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    });
-                                }
-                            }).catch(error => {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: error.message || 'Failed to update permissions'
-                                });
-                            });
-                    } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Failed to fetch permissions'
-                            });
-                        }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Failed to fetch permissions'
-                        });
-                    }
-                });
-            }
+            // Close modal when clicking the close button
+            $('.close').click(function() {
+                $(this).closest('.modal').hide();
+            });
 
-            // Delete User
-            function deleteUser(userId) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'Cancel',
-                    showLoaderOnConfirm: true,
-                    preConfirm: () => {
-                        const formData = new FormData();
-                        formData.append('action', 'delete_user');
-                        formData.append('id', userId);
-                        
-                        return $.ajax({
-                            url: window.location.href,
-                            type: 'POST',
-                            data: formData,
-                            processData: false,
-                            contentType: false
-                        }).then(response => {
-                            if (!response.success) {
-                                throw new Error(response.message);
-                            }
-                            return response;
-                        });
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: 'User deleted successfully',
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    }
-                }).catch(error => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: error.message || 'Failed to delete user'
-                    });
-                });
-            }
-
-            function confirmLogout() {
-                // Check if running on localhost
-                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You will be logged out of the system.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Yes, logout',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = '../logout.php';
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Logout is only available on localhost'
+            // Close modal when clicking outside
+            $(window).click(function(e) {
+                if ($(e.target).attr('id') === 'addUserModal') {
+                    $('#addUserModal').fadeOut(200, function() {
+                        $('body').css('overflow', 'auto');
                     });
                 }
-            }
+            });
+
+            // Handle Add User Form Submission
+            $('#addUserForm').on('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                formData.append('action', 'add_user');
+
+                $.ajax({
+                    url: window.location.href,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            $('#addUserModal').fadeOut(200, function() {
+                                $('body').css('overflow', 'auto');
+                                location.reload();
+                            });
+                        } else {
+                            alert(response.message || 'Failed to add user');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while processing your request');
+                    }
+                });
+            });
+
+            // Handle Edit User Form Submission
+            $('#editUserForm').on('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                formData.append('action', 'edit_user');
+
+                $.ajax({
+                    url: window.location.href,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            $('#editUserModal').hide();
+                            location.reload();
+                        } else {
+                            alert(response.message || 'Failed to update user');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while processing your request');
+                    }
+                });
+            });
+
+            // Handle Delete Confirmation
+            $('#confirmDelete').on('click', function() {
+                const userId = $('#deleteUserId').val();
+                const formData = new FormData();
+                formData.append('action', 'delete_user');
+                formData.append('id', userId);
+
+                $.ajax({
+                    url: window.location.href,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            $('#deleteUserModal').hide();
+                            location.reload();
+                        } else {
+                            alert(response.message || 'Failed to delete user');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while processing your request');
+                    }
+                });
+            });
+
+            // Close modal when clicking close button or outside
+            $('.close-modal').click(function() {
+                $('#addUserModal').fadeOut(200, function() {
+                    $('body').css('overflow', 'auto');
+                });
+            });
         });
+
+        // Function to close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
     </script>
 </body>
 </html>

@@ -323,9 +323,10 @@ $stmt->close();
                     <form id="uploadForm" action="api/upload_workbook.php" method="post" enctype="multipart/form-data">
                         <div class="custom-file-upload mb-3">
                             <i class="bi bi-cloud-upload"></i>
-                            <p class="mt-3 mb-2">Drag and drop files here</p>
+                            <p class="mt-3 mb-2">Drag and drop CSV files here</p>
                             <small class="text-muted">or</small>
-                            <input type="file" class="form-control mt-3" id="file" name="file" accept=".csv,.xlsx,.xls" required>
+                            <input type="file" class="form-control mt-3" id="file" name="file" accept=".csv" required>
+                            <div class="form-text text-muted">Only CSV files are allowed. Maximum file size: 10MB</div>
                         </div>
                        
                         <button type="submit" class="btn btn-primary w-100">
@@ -364,6 +365,34 @@ $stmt->close();
             // File upload handling
             $('#uploadForm').on('submit', function(e) {
                 e.preventDefault();
+                
+                // Validate file type
+                const fileInput = $('#file')[0];
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const fileType = file.name.split('.').pop().toLowerCase();
+                    
+                    if (fileType !== 'csv') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Invalid File Type',
+                            text: 'Please upload a CSV file only.',
+                            confirmButtonText: 'OK'
+                        });
+                        return;
+                    }
+                    
+                    if (file.size > 10 * 1024 * 1024) { // 10MB
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'File Too Large',
+                            text: 'Maximum file size is 10MB.',
+                            confirmButtonText: 'OK'
+                        });
+                        return;
+                    }
+                }
+                
                 const formData = new FormData(this);
                 
                 // Show loading state
