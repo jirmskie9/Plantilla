@@ -1,79 +1,64 @@
 <?php
 session_start();
 include '../dbconnection.php';
-
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: ../login.php');
-    exit();
-}
-
-// Get current user data
-$userId = $_SESSION['user_id'] ?? 1; // For testing, remove in production
-$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-$stmt->close();
-
-// Get user permissions
-$stmt = $conn->prepare("SELECT * FROM user_permissions WHERE user_id = ? AND module = 'applicants'");
-$stmt->bind_param("i", $_SESSION['user_id']);
-$stmt->execute();
-$permissions = $stmt->get_result()->fetch_assoc();
-$stmt->close();
+// if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+//     header('Location: ../login.php');
+//     exit();
+// }
 
 // Get search parameters
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$status = isset($_GET['status']) ? $_GET['status'] : '';
+$remarks = isset($_GET['remarks']) ? $_GET['remarks'] : '';
 $position = isset($_GET['position']) ? $_GET['position'] : '';
+$month = isset($_GET['month']) ? $_GET['month'] : '';
+$division = isset($_GET['division']) ? $_GET['division'] : '';
 
 // Build query with prepared statements
-$query = "SELECT 
-    a.*,
-    oc.position,
-    oc.department,
-    u.first_name as created_by_first,
-    u.last_name as created_by_last
-FROM applicants a
-LEFT JOIN organizational_codes oc ON a.position_id = oc.id
-LEFT JOIN users u ON a.created_by = u.id
-WHERE 1=1";
+$query = "SELECT r.*, 
+          DATE_FORMAT(r.date_of_birth, '%M %d, %Y') as formatted_dob,
+          DATE_FORMAT(r.date_orig_appt, '%M %d, %Y') as formatted_orig_appt,
+          DATE_FORMAT(r.date_govt_srvc, '%M %d, %Y') as formatted_govt_srvc,
+          DATE_FORMAT(r.date_last_promotion, '%M %d, %Y') as formatted_last_promotion,
+          DATE_FORMAT(r.date_last_increment, '%M %d, %Y') as formatted_last_increment,
+          DATE_FORMAT(r.date_longevity, '%M %d, %Y') as formatted_longevity
+          FROM records r 
+          WHERE 1=1";
+
 $params = [];
 $types = '';
 
+// Add search filter
 if (!empty($search)) {
-    $query .= " AND (a.first_name LIKE ? OR a.last_name LIKE ? OR a.email LIKE ?)";
+    $query .= " AND (r.first_name LIKE ? OR r.last_name LIKE ? OR r.middle_name LIKE ? OR r.ext_name LIKE ?)";
     $params[] = "%$search%";
     $params[] = "%$search%";
     $params[] = "%$search%";
-    $types .= 'sss';
+    $params[] = "%$search%";
+    $types .= 'ssss';
 }
 
-if (!empty($status)) {
-    $query .= " AND a.status = ?";
-    $params[] = $status;
-    $types .= 's';
-}
-
-if (!empty($position)) {
-    $query .= " AND a.position_id = ?";
-    $params[] = $position;
+// Add month filter
+if (!empty($month)) {
+    $query .= " AND MONTH(r.created_at) = ?";
+    $params[] = $month;
     $types .= 'i';
 }
 
-// Execute query with prepared statement
-$stmt = $conn->prepare($query);
-if (!empty($params)) {
-    $stmt->bind_param($types, ...$params);
+// Add division filter
+if (!empty($division)) {
+    $query .= " AND r.division = ?";
+    $params[] = $division;
+    $types .= 's';
 }
-$stmt->execute();
-$result = $stmt->get_result();
-$applicants = $result->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
 
-// Get active positions for filter
+// Add remarks filter
+if (!empty($remarks)) {
+    $query .= " AND r.remarks = ?";
+    $params[] = $remarks;
+    $types .= 's';
+}
+
+// Get unique positions for filter
 $posQuery = "SELECT id, position, department FROM organizational_codes WHERE status = 'active' ORDER BY position";
 $stmt = $conn->prepare($posQuery);
 $stmt->execute();
@@ -82,6 +67,16 @@ $positions = [];
 while ($row = $posResult->fetch_assoc()) {
     $positions[] = $row;
 }
+$stmt->close();
+
+// Execute main query with prepared statement
+$stmt = $conn->prepare($query);
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
+}
+$stmt->execute();
+$result = $stmt->get_result();
+$records = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 ?>
 
@@ -93,9 +88,154 @@ $stmt->close();
     <title>Applicant Records - Plantilla Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/x-icon">
+    <style>
+        .dataTables_wrapper .dataTables_filter {
+            float: none;
+            text-align: left;
+        }
+        .dataTables_wrapper .dataTables_length {
+            float: none;
+            text-align: left;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        .applicant-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .sidebar {
+            width: 250px;
+            transition: all 0.3s ease;
+            position: fixed;
+            height: 100vh;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .sidebar.minimized {
+            width: 70px;
+        }
+
+        .sidebar.minimized .sidebar-header .title,
+        .sidebar.minimized .nav-link span,
+        .sidebar.minimized .user-details,
+        .sidebar.minimized .logout-btn span {
+            display: none;
+        }
+
+        .sidebar.minimized .nav-link {
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .sidebar.minimized .nav-link i {
+            margin-right: 0;
+            font-size: 1.2rem;
+        }
+
+        .sidebar.minimized .user-info {
+            padding: 0.5rem;
+            justify-content: center;
+        }
+
+        .sidebar.minimized .user-info img {
+            margin-right: 0;
+        }
+
+        .sidebar.minimized .logout-btn a {
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 70px;
+        }
+
+        .toggle-sidebar {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            color: #495057;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .toggle-sidebar:hover {
+            background: #e9ecef;
+            color: #212529;
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .toggle-sidebar i {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.minimized .toggle-sidebar i {
+            transform: rotate(180deg);
+        }
+
+        .sidebar.minimized .toggle-sidebar {
+            right: 10px;
+        }
+
+        .toggle-sidebar::after {
+            content: 'Minimize Sidebar';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #212529;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .toggle-sidebar:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar.minimized .toggle-sidebar::after {
+            content: 'Expand Sidebar';
+        }
+
+        .sidebar-header {
+            position: relative;
+            padding-right: 50px;
+        }
+    </style>
 </head>
 <body>
     <!-- Sidebar -->
@@ -105,9 +245,12 @@ $stmt->close();
                 <i class="bi bi-building"></i>
             </div>
             <div class="title">
-                <h4>User</h4>
+                <h4><?php echo $_SESSION['username']; ?></h4>
                 <p>Plantilla Management</p>
             </div>
+            <button class="toggle-sidebar" id="toggleSidebar" title="Minimize Sidebar">
+                <i class="bi bi-chevron-left"></i>
+            </button>
         </div>
         <div class="sidebar-content">
             <ul class="nav flex-column">
@@ -118,31 +261,21 @@ $stmt->close();
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#dataManagement">
+                    <a class="nav-link" href="data_management.php">
                         <i class="bi bi-database"></i>
                         <span>Data Management</span>
                     </a>
-                    <div class="collapse" id="dataManagement">
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link" href="org_code.php">
-                                    <i class="bi bi-diagram-3"></i>
-                                    <span>Organizational Code</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="spreadsheet.php">
-                                    <i class="bi bi-table"></i>
-                                    <span>Spreadsheet View</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="applicant_records.php">
                         <i class="bi bi-file-earmark-text"></i>
                         <span>Applicant Records</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="user_management.php">
+                        <i class="bi bi-people"></i>
+                        <span>User Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -154,15 +287,9 @@ $stmt->close();
             </ul>
         </div>
         <div class="sidebar-footer">
-            <div class="user-info">
-                <img src="<?php echo !empty($user['photo']) ? htmlspecialchars($user['photo']) : 'https://ui-avatars.com/api/?name=' . urlencode($user['first_name'] . '+' . $user['last_name']); ?>" alt="User">
-                <div class="user-details">
-                    <h6><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h6>
-                    <p><?php echo ucfirst($user['role']); ?></p>
-                </div>
-            </div>
+            
             <div class="logout-btn">
-                <a class="nav-link" href="../logout.php" >
+            <a class="nav-link" onclick="return confirm('Are you sure you want to logout?')" href="logout.php">
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Logout</span>
                 </a>
@@ -178,11 +305,7 @@ $stmt->close();
                     <h2 class="mb-1">Applicant Records</h2>
                     <p class="text-muted mb-0">Manage and view applicant information</p>
                 </div>
-                <?php if ($permissions && $permissions['can_create']): ?>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addApplicantModal">
-                    <i class="bi bi-plus-lg me-2"></i>Add New Applicant
-                </button>
-                <?php endif; ?>
+               
             </div>
         </div>
 
@@ -190,161 +313,162 @@ $stmt->close();
         <div class="card mb-4">
             <div class="card-body">
                 <form method="GET" class="row g-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="input-group">
                             <span class="input-group-text bg-white">
                                 <i class="bi bi-search"></i>
                             </span>
-                            <input type="text" class="form-control" name="search" placeholder="Search by name or email..." value="<?php echo htmlspecialchars($search); ?>">
+                            <input type="text" class="form-control" name="search" placeholder="Search by name..." value="<?php echo htmlspecialchars($search); ?>">
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <select class="form-select" name="position">
-                            <option value="">All Positions</option>
-                            <?php foreach ($positions as $pos): ?>
-                                <option value="<?php echo $pos['id']; ?>" <?php echo $position == $pos['id'] ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($pos['position'] . ' - ' . $pos['department']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-select" name="status">
-                            <option value="">All Status</option>
-                            <option value="pending" <?php echo $status === 'pending' ? 'selected' : ''; ?>>Pending</option>
-                            <option value="reviewed" <?php echo $status === 'reviewed' ? 'selected' : ''; ?>>Reviewed</option>
-                            <option value="shortlisted" <?php echo $status === 'shortlisted' ? 'selected' : ''; ?>>Shortlisted</option>
-                            <option value="rejected" <?php echo $status === 'rejected' ? 'selected' : ''; ?>>Rejected</option>
+                    <div class="col-md-2">
+                        <select class="form-select" name="month">
+                            <option value="">All Months</option>
+                            <?php
+                            $months = [
+                                1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April',
+                                5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August',
+                                9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'
+                            ];
+                            foreach ($months as $num => $name) {
+                                $selected = $month == $num ? 'selected' : '';
+                                echo "<option value='$num' $selected>$name</option>";
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="bi bi-filter me-2"></i>Filter
+                        <select class="form-select" name="division">
+                            <option value="">All Divisions</option>
+                            <?php
+                            $divisions = array_unique(array_column($records, 'division'));
+                            foreach ($divisions as $div) {
+                                $selected = $division == $div ? 'selected' : '';
+                                echo "<option value='$div' $selected>$div</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" name="remarks">
+                            <option value="">All Remarks</option>
+                            <option value="Not Yet for Filling up" <?php echo $remarks === 'Not Yet for Filling up' ? 'selected' : ''; ?>>Not Yet for Filling up</option>
+                            <option value="On-Hold" <?php echo $remarks === 'On-Hold' ? 'selected' : ''; ?>>On-Hold</option>
+                            <option value="On Process" <?php echo $remarks === 'On Process' ? 'selected' : ''; ?>>On Process</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-funnel me-2"></i>Filter
                         </button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Applicants Table -->
+        <!-- Data Table -->
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover" id="applicantTable">
+                    <table id="recordsTable" class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>Photo</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Position</th>
-                                <th>Department</th>
-                                <th>Status</th>
-                                <th>Applied Date</th>
+                                <th>ID No.</th>
+                                <th>Full Name</th>
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                <th>Middle Name</th>
+                                <th>Ext. Name</th>
+                                <th>MI</th>
+                                <th>Sex</th>
+                                <th>Position Title</th>
+                                <th>Item No.</th>
+                                <th>Tech Code</th>
+                                <th>Level</th>
+                                <th>Appointment Status</th>
+                                <th>SG</th>
+                                <th>Step</th>
+                                <th>Date of Birth</th>
+                                <th>Date of Original Appointment</th>
+                                <th>Date of Govt. Service</th>
+                                <th>Date of Last Promotion</th>
+                                <th>Date of Last Increment</th>
+                                <th>Date of Longevity</th>
+                                <th>Remarks</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($applicants as $applicant): ?>
+                            <?php foreach ($records as $record): ?>
                                 <tr>
+                                    <td><?php echo htmlspecialchars($record['id_no']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['last_name'] . ', ' . $record['first_name'] . ' ' . $record['middle_name'] . ' ' . $record['ext_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['last_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['first_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['middle_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['ext_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['mi']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['sex']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['position_title']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['item_number']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['tech_code']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['level']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['appointment_status']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['sg']); ?></td>
+                                    <td><?php echo htmlspecialchars($record['step']); ?></td>
+                                    <td><?php echo $record['formatted_dob']; ?></td>
+                                    <td><?php echo $record['formatted_orig_appt']; ?></td>
+                                    <td><?php echo $record['formatted_govt_srvc']; ?></td>
+                                    <td><?php echo $record['formatted_last_promotion']; ?></td>
+                                    <td><?php echo $record['formatted_last_increment']; ?></td>
+                                    <td><?php echo $record['formatted_longevity']; ?></td>
+                                    <td data-remarks><?php echo htmlspecialchars($record['remarks']); ?></td>
                                     <td>
-                                        <img src="<?php echo !empty($applicant['photo_path']) ? htmlspecialchars($applicant['photo_path']) : 'https://ui-avatars.com/api/?name=' . urlencode($applicant['first_name'] . '+' . $applicant['last_name']); ?>" 
-                                             class="applicant-photo" 
-                                             alt="Applicant Photo">
-                                    </td>
-                                    <td><?php echo htmlspecialchars($applicant['first_name'] . ' ' . $applicant['last_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($applicant['email']); ?></td>
-                                    <td><?php echo htmlspecialchars($applicant['position']); ?></td>
-                                    <td><?php echo htmlspecialchars($applicant['department']); ?></td>
-                                    <td>
-                                        <span class="badge bg-<?php 
-                                            echo match($applicant['status']) {
-                                                'pending' => 'warning',
-                                                'reviewed' => 'info',
-                                                'shortlisted' => 'success',
-                                                'rejected' => 'danger',
-                                                default => 'secondary'
-                                            };
-                                        ?>">
-                                            <?php echo ucfirst($applicant['status']); ?>
-                                        </span>
-                                    </td>
-                                    <td><?php echo date('M d, Y', strtotime($applicant['created_at'])); ?></td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-primary view-applicant" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#viewApplicantModal"
-                                                    data-id="<?php echo $applicant['id']; ?>"
-                                                    data-first-name="<?php echo htmlspecialchars($applicant['first_name']); ?>"
-                                                    data-last-name="<?php echo htmlspecialchars($applicant['last_name']); ?>"
-                                                    data-email="<?php echo htmlspecialchars($applicant['email']); ?>"
-                                                    data-phone="<?php echo htmlspecialchars($applicant['phone']); ?>"
-                                                    data-position="<?php echo htmlspecialchars($applicant['position']); ?>"
-                                                    data-department="<?php echo htmlspecialchars($applicant['department']); ?>"
-                                                    data-status="<?php echo $applicant['status']; ?>"
-                                                    data-remarks="<?php echo htmlspecialchars($applicant['remarks']); ?>"
-                                                    data-photo="<?php echo htmlspecialchars($applicant['photo_path']); ?>"
-                                                    data-resume="<?php echo htmlspecialchars($applicant['resume_path']); ?>">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                            <?php if ($permissions && $permissions['can_edit']): ?>
-                                            <button type="button" class="btn btn-sm btn-outline-primary edit-applicant"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#editApplicantModal"
-                                                    data-id="<?php echo $applicant['id']; ?>"
-                                                    data-first-name="<?php echo htmlspecialchars($applicant['first_name']); ?>"
-                                                    data-last-name="<?php echo htmlspecialchars($applicant['last_name']); ?>"
-                                                    data-email="<?php echo htmlspecialchars($applicant['email']); ?>"
-                                                    data-phone="<?php echo htmlspecialchars($applicant['phone']); ?>"
-                                                    data-position-id="<?php echo $applicant['position_id']; ?>"
-                                                    data-status="<?php echo $applicant['status']; ?>"
-                                                    data-remarks="<?php echo htmlspecialchars($applicant['remarks']); ?>">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <?php endif; ?>
-                                            <?php if ($permissions && $permissions['can_delete']): ?>
-                                            <button type="button" class="btn btn-sm btn-outline-danger delete-applicant" 
-                                                    data-id="<?php echo $applicant['id']; ?>">
-                                                <i class="bi bi-trash"></i>
-                    </button>
-                                            <?php endif; ?>
-                                        </div>
+                                        <button class="btn btn-sm btn-outline-success update-remarks" 
+                                                data-id="<?php echo $record['id']; ?>"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#updateRemarksModal">
+                                            <i class="bi bi-pencil"></i> 
+                                        </button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
-                </div>
             </div>
         </div>
+    </div>
 
     <!-- Add Applicant Modal -->
-    <?php if ($permissions && $permissions['can_create']): ?>
     <div class="modal fade" id="addApplicantModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add New Applicant</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form id="addApplicantForm" method="POST" action="process/add_applicant.php" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">First Name</label>
-                            <input type="text" class="form-control" name="first_name" required>
+                <div class="modal-body">
+                    <form id="addApplicantForm" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" name="first_name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" name="last_name" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Last Name</label>
-                            <input type="text" class="form-control" name="last_name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Phone</label>
-                            <input type="tel" class="form-control" name="phone">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-control" name="phone" required>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Position</label>
@@ -365,19 +489,18 @@ $stmt->close();
                             <label class="form-label">Photo</label>
                             <input type="file" class="form-control" name="photo" accept="image/*">
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Add Applicant</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveApplicant">Save</button>
+                </div>
             </div>
         </div>
     </div>
-    <?php endif; ?>
 
     <!-- View Applicant Modal -->
-    <div class="modal fade" id="viewApplicantModal" tabindex="-1">
+    <div class="modal fade" id="viewRecordModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -392,120 +515,81 @@ $stmt->close();
                             <p id="viewPosition" class="text-muted"></p>
                         </div>
                         <div class="col-md-8">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <p class="mb-1"><strong>Email:</strong></p>
-                                    <p id="viewEmail"></p>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email</label>
+                                    <p id="viewEmail" class="form-control-static"></p>
                                 </div>
-                                <div class="col-md-6">
-                                    <p class="mb-1"><strong>Phone:</strong></p>
-                                    <p id="viewPhone"></p>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <p class="mb-1"><strong>Department:</strong></p>
-                                    <p id="viewDepartment"></p>
-                                </div>
-                                <div class="col-md-6">
-                                    <p class="mb-1"><strong>Status:</strong></p>
-                                    <p id="viewStatus"></p>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <p id="viewPhone" class="form-control-static"></p>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <p class="mb-1"><strong>Remarks:</strong></p>
-                                <p id="viewRemarks"></p>
+                                <label class="form-label">Department</label>
+                                <p id="viewDepartment" class="form-control-static"></p>
                             </div>
                             <div class="mb-3">
-                                <p class="mb-1"><strong>Resume:</strong></p>
-                                <a id="viewResume" href="#" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <label class="form-label">Status</label>
+                                <p id="viewStatus" class="form-control-static"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Applied Date</label>
+                                <p id="viewAppliedDate" class="form-control-static"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Resume</label>
+                                <a id="viewResume" href="#" target="_blank" class="btn btn-outline-primary">
                                     <i class="bi bi-file-earmark-pdf me-2"></i>View Resume
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- Edit Applicant Modal -->
-    <?php if ($permissions && $permissions['can_edit']): ?>
-    <div class="modal fade" id="editApplicantModal" tabindex="-1">
+    <!-- Update Remarks Modal -->
+    <div class="modal fade" id="updateRemarksModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Applicant</h5>
+                    <h5 class="modal-title">Update Remarks</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form id="editApplicantForm" method="POST" action="process/edit_applicant.php">
-                    <div class="modal-body">
-                        <input type="hidden" name="id" id="editId">
-                        <div class="mb-3">
-                            <label class="form-label">First Name</label>
-                            <input type="text" class="form-control" name="first_name" id="editFirstName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Last Name</label>
-                            <input type="text" class="form-control" name="last_name" id="editLastName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" id="editEmail" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Phone</label>
-                            <input type="tel" class="form-control" name="phone" id="editPhone">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Position</label>
-                            <select class="form-select" name="position_id" id="editPositionId" required>
-                                <option value="">Select Position</option>
-                                <?php foreach ($positions as $pos): ?>
-                                    <option value="<?php echo $pos['id']; ?>">
-                                        <?php echo htmlspecialchars($pos['position'] . ' - ' . $pos['department']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" name="status" id="editStatus" required>
-                                <option value="pending">Pending</option>
-                                <option value="reviewed">Reviewed</option>
-                                <option value="shortlisted">Shortlisted</option>
-                                <option value="rejected">Rejected</option>
-                            </select>
-                        </div>
+                <div class="modal-body">
+                    <form id="updateRemarksForm">
+                        <input type="hidden" name="record_id" id="remarksRecordId">
                         <div class="mb-3">
                             <label class="form-label">Remarks</label>
-                            <textarea class="form-control" name="remarks" id="editRemarks" rows="3"></textarea>
+                            <select class="form-select" name="remarks" required>
+                                <option value="Not Yet for Filling up">Not Yet for Filling up</option>
+                                <option value="On-Hold">On-Hold</option>
+                                <option value="On Process">On Process</option>
+                            </select>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveRemarks">Update Remarks</button>
+                </div>
             </div>
         </div>
     </div>
-    <?php endif; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <script>
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
             // Initialize DataTable
-            $('#applicantTable').DataTable({
-                order: [[6, 'desc']],
+            const table = $('#recordsTable').DataTable({
+                order: [[0, 'desc']],
                 pageLength: 25,
+                scrollX: true,
                 language: {
                     search: "",
                     searchPlaceholder: "Search...",
@@ -516,52 +600,145 @@ $stmt->close();
                 }
             });
 
-            // Handle view applicant modal
-            $('.view-applicant').on('click', function() {
-                const data = $(this).data();
-                $('#viewPhoto').attr('src', data.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.firstName + '+' + data.lastName)}`);
-                $('#viewName').text(data.firstName + ' ' + data.lastName);
-                $('#viewEmail').text(data.email);
-                $('#viewPhone').text(data.phone || 'N/A');
-                $('#viewPosition').text(data.position);
-                $('#viewDepartment').text(data.department);
-                $('#viewStatus').html(`<span class="badge bg-${getStatusColor(data.status)}">${data.status.charAt(0).toUpperCase() + data.status.slice(1)}</span>`);
-                $('#viewRemarks').text(data.remarks || 'No remarks');
-                $('#viewResume').attr('href', data.resume);
+            // View Applicant Details
+            document.querySelectorAll('.view-record').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    fetch(`get_applicant.php?id=${id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const applicant = data.applicant;
+                                document.getElementById('viewPhoto').src = applicant.photo || 
+                                    `https://ui-avatars.com/api/?name=${encodeURIComponent(applicant.first_name + '+' + applicant.last_name)}`;
+                                document.getElementById('viewName').textContent = `${applicant.first_name} ${applicant.last_name}`;
+                                document.getElementById('viewPosition').textContent = applicant.position;
+                                document.getElementById('viewEmail').textContent = applicant.email;
+                                document.getElementById('viewPhone').textContent = applicant.phone;
+                                document.getElementById('viewDepartment').textContent = applicant.department;
+                                document.getElementById('viewStatus').innerHTML = 
+                                    `<span class="badge bg-${getStatusColor(applicant.status)}">${applicant.status}</span>`;
+                                document.getElementById('viewAppliedDate').textContent = 
+                                    new Date(applicant.applied_date).toLocaleDateString();
+                                document.getElementById('viewResume').href = applicant.resume;
+                            }
+                        });
+                });
             });
 
-            // Handle edit applicant modal
-            $('.edit-applicant').on('click', function() {
-                const data = $(this).data();
-                $('#editId').val(data.id);
-                $('#editFirstName').val(data.firstName);
-                $('#editLastName').val(data.lastName);
-                $('#editEmail').val(data.email);
-                $('#editPhone').val(data.phone);
-                $('#editPositionId').val(data.positionId);
-                $('#editStatus').val(data.status);
-                $('#editRemarks').val(data.remarks);
+            // Update Remarks
+            document.querySelectorAll('.update-remarks').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const currentRemarks = this.closest('tr').querySelector('td[data-remarks]').textContent.trim();
+                    document.getElementById('remarksRecordId').value = id;
+                    document.querySelector('#updateRemarksForm select[name="remarks"]').value = currentRemarks;
+                });
             });
 
-            // Handle delete applicant
-            $('.delete-applicant').on('click', function() {
-                const id = $(this).data('id');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = `process/delete_applicant.php?id=${id}`;
+            // Save Remarks Update
+            document.getElementById('saveRemarks').addEventListener('click', function() {
+                const form = document.getElementById('updateRemarksForm');
+                const formData = new FormData(form);
+                const recordId = formData.get('record_id');
+                const newRemarks = formData.get('remarks');
+
+                // Show loading state
+                const saveButton = this;
+                const originalText = saveButton.innerHTML;
+                saveButton.disabled = true;
+                saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Updating...';
+
+                fetch('update_remarks.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the remarks in the table without reloading
+                        const row = document.querySelector(`.update-remarks[data-id="${recordId}"]`).closest('tr');
+                        row.querySelector('td[data-remarks]').textContent = newRemarks;
+                        
+                        // Close the modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('updateRemarksModal'));
+                        modal.hide();
+                        
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.message || 'Remarks updated successfully',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    } else {
+                        // Show error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message || 'Failed to update remarks'
+                        });
+                    }
+                })
+                .catch(error => {
+                    // Show error message
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while updating remarks'
+                    });
+                })
+                .finally(() => {
+                    // Reset button state
+                    saveButton.disabled = false;
+                    saveButton.innerHTML = originalText;
+                });
+            });
+
+            // Delete Applicant
+            document.querySelectorAll('.delete-record').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to delete this applicant?')) {
+                        const id = this.dataset.id;
+                        fetch('delete_applicant.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `id=${id}`
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                location.reload();
+                            } else {
+                                alert('Error deleting applicant');
+                            }
+                        });
                     }
                 });
             });
 
-            // Helper function for status colors
+            // Save New Applicant
+            document.getElementById('saveApplicant').addEventListener('click', function() {
+                const form = document.getElementById('addApplicantForm');
+                const formData = new FormData(form);
+
+                fetch('add_applicant.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error adding applicant');
+                    }
+                });
+            });
+
             function getStatusColor(status) {
                 switch(status) {
                     case 'pending': return 'warning';
@@ -571,6 +748,34 @@ $stmt->close();
                     default: return 'secondary';
                 }
             }
+        });
+
+        $(document).ready(function() {
+            const sidebar = $('#sidebar');
+            const mainContent = $('.main-content');
+            const toggleBtn = $('#toggleSidebar');
+            
+            // Check if sidebar was minimized in previous session
+            if (localStorage.getItem('sidebarMinimized') === 'true') {
+                sidebar.addClass('minimized');
+                mainContent.addClass('expanded');
+                toggleBtn.attr('title', 'Expand Sidebar');
+            }
+            
+            // Toggle sidebar
+            toggleBtn.on('click', function() {
+                sidebar.toggleClass('minimized');
+                mainContent.toggleClass('expanded');
+                
+                // Update button title
+                if (sidebar.hasClass('minimized')) {
+                    toggleBtn.attr('title', 'Expand Sidebar');
+                    localStorage.setItem('sidebarMinimized', 'true');
+                } else {
+                    toggleBtn.attr('title', 'Minimize Sidebar');
+                    localStorage.setItem('sidebarMinimized', 'false');
+                }
+            });
         });
     </script>
 </body>

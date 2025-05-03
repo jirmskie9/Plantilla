@@ -110,6 +110,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     echo json_encode($response);
     exit();
 }
+
+// Handle password update
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_password') {
+    $response = ['success' => false, 'message' => ''];
+    
+    try {
+        // Get form data
+        $current_password = $_POST['current_password'];
+        $new_password = $_POST['new_password'];
+        $confirm_password = $_POST['confirm_password'];
+        
+        // Validate input
+        if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
+            throw new Exception('All fields are required');
+        }
+        
+        if ($new_password !== $confirm_password) {
+            throw new Exception('New passwords do not match');
+        }
+        
+        if (strlen($new_password) < 8) {
+            throw new Exception('New password must be at least 8 characters long');
+        }
+        
+        // Verify current password
+        $stmt = $conn->prepare("SELECT password FROM users WHERE id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+        
+        if (!password_verify($current_password, $user['password'])) {
+            throw new Exception('Current password is incorrect');
+        }
+        
+        // Hash new password
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+        
+        // Update password
+        $stmt = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
+        $stmt->bind_param("si", $hashed_password, $userId);
+        
+        if ($stmt->execute()) {
+            $response['success'] = true;
+            $response['message'] = 'Password updated successfully';
+        } else {
+            throw new Exception('Failed to update password: ' . $stmt->error);
+        }
+        
+        $stmt->close();
+    } catch (Exception $e) {
+        $response['message'] = $e->getMessage();
+    }
+    
+    // Return JSON response
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -121,6 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/x-icon">
     <link rel="stylesheet" href="../assets/css/styles.css">
     <style>
         :root {
@@ -454,23 +515,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <div class="tab-pane fade" id="password" role="tabpanel">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Change Password</h5>
+                                    <h5 class="card-title">Change Password</h5>
                                 </div>
                                 <div class="card-body">
                                     <form id="passwordForm">
+                                        <input type="hidden" name="action" value="update_password">
                                         <div class="mb-3">
-                                            <label class="form-label">Current Password</label>
-                                            <input type="password" class="form-control" name="current_password" required>
+                                            <label for="current_password" class="form-label">Current Password</label>
+                                            <input type="password" class="form-control" id="current_password" name="current_password" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">New Password</label>
-                                            <input type="password" class="form-control" name="new_password" required>
+                                            <label for="new_password" class="form-label">New Password</label>
+                                            <input type="password" class="form-control" id="new_password" name="new_password" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Confirm New Password</label>
-                                            <input type="password" class="form-control" name="confirm_password" required>
+                                            <label for="confirm_password" class="form-label">Confirm New Password</label>
+                                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Change Password</button>
+                                        <button type="submit" class="btn btn-primary">Update Password</button>
                                     </form>
                                 </div>
                             </div>
@@ -569,6 +631,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         // Reset button state
                         submitBtn.prop('disabled', false);
                         spinner.addClass('d-none');
+                    }
+                });
+            });
+
+            // Handle password form submission
+            $('#passwordForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                
+                $.ajax({
+                    url: window.location.href,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                // Clear form
+                                $('#passwordForm')[0].reset();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'An error occurred while updating your password'
+                        });
                     }
                 });
             });

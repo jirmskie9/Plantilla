@@ -3,7 +3,7 @@ session_start();
 require '../dbconnection.php';
 
 // Check admin permissions
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'user') {
     header('Location: ../login.php');
     exit();
 }
@@ -386,7 +386,6 @@ $monthly_files = getMonthlyFiles($selected_month);
     <link rel="stylesheet" href="../assets/css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
-    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/x-icon">
 </head>
 <body>
     <div class="wrapper">
@@ -397,7 +396,7 @@ $monthly_files = getMonthlyFiles($selected_month);
                 <i class="bi bi-building"></i>
             </div>
             <div class="title">
-                <h4>Admin</h4>
+                <h4><?php echo $_SESSION['username']; ?></h4>
                 <p>Plantilla Management</p>
             </div>
         </div>
@@ -436,20 +435,14 @@ $monthly_files = getMonthlyFiles($selected_month);
             </ul>
         </div>
         <div class="sidebar-footer">
-            <div class="user-info">
-                <img src="https://ui-avatars.com/api/?name=Admin&background=2962FF&color=fff" alt="Admin">
-                <div class="user-details">
-                    <h6>Administrator</h6>
-                    <p>Super Admin</p>
-                </div>
-            </div>
-            <div class="logout-btn">
-            <a class="nav-link" onclick="return confirm('Are you sure you want to logout?')" href="logout.php">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Logout</span>
-                </a>
-            </div>
-        </div>
+           
+           <div class="logout-btn">
+           <a class="nav-link" onclick="return confirm('Are you sure you want to logout?')" href="logout.php">
+                   <i class="bi bi-box-arrow-right"></i>
+                   <span>Logout</span>
+               </a>
+           </div>
+       </div>
     </div>
 
         <!-- Main Content -->

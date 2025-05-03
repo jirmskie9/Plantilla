@@ -91,6 +91,7 @@ $stmt->close();
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/x-icon">
     <style>
         .dataTables_wrapper .dataTables_filter {
             float: none;
@@ -109,6 +110,131 @@ $stmt->close();
             border-radius: 50%;
             object-fit: cover;
         }
+        .sidebar {
+            width: 250px;
+            transition: all 0.3s ease;
+            position: fixed;
+            height: 100vh;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .sidebar.minimized {
+            width: 70px;
+        }
+
+        .sidebar.minimized .sidebar-header .title,
+        .sidebar.minimized .nav-link span,
+        .sidebar.minimized .user-details,
+        .sidebar.minimized .logout-btn span {
+            display: none;
+        }
+
+        .sidebar.minimized .nav-link {
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .sidebar.minimized .nav-link i {
+            margin-right: 0;
+            font-size: 1.2rem;
+        }
+
+        .sidebar.minimized .user-info {
+            padding: 0.5rem;
+            justify-content: center;
+        }
+
+        .sidebar.minimized .user-info img {
+            margin-right: 0;
+        }
+
+        .sidebar.minimized .logout-btn a {
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 70px;
+        }
+
+        .toggle-sidebar {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            color: #495057;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .toggle-sidebar:hover {
+            background: #e9ecef;
+            color: #212529;
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .toggle-sidebar i {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.minimized .toggle-sidebar i {
+            transform: rotate(180deg);
+        }
+
+        .sidebar.minimized .toggle-sidebar {
+            right: 10px;
+        }
+
+        .toggle-sidebar::after {
+            content: 'Minimize Sidebar';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #212529;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .toggle-sidebar:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar.minimized .toggle-sidebar::after {
+            content: 'Expand Sidebar';
+        }
+
+        .sidebar-header {
+            position: relative;
+            padding-right: 50px;
+        }
     </style>
 </head>
 <body>
@@ -122,6 +248,9 @@ $stmt->close();
                 <h4>Admin</h4>
                 <p>Plantilla Management</p>
             </div>
+            <button class="toggle-sidebar" id="toggleSidebar" title="Minimize Sidebar">
+                <i class="bi bi-chevron-left"></i>
+            </button>
         </div>
         <div class="sidebar-content">
             <ul class="nav flex-column">
@@ -625,6 +754,34 @@ $stmt->close();
                     default: return 'secondary';
                 }
             }
+        });
+
+        $(document).ready(function() {
+            const sidebar = $('#sidebar');
+            const mainContent = $('.main-content');
+            const toggleBtn = $('#toggleSidebar');
+            
+            // Check if sidebar was minimized in previous session
+            if (localStorage.getItem('sidebarMinimized') === 'true') {
+                sidebar.addClass('minimized');
+                mainContent.addClass('expanded');
+                toggleBtn.attr('title', 'Expand Sidebar');
+            }
+            
+            // Toggle sidebar
+            toggleBtn.on('click', function() {
+                sidebar.toggleClass('minimized');
+                mainContent.toggleClass('expanded');
+                
+                // Update button title
+                if (sidebar.hasClass('minimized')) {
+                    toggleBtn.attr('title', 'Expand Sidebar');
+                    localStorage.setItem('sidebarMinimized', 'true');
+                } else {
+                    toggleBtn.attr('title', 'Minimize Sidebar');
+                    localStorage.setItem('sidebarMinimized', 'false');
+                }
+            });
         });
     </script>
 </body>

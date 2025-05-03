@@ -1,62 +1,10 @@
 <?php
 session_start();
 include '../dbconnection.php';
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     header('Location: ../login.php');
     exit();
 }
-
-// Get current user data
-$userId = $_SESSION['user_id'] ?? 1; // For testing, remove in production
-$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-$stmt->close();
-
-// Get applicant counts by status
-$stmt = $conn->prepare("
-    SELECT status, COUNT(*) as count 
-    FROM applicants 
-    WHERE created_by = ? 
-    GROUP BY status
-");
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$statusCounts = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
-
-// Get recent files
-$stmt = $conn->prepare("
-    SELECT * FROM file_uploads 
-    WHERE user_id = ? 
-    ORDER BY created_at DESC 
-    LIMIT 5
-");
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$recentFiles = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
-
-// Get recent activities
-$stmt = $conn->prepare("
-    SELECT * FROM activity_logs 
-    WHERE user_id = ? 
-    ORDER BY created_at DESC 
-    LIMIT 5
-");
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$recentActivities = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
-
-// Get user permissions
-$stmt = $conn->prepare("SELECT * FROM user_permissions WHERE user_id = ? AND module = 'spreadsheet'");
-$stmt->bind_param("i", $_SESSION['user_id']);
-$stmt->execute();
-$permissions = $stmt->get_result()->fetch_assoc();
-$stmt->close();
 
 // Get search parameters
 $search = isset($_GET['search']) ? $_GET['search'] : '';
@@ -64,24 +12,15 @@ $department = isset($_GET['department']) ? $_GET['department'] : '';
 $status = isset($_GET['status']) ? $_GET['status'] : '';
 
 // Build query with prepared statements
-$query = "SELECT 
-    code,
-    description,
-    department,
-    position,
-    status,
-    updated_at
-FROM organizational_codes 
-WHERE 1=1";
+$query = "SELECT * FROM organizational_codes WHERE 1=1";
 $params = [];
 $types = '';
 
 if (!empty($search)) {
-    $query .= " AND (code LIKE ? OR description LIKE ? OR position LIKE ?)";
+    $query .= " AND (code LIKE ? OR description LIKE ?)";
     $params[] = "%$search%";
     $params[] = "%$search%";
-    $params[] = "%$search%";
-    $types .= 'sss';
+    $types .= 'ss';
 }
 
 if (!empty($department)) {
@@ -96,6 +35,28 @@ if (!empty($status)) {
     $types .= 's';
 }
 
+// Get total count for pagination
+$countQuery = str_replace("SELECT *", "SELECT COUNT(*)", $query);
+$stmt = $conn->prepare($countQuery);
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
+}
+$stmt->execute();
+$result = $stmt->get_result();
+$totalRecords = $result->fetch_row()[0];
+$stmt->close();
+
+// Pagination
+$recordsPerPage = 10;
+$totalPages = ceil($totalRecords / $recordsPerPage);
+$page = isset($_GET['page']) ? max(1, min($_GET['page'], $totalPages)) : 1;
+$offset = ($page - 1) * $recordsPerPage;
+
+$query .= " LIMIT ? OFFSET ?";
+$params[] = $recordsPerPage;
+$params[] = $offset;
+$types .= 'ii';
+
 // Execute query with prepared statement
 $stmt = $conn->prepare($query);
 if (!empty($params)) {
@@ -103,17 +64,17 @@ if (!empty($params)) {
 }
 $stmt->execute();
 $result = $stmt->get_result();
-$spreadsheetData = $result->fetch_all(MYSQLI_ASSOC);
+$organizationalCodes = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
-// Get unique departments for filter
+// Get unique departments for filter using prepared statement
 $deptQuery = "SELECT DISTINCT department FROM organizational_codes ORDER BY department";
 $stmt = $conn->prepare($deptQuery);
 $stmt->execute();
 $deptResult = $stmt->get_result();
 $departments = [];
-while ($row = $deptResult->fetch_assoc()) {
-    $departments[] = $row['department'];
+while ($row = $deptResult->fetch_row()) {
+    $departments[] = $row[0];
 }
 $stmt->close();
 ?>
@@ -126,10 +87,22 @@ $stmt->close();
     <title>Spreadsheet View - Plantilla Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
     <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        .dataTables_wrapper .dataTables_filter {
+            float: none;
+            text-align: left;
+        }
+        .dataTables_wrapper .dataTables_length {
+            float: none;
+            text-align: left;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
     <!-- Sidebar -->
@@ -139,7 +112,7 @@ $stmt->close();
                 <i class="bi bi-building"></i>
             </div>
             <div class="title">
-                <h4>User</h4>
+                <h4>Admin</h4>
                 <p>Plantilla Management</p>
             </div>
         </div>
@@ -159,13 +132,13 @@ $stmt->close();
                     <div class="collapse" id="dataManagement">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active" href="org_code.php">
+                                <a class="nav-link" href="org_code.php">
                                     <i class="bi bi-diagram-3"></i>
                                     <span>Organizational Code</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="spreadsheet.php">
+                                <a class="nav-link active" href="spreadsheet.php">
                                     <i class="bi bi-table"></i>
                                     <span>Spreadsheet View</span>
                                 </a>
@@ -180,6 +153,12 @@ $stmt->close();
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="user_management.php">
+                        <i class="bi bi-people"></i>
+                        <span>User Management</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="my_account.php">
                         <i class="bi bi-person-circle"></i>
                         <span>My Account</span>
@@ -189,10 +168,10 @@ $stmt->close();
         </div>
         <div class="sidebar-footer">
             <div class="user-info">
-                <img src="<?php echo !empty($user['photo']) ? htmlspecialchars($user['photo']) : 'https://ui-avatars.com/api/?name=' . urlencode($user['first_name'] . '+' . $user['last_name']); ?>" alt="User">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=2962FF&color=fff" alt="Admin">
                 <div class="user-details">
-                    <h6><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h6>
-                    <p><?php echo ucfirst($user['role']); ?></p>
+                    <h6>Administrator</h6>
+                    <p>Super Admin</p>
                 </div>
             </div>
             <div class="logout-btn">
@@ -210,14 +189,14 @@ $stmt->close();
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h2 class="mb-1">Spreadsheet View</h2>
-                    <p class="text-muted mb-0">View and export organizational structure and positions</p>
+                    <p class="text-muted mb-0">View and export organizational codes</p>
                 </div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-primary" id="exportExcel">
-                        <i class="bi bi-file-earmark-excel me-2"></i>Export Excel
+                <div>
+                    <button class="btn btn-outline-primary me-2" id="exportExcel">
+                        <i class="bi bi-file-earmark-excel me-2"></i>Export to Excel
                     </button>
-                    <button type="button" class="btn btn-primary" id="exportPDF">
-                        <i class="bi bi-file-earmark-pdf me-2"></i>Export PDF
+                    <button class="btn btn-outline-secondary" id="exportPDF">
+                        <i class="bi bi-file-earmark-pdf me-2"></i>Export to PDF
                     </button>
                 </div>
             </div>
@@ -232,7 +211,7 @@ $stmt->close();
                             <span class="input-group-text bg-white">
                                 <i class="bi bi-search"></i>
                             </span>
-                            <input type="text" class="form-control" name="search" placeholder="Search by code, description, or position..." value="<?php echo htmlspecialchars($search); ?>">
+                            <input type="text" class="form-control" name="search" placeholder="Search by code or description..." value="<?php echo htmlspecialchars($search); ?>">
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -253,19 +232,19 @@ $stmt->close();
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="bi bi-filter me-2"></i>Filter
+                        <button type="submit" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-funnel me-2"></i>Filter
                         </button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Spreadsheet Table -->
+        <!-- Data Table -->
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover" id="spreadsheetTable">
+                    <table id="spreadsheetTable" class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>Code</th>
@@ -273,22 +252,24 @@ $stmt->close();
                                 <th>Department</th>
                                 <th>Position</th>
                                 <th>Status</th>
-                                <th>Last Updated</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($spreadsheetData as $row): ?>
+                            <?php foreach ($organizationalCodes as $code): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($row['code']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['description']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['department']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['position']); ?></td>
+                                    <td><?php echo htmlspecialchars($code['code']); ?></td>
+                                    <td><?php echo htmlspecialchars($code['description']); ?></td>
+                                    <td><?php echo htmlspecialchars($code['department']); ?></td>
+                                    <td><?php echo htmlspecialchars($code['position']); ?></td>
                                     <td>
-                                        <span class="badge bg-<?php echo $row['status'] === 'active' ? 'success' : 'danger'; ?>">
-                                            <?php echo ucfirst($row['status']); ?>
+                                        <span class="badge bg-<?php echo $code['status'] === 'active' ? 'success' : 'warning'; ?>">
+                                            <?php echo ucfirst($code['status']); ?>
                                         </span>
                                     </td>
-                                    <td><?php echo date('M d, Y', strtotime($row['updated_at'])); ?></td>
+                                    <td><?php echo date('M d, Y H:i', strtotime($code['created_at'])); ?></td>
+                                    <td><?php echo date('M d, Y H:i', strtotime($code['updated_at'])); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -302,37 +283,15 @@ $stmt->close();
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <script>
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize DataTable
             const table = $('#spreadsheetTable').DataTable({
-                order: [[5, 'desc']],
+                order: [[0, 'asc']],
                 pageLength: 25,
-                dom: 'Bfrtip',
-                buttons: [
-                    {
-                        extend: 'excel',
-                        text: '<i class="bi bi-file-earmark-excel me-2"></i>Export Excel',
-                        className: 'btn btn-primary',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5]
-                        }
-                    },
-                    {
-                        extend: 'pdf',
-                        text: '<i class="bi bi-file-earmark-pdf me-2"></i>Export PDF',
-                        className: 'btn btn-primary',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5]
-                        }
-                    }
-                ],
                 language: {
                     search: "",
                     searchPlaceholder: "Search...",
@@ -343,13 +302,31 @@ $stmt->close();
                 }
             });
 
-            // Handle export buttons
-            $('#exportExcel').on('click', function() {
-                table.button('.buttons-excel').trigger();
+            // Export to Excel
+            document.getElementById('exportExcel').addEventListener('click', function() {
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.table_to_sheet(document.getElementById('spreadsheetTable'));
+                XLSX.utils.book_append_sheet(wb, ws, "Organizational Codes");
+                XLSX.writeFile(wb, "organizational_codes.xlsx");
             });
 
-            $('#exportPDF').on('click', function() {
-                table.button('.buttons-pdf').trigger();
+            // Export to PDF
+            document.getElementById('exportPDF').addEventListener('click', function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                doc.autoTable({
+                    html: '#spreadsheetTable',
+                    theme: 'grid',
+                    headStyles: { fillColor: [41, 98, 255] },
+                    margin: { top: 20 },
+                    didDrawPage: function(data) {
+                        doc.setFontSize(20);
+                        doc.text('Organizational Codes', 14, 15);
+                    }
+                });
+
+                doc.save('organizational_codes.pdf');
             });
         });
     </script>
