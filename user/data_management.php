@@ -540,7 +540,7 @@ $monthly_files = getMonthlyFiles($selected_month);
                         <div class="list-group">
                             <?php
                             // Fetch all divisions from database
-                            $divisions_result = $conn->query("SELECT * FROM divisions ORDER BY name");
+                            $divisions_result = $conn->query("SELECT * FROM divisions ORDER BY order_count");
                             $all_divisions = [];
                             while ($row = $divisions_result->fetch_assoc()) {
                                 $all_divisions[] = $row;
@@ -576,7 +576,7 @@ $monthly_files = getMonthlyFiles($selected_month);
                                                 <select name="division" id="division" class="form-select border-start-0">
                                                     <option value="0">All Divisions</option>
                                                     <?php
-                                                    $stmt = $conn->prepare("SELECT id, name FROM divisions ORDER BY name");
+                                                    $stmt = $conn->prepare("SELECT id, name FROM divisions ORDER BY order_count");
                                                     $stmt->execute();
                                                     $result = $stmt->get_result();
                                                     while ($row = $result->fetch_assoc()) {
@@ -691,7 +691,7 @@ $monthly_files = getMonthlyFiles($selected_month);
                                 <select class="form-select" id="divisionFilter">
                                     <option value="0">All Divisions</option>
                                     <?php 
-                                    $stmt = $conn->prepare("SELECT id, name FROM divisions ORDER BY name");
+                                    $stmt = $conn->prepare("SELECT id, name FROM divisions ORDER BY order_count");
                                     $stmt->execute();
                                     $result = $stmt->get_result();
                                     while ($row = $result->fetch_assoc()) {

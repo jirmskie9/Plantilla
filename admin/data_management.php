@@ -185,7 +185,7 @@ function getDivisionName($id) {
     global $conn;
     if ($id == 0) return 'All Divisions';
     
-    $stmt = $conn->prepare("SELECT name FROM divisions WHERE id = ?");
+    $stmt = $conn->prepare("SELECT name FROM divisions WHERE id = ? ORDER BY order_count");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -562,30 +562,35 @@ $monthly_files = getMonthlyFiles($selected_month);
                 <div class="row">
                     <!-- Division List -->
                     <div class="col-md-3 division-list">
-                        <h5 class="mb-3"><i class="fas fa-sitemap me-2"></i>Divisions</h5>
-                        <div class="list-group">
-                            <?php
-                            // Fetch all divisions from database
-                            $divisions_result = $conn->query("SELECT * FROM divisions ORDER BY name");
-                            $all_divisions = [];
-                            while ($row = $divisions_result->fetch_assoc()) {
-                                $all_divisions[] = $row;
-                            }
-                            ?>
-                            <a href="?division=0" 
-                               class="list-group-item list-group-item-action division-item <?= $selected_division == 0 ? 'active' : '' ?>"
-                               data-division-id="0">
-                                <i class="fas fa-layer-group me-2"></i>All Divisions
-                            </a>
-                            <?php foreach ($all_divisions as $division): ?>
-                            <a href="?division=<?= $division['id'] ?>" 
-                               class="list-group-item list-group-item-action division-item <?= $selected_division == $division['id'] ? 'active' : '' ?>"
-                               data-division-id="<?= $division['id'] ?>">
-                                <i class="fas fa-building me-2"></i><?= htmlspecialchars($division['name']) ?>
-                            </a>
-                            <?php endforeach; ?>
+                        <h5 class="mb-3"><i class="bi bi-sitemap me-2"></i>Divisions</h5>
+                        
+                    
+                        <div class="divisions-container" style="max-height: 600px; overflow-y: auto;">
+                            <div class="list-group" id="divisionList">
+                                <?php
+                                // Fetch all divisions from database
+                                $divisions_result = $conn->query("SELECT * FROM divisions ORDER BY order_count");
+                                $all_divisions = [];
+                                while ($row = $divisions_result->fetch_assoc()) {
+                                    $all_divisions[] = $row;
+                                }
+                                ?>
+                                <a href="?division=0" 
+                                   class="list-group-item list-group-item-action division-item <?= $selected_division == 0 ? 'active' : '' ?>"
+                                   data-division-id="0">
+                                    <i class="bi bi-layers me-2"></i>All Divisions
+                                </a>
+                                <?php foreach ($all_divisions as $division): ?>
+                                <a href="?division=<?= $division['id'] ?>" 
+                                   class="list-group-item list-group-item-action division-item <?= $selected_division == $division['id'] ? 'active' : '' ?>"
+                                   data-division-id="<?= $division['id'] ?>">
+                                    <i class="bi bi-building me-2"></i><?= htmlspecialchars($division['name']) ?>
+                                </a>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
+
 
                     <!-- Data Display -->
                     <div class="col-md-9">
@@ -1639,6 +1644,41 @@ $monthly_files = getMonthlyFiles($selected_month);
                     localStorage.setItem('sidebarMinimized', 'false');
                 }
             });
+
+            // Add JavaScript for search functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                const searchInput = document.getElementById('divisionSearch');
+                const divisionItems = document.querySelectorAll('.division-item');
+
+                searchInput.addEventListener('keyup', function() {
+                    const searchTerm = this.value.toLowerCase().trim();
+                    let hasResults = false;
+
+                    divisionItems.forEach(item => {
+                        const divisionName = item.textContent.toLowerCase();
+                        if (divisionName.includes(searchTerm)) {
+                            item.style.display = '';
+                            hasResults = true;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    // Show/hide no results message
+                    let noResultsMsg = document.getElementById('noResultsMessage');
+                    if (searchTerm && !hasResults) {
+                        if (!noResultsMsg) {
+                            noResultsMsg = document.createElement('div');
+                            noResultsMsg.id = 'noResultsMessage';
+                            noResultsMsg.className = 'alert alert-info mt-2';
+                            noResultsMsg.textContent = 'No divisions found matching your search.';
+                            document.querySelector('.divisions-container').appendChild(noResultsMsg);
+                        }
+                    } else if (noResultsMsg) {
+                        noResultsMsg.remove();
+                    }
+                });
+            });
         });
     </script>
 </body>
@@ -1830,5 +1870,51 @@ $monthly_files = getMonthlyFiles($selected_month);
 .sidebar-header {
     position: relative;
     padding-right: 50px;
+}
+
+/* Add custom scrollbar styles */
+.divisions-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.divisions-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.divisions-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.divisions-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Add hover effect for division items */
+.division-item:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.2s ease;
+}
+
+/* Style for active division */
+.division-item.active {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Style for search input */
+#divisionSearch {
+    border-radius: 0 4px 4px 0;
+}
+
+.input-group-text {
+    background-color: #f8f9fa;
+    border-right: none;
+}
+
+#divisionSearch:focus {
+    box-shadow: none;
+    border-color: #ced4da;
 }
 </style>

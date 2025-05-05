@@ -11,9 +11,11 @@ try {
     $query = "SELECT 
         r.*, 
         d.name as division_name,
-        d.code as division_code
+        d.code as division_code,
+        d.order_count
     FROM records r
-    LEFT JOIN divisions d ON r.plantilla_division_definition = d.name";
+    LEFT JOIN divisions d ON r.plantilla_division_definition = d.name 
+        OR r.plantilla_division = d.code";
     
     $params = [];
     $types = '';
@@ -38,7 +40,56 @@ try {
         $query .= " WHERE " . implode(" AND ", $whereClauses);
     }
     
-    $query .= " ORDER BY r.created_at DESC";
+    // Order by division code using CASE statement for exact ordering
+    $query .= " ORDER BY 
+        CASE d.code
+            WHEN 'OA' THEN 1
+            WHEN 'AD' THEN 2
+            WHEN 'HRMDS' THEN 3
+            WHEN 'RMS' THEN 4
+            WHEN 'PPGSS' THEN 5
+            WHEN 'FPMD' THEN 6
+            WHEN 'AS' THEN 7
+            WHEN 'BPS' THEN 8
+            WHEN 'MSS' THEN 9
+            WHEN 'ETSD' THEN 10
+            WHEN 'METTSS' THEN 11
+            WHEN 'MGSS' THEN 12
+            WHEN 'MEIES' THEN 13
+            WHEN 'WD' THEN 14
+            WHEN 'WFS' THEN 15
+            WHEN 'MDIES' THEN 16
+            WHEN 'TAMSS' THEN 17
+            WHEN 'AMSS' THEN 18
+            WHEN 'MMSS' THEN 19
+            WHEN 'HMD' THEN 20
+            WHEN 'HDAS' THEN 21
+            WHEN 'FFWS' THEN 22
+            WHEN 'HTS' THEN 23
+            WHEN 'CAD' THEN 24
+            WHEN 'CMPS' THEN 25
+            WHEN 'FWSS' THEN 26
+            WHEN 'IAAS' THEN 27
+            WHEN 'CADS' THEN 28
+            WHEN 'RDTD' THEN 29
+            WHEN 'ASSS' THEN 30
+            WHEN 'CARDS' THEN 31
+            WHEN 'HTMIRD' THEN 32
+            WHEN 'NMS' THEN 33
+            WHEN 'TPIS' THEN 34
+            WHEN 'NLPRSD' THEN 35
+            WHEN 'AFFWS' THEN 36
+            WHEN 'PFFWS' THEN 37
+            WHEN 'SLPRSD' THEN 38
+            WHEN 'BFFWS' THEN 39
+            WHEN 'VPRSD' THEN 40
+            WHEN 'NMPRSD' THEN 41
+            WHEN 'SMPRSD' THEN 42
+            WHEN 'FS' THEN 43
+            ELSE 999
+        END,
+        d.code,
+        r.created_at DESC";
     
     // Debug output
     error_log("Executing query: $query");
