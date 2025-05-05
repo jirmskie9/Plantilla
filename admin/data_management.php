@@ -67,9 +67,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
                     }
 
                     $rowCount = 0;
+                    $firstPlantillaNo = null;
+                    $lastPlantillaNo = null;
+                    
                     while (($data = fgetcsv($handle)) !== FALSE) {
                         // Map CSV columns to database fields
                         $plantillaNo = $data[0] ?? null;
+                        
+                        // Track first and last plantilla numbers
+                        if ($rowCount === 0) {
+                            $firstPlantillaNo = $plantillaNo;
+                        }
+                        $lastPlantillaNo = $plantillaNo;
+                        
                         $plantillaDivision = $data[1] ?? null;
                         $plantillaSection = $data[2] ?? null;
                         $equivalentDivision = $data[3] ?? null;
@@ -122,6 +132,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
                     
                     fclose($handle);
                     $insertStmt->close();
+                    
+                    // Log the activity once with the range of plantilla numbers
+                    if ($rowCount > 0) {
+                        $logStmt = $conn->prepare("INSERT INTO activity_logs (user_id, activity_type, description, ip_address) VALUES (?, 'create', ?, ?)");
+                        $description = "Created new record with Plantilla No: " . $firstPlantillaNo . "-" . $lastPlantillaNo;
+                        $ip_address = $_SERVER['REMOTE_ADDR'];
+                        $logStmt->bind_param("iss", $_SESSION['user_id'], $description, $ip_address);
+                        $logStmt->execute();
+                    }
                     
                     // Update file upload status
                     $updateStmt = $conn->prepare("UPDATE file_uploads SET status = ? WHERE id = ?");
@@ -626,6 +645,7 @@ $monthly_files = getMonthlyFiles($selected_month);
                                                 <th>PLANTILLA DIVISION</th>
                                                 <th>EQUIVALENT DIVISION</th>
                                                 <th>PLANTILLA DIVISION DEFINITION</th>
+                                                <th>PLANTILLA SECTION DEFINITION</th>
                                                 <th>FULLNAME</th>
                                                 <th>LAST NAME</th>
                                                 <th>FIRST NAME</th>
@@ -647,7 +667,7 @@ $monthly_files = getMonthlyFiles($selected_month);
                                                 <th>DATE LAST PROMOTION</th>
                                                 <th>DATE LAST INCREMENT</th>
                                                 <th>DATE OF LONGEVITY</th>
-                                                <th>REMARKS</th>
+                                             
                                                 <th>DATE VACATED</th>
                                                 <th>VACATED DUE TO</th>
                                                 <th>VACATED BY</th>
@@ -1137,13 +1157,10 @@ $monthly_files = getMonthlyFiles($selected_month);
                     'DATE LAST PROMOTION',
                     'DATE LAST INCREMENT',
                     'DATE OF LONGEVITY',
-                    'REMARKS',
                     'DATE VACATED',
                     'VACATED DUE TO',
                     'VACATED BY',
-                    'ID NO.',
-                    'CREATED AT',
-                    'UPDATED AT'
+                    'ID NO.'
                 ],
                 columns: [
                     { data: 'id', type: 'numeric', width: 50, readOnly: true },
@@ -1179,12 +1196,10 @@ $monthly_files = getMonthlyFiles($selected_month);
                     { data: 'date_vacated', type: 'date', width: 100 },
                     { data: 'vacated_due_to', type: 'text', width: 150 },
                     { data: 'vacated_by', type: 'text', width: 150 },
-                    { data: 'id_no', type: 'text', width: 100 },
-                    { data: 'created_at', type: 'date', width: 150 },
-                    { data: 'updated_at', type: 'date', width: 150 }
+                    { data: 'id_no', type: 'text', width: 100 }
                 ],
                 rowHeaders: true,
-                colWidths: [100, 150, 150, 200, 200, 150, 150, 150, 50, 50, 200, 100, 100, 100, 150, 50, 50, 100, 100, 100, 100, 100, 100, 100, 100, 150, 150, 100, 150, 150],
+                colWidths: [100, 150, 150, 200, 200, 150, 150, 150, 50, 50, 200, 100, 100, 100, 150, 50, 50, 100, 100, 100, 100, 100, 100, 100, 150, 150, 100, 150, 150],
                 height: 'calc(100vh - 300px)',
                 licenseKey: 'non-commercial-and-evaluation',
                 contextMenu: true,

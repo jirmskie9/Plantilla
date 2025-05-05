@@ -10,9 +10,9 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
 // Get real-time status counts
 $stmt = $conn->prepare("
     SELECT 
-        COUNT(CASE WHEN remarks = 'On Process' THEN 1 END) as on_process,
-        COUNT(CASE WHEN remarks = 'On-Hold' THEN 1 END) as on_hold,
-        COUNT(CASE WHEN remarks = 'Not Yet for Filling up' THEN 1 END) as not_yet_filing,
+        COUNT(CASE WHEN status = 'On Process' THEN 1 END) as on_process,
+        COUNT(CASE WHEN status = 'On-Hold' THEN 1 END) as on_hold,
+        COUNT(CASE WHEN status = 'Not Yet for Filing' THEN 1 END) as not_yet_filing,
         COUNT(*) as total_applicants
     FROM records
 ");
@@ -185,7 +185,7 @@ $stmt->close();
         <!-- Summary Cards -->
         <div class="row g-4 mb-4">
             <div class="col-md-3">
-                <div class="card dashboard-card card-on-process" onclick="window.location.href='applicant_records.php?remarks=On Process'">
+                <div class="card dashboard-card card-on-process" onclick="window.location.href='applicant_records.php?status=In Progress'">
                     <div class="card-body">
                         <h5 class="card-title">On Process</h5>
                         <h2 class="card-value"><?php echo $stats['on_process']; ?></h2>
@@ -197,7 +197,7 @@ $stmt->close();
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card dashboard-card card-on-hold" onclick="window.location.href='applicant_records.php?remarks=On-Hold'">
+                <div class="card dashboard-card card-on-hold" onclick="window.location.href='applicant_records.php?status=On-Hold'">
                     <div class="card-body">
                         <h5 class="card-title">On Hold</h5>
                         <h2 class="card-value"><?php echo $stats['on_hold']; ?></h2>
@@ -209,7 +209,7 @@ $stmt->close();
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card dashboard-card card-not-filing" onclick="window.location.href='applicant_records.php?remarks=Not Yet for Filling up'">
+                <div class="card dashboard-card card-not-filing" onclick="window.location.href='applicant_records.php?status=Not Yet for Filing'">
                     <div class="card-body">
                         <h5 class="card-title">Not Yet for Filing</h5>
                         <h2 class="card-value"><?php echo $stats['not_yet_filing']; ?></h2>

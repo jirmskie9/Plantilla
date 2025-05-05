@@ -8,7 +8,7 @@ include '../dbconnection.php';
 
 // Get search parameters
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$remarks = isset($_GET['remarks']) ? $_GET['remarks'] : '';
+$status = isset($_GET['status']) ? $_GET['status'] : '';
 $position = isset($_GET['position']) ? $_GET['position'] : '';
 $month = isset($_GET['month']) ? $_GET['month'] : '';
 $division = isset($_GET['division']) ? $_GET['division'] : '';
@@ -51,10 +51,10 @@ if (!empty($division)) {
     $types .= 's';
 }
 
-// Add remarks filter
-if (!empty($remarks)) {
-    $query .= " AND r.remarks = ?";
-    $params[] = $remarks;
+// Add status filter
+if (!empty($status)) {
+    $query .= " AND r.status = ?";
+    $params[] = $status;
     $types .= 's';
 }
 
@@ -355,11 +355,12 @@ $stmt->close();
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <select class="form-select" name="remarks">
-                            <option value="">All Remarks</option>
-                            <option value="Not Yet for Filling up" <?php echo $remarks === 'Not Yet for Filling up' ? 'selected' : ''; ?>>Not Yet for Filling up</option>
-                            <option value="On-Hold" <?php echo $remarks === 'On-Hold' ? 'selected' : ''; ?>>On-Hold</option>
-                            <option value="On Process" <?php echo $remarks === 'On Process' ? 'selected' : ''; ?>>On Process</option>
+                        <select class="form-select" name="status">
+                            <option value="">All Status</option>
+                            <option value="Pending" <?php echo $status === 'Pending' ? 'selected' : ''; ?>>Pending</option>
+                            <option value="On-Hold" <?php echo $status === 'On-Hold' ? 'selected' : ''; ?>>On-Hold</option>
+                            <option value="In Progress" <?php echo $status === 'In Progress' ? 'selected' : ''; ?>>In Progress</option>
+                            <option value="Completed" <?php echo $status === 'Completed' ? 'selected' : ''; ?>>Completed</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -399,7 +400,7 @@ $stmt->close();
                                 <th>Date of Last Promotion</th>
                                 <th>Date of Last Increment</th>
                                 <th>Date of Longevity</th>
-                                <th>Remarks</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -427,12 +428,12 @@ $stmt->close();
                                     <td><?php echo $record['formatted_last_promotion']; ?></td>
                                     <td><?php echo $record['formatted_last_increment']; ?></td>
                                     <td><?php echo $record['formatted_longevity']; ?></td>
-                                    <td data-remarks><?php echo htmlspecialchars($record['remarks']); ?></td>
+                                    <td data-status><?php echo htmlspecialchars($record['status']); ?></td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-success update-remarks" 
+                                        <button class="btn btn-sm btn-outline-success update-status" 
                                                 data-id="<?php echo $record['id']; ?>"
                                                 data-bs-toggle="modal" 
-                                                data-bs-target="#updateRemarksModal">
+                                                data-bs-target="#updateStatusModal">
                                             <i class="bi bi-pencil"></i> 
                                         </button>
                                     </td>
@@ -555,30 +556,31 @@ $stmt->close();
         </div>
     </div>
 
-    <!-- Update Remarks Modal -->
-    <div class="modal fade" id="updateRemarksModal" tabindex="-1">
+    <!-- Update Status Modal -->
+    <div class="modal fade" id="updateStatusModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Update Remarks</h5>
+                    <h5 class="modal-title">Update Status</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="updateRemarksForm">
-                        <input type="hidden" name="record_id" id="remarksRecordId">
+                    <form id="updateStatusForm">
+                        <input type="hidden" name="record_id" id="statusRecordId">
                         <div class="mb-3">
-                            <label class="form-label">Remarks</label>
-                            <select class="form-select" name="remarks" required>
-                                <option value="Not Yet for Filling up">Not Yet for Filling up</option>
+                            <label class="form-label">Status</label>
+                            <select class="form-select" name="status" required>
+                                <option value="Pending">Pending</option>
                                 <option value="On-Hold">On-Hold</option>
-                                <option value="On Process">On Process</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
                             </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="saveRemarks">Update Remarks</button>
+                    <button type="button" class="btn btn-primary" id="saveStatus">Update Status</button>
                 </div>
             </div>
         </div>
@@ -588,6 +590,7 @@ $stmt->close();
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize DataTable
@@ -631,22 +634,32 @@ $stmt->close();
                 });
             });
 
-            // Update Remarks
-            document.querySelectorAll('.update-remarks').forEach(button => {
+            // Update Status
+            document.querySelectorAll('.update-status').forEach(button => {
                 button.addEventListener('click', function() {
                     const id = this.dataset.id;
-                    const currentRemarks = this.closest('tr').querySelector('td[data-remarks]').textContent.trim();
-                    document.getElementById('remarksRecordId').value = id;
-                    document.querySelector('#updateRemarksForm select[name="remarks"]').value = currentRemarks;
+                    const currentStatus = this.closest('tr').querySelector('td[data-status]').textContent.trim();
+                    document.getElementById('statusRecordId').value = id;
+                    const statusSelect = document.querySelector('#updateStatusForm select[name="status"]');
+                    statusSelect.value = currentStatus || 'Pending'; // Default to Pending if no status
                 });
             });
 
-            // Save Remarks Update
-            document.getElementById('saveRemarks').addEventListener('click', function() {
-                const form = document.getElementById('updateRemarksForm');
+            // Save Status Update
+            document.getElementById('saveStatus').addEventListener('click', function() {
+                const form = document.getElementById('updateStatusForm');
                 const formData = new FormData(form);
                 const recordId = formData.get('record_id');
-                const newRemarks = formData.get('remarks');
+                const newStatus = formData.get('status');
+
+                if (!recordId || !newStatus) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Please select a valid status'
+                    });
+                    return;
+                }
 
                 // Show loading state
                 const saveButton = this;
@@ -654,44 +667,50 @@ $stmt->close();
                 saveButton.disabled = true;
                 saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Updating...';
 
-                fetch('update_remarks.php', {
+                fetch('update_status.php', {
                     method: 'POST',
                     body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Update the remarks in the table without reloading
-                        const row = document.querySelector(`.update-remarks[data-id="${recordId}"]`).closest('tr');
-                        row.querySelector('td[data-remarks]').textContent = newRemarks;
+                        // Update the status in the table without reloading
+                        const row = document.querySelector(`.update-status[data-id="${recordId}"]`).closest('tr');
+                        row.querySelector('td[data-status]').textContent = newStatus;
                         
                         // Close the modal
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('updateRemarksModal'));
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('updateStatusModal'));
                         modal.hide();
                         
                         // Show success message
                         Swal.fire({
                             icon: 'success',
                             title: 'Success',
-                            text: data.message || 'Remarks updated successfully',
+                            text: data.message || 'Status updated successfully',
                             showConfirmButton: false,
                             timer: 1500
                         });
+
+                        // Refresh the page to show updated data
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
                     } else {
                         // Show error message
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: data.message || 'Failed to update remarks'
+                            text: data.message || 'Failed to update status'
                         });
                     }
                 })
                 .catch(error => {
+                    console.error('Error:', error);
                     // Show error message
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'An error occurred while updating remarks'
+                        text: 'An error occurred while updating status'
                     });
                 })
                 .finally(() => {

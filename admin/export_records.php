@@ -32,7 +32,39 @@ header('Content-Disposition: attachment; filename=records_export_' . date('Y-m-d
 $output = fopen('php://output', 'w');
 
 // Build query with filters
-$query = "SELECT r.* FROM records r WHERE 1=1";
+$query = "SELECT 
+    r.plantilla_no,
+    r.plantilla_division,
+    r.plantilla_section,
+    r.equivalent_division,
+    r.plantilla_division_definition,
+    r.plantilla_section_definition,
+    r.fullname,
+    r.last_name,
+    r.first_name,
+    r.middle_name,
+    r.ext_name,
+    r.mi,
+    r.sex,
+    r.position_title,
+    r.item_number,
+    r.tech_code,
+    r.level,
+    r.appointment_status,
+    r.sg,
+    r.step,
+    r.monthly_salary,
+    r.date_of_birth,
+    r.date_orig_appt,
+    r.date_govt_srvc,
+    r.date_last_promotion,
+    r.date_last_increment,
+    r.date_longevity,
+    r.date_vacated,
+    r.vacated_due_to,
+    r.vacated_by,
+    r.id_no
+FROM records r WHERE 1=1";
 $params = array();
 $types = '';
 
@@ -61,7 +93,9 @@ if ($result && $result->num_rows > 0) {
     $fields = $result->fetch_fields();
     $headers = array();
     foreach ($fields as $field) {
-        $headers[] = $field->name;
+        // Convert column name to uppercase and replace underscores with spaces
+        $header = str_replace('_', ' ', strtoupper($field->name));
+        $headers[] = $header;
     }
     
     // Write headers
@@ -73,7 +107,7 @@ if ($result && $result->num_rows > 0) {
     }
 } else {
     // If no records found, write error message
-    fputcsv($output, array('No records found'));
+    fputcsv($output, array('NO RECORDS FOUND'));
 }
 
 // Close the output stream
