@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 05, 2025 at 11:02 AM
+-- Generation Time: May 11, 2025 at 03:15 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -41,10 +41,11 @@ CREATE TABLE `activity_logs` (
 --
 
 INSERT INTO `activity_logs` (`id`, `user_id`, `activity_type`, `description`, `ip_address`, `created_at`) VALUES
-(1, 1, 'create', 'Created new record with Plantilla No: 1-39', '::1', '2025-05-05 08:25:58'),
-(2, 1, 'create', 'Created new record with Plantilla No: 1-39', '::1', '2025-05-05 08:45:56'),
-(3, 1, 'create', 'Created new record with Plantilla No: 1-39', '::1', '2025-05-05 08:59:45'),
-(4, 1, 'create', 'Created new record with Plantilla No: 1-39', '::1', '2025-05-05 08:59:45');
+(1, 1, 'create', 'Created new record with Plantilla No: 1-39', '::1', '2025-05-11 12:36:12'),
+(2, 1, 'update', 'Updated status to \'In Progress\' for record ID: 20', '::1', '2025-05-11 12:36:51'),
+(3, 1, 'update', 'Updated status to \'On-Hold\' for record ID: 23', '::1', '2025-05-11 12:37:51'),
+(4, 1, 'update', 'Updated status to \'On Process\' for record ID: 20', '::1', '2025-05-11 12:40:47'),
+(5, 1, 'update', 'Updated status to \'Deliberated\' for record ID: 20', '::1', '2025-05-11 13:02:18');
 
 -- --------------------------------------------------------
 
@@ -76,12 +77,8 @@ CREATE TABLE `applicants` (
 -- Table structure for table `divisions`
 --
 
--- Drop existing divisions table if exists
-DROP TABLE IF EXISTS `divisions`;
-
--- Create divisions table
 CREATE TABLE `divisions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `code` varchar(20) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
@@ -90,16 +87,13 @@ CREATE TABLE `divisions` (
   `updated_by` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `order_count` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `created_by` (`created_by`),
-  KEY `updated_by` (`updated_by`),
-  CONSTRAINT `divisions_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
-  CONSTRAINT `divisions_ibfk_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
+  `order_count` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Insert divisions data
+--
+-- Dumping data for table `divisions`
+--
+
 INSERT INTO `divisions` (`id`, `code`, `name`, `description`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `order_count`) VALUES
 (1, 'OA', 'Office of the Administrator', 'Head office division', 'active', NULL, NULL, '2025-05-01 02:27:53', '2025-05-01 02:27:53', 1),
 (2, 'AD', 'Administrative Division', 'General administration', 'active', NULL, NULL, '2025-05-01 02:27:53', '2025-05-01 02:27:53', 2),
@@ -167,11 +161,7 @@ CREATE TABLE `file_uploads` (
 --
 
 INSERT INTO `file_uploads` (`id`, `user_id`, `file_name`, `file_path`, `file_type`, `file_size`, `status`, `created_at`) VALUES
-(1, 1, 'samplefilecsv.csv', '../uploads/upload_681875549e159.csv', 'csv', 10839, 'processed', '2025-05-05 08:22:44'),
-(2, 1, 'samplefilecsv.csv', '../uploads/upload_6818761518ac0.csv', 'csv', 10839, 'processed', '2025-05-05 08:25:57'),
-(3, 1, 'samplefilecsv.csv', '../uploads/upload_68187ac39d76e.csv', 'csv', 10839, 'processed', '2025-05-05 08:45:55'),
-(4, 1, 'samplefilexcel.xlsx', '../uploads/upload_68187df1d21fd.xlsx', 'csv', 16652, 'pending', '2025-05-05 08:59:29'),
-(5, 1, 'samplefilecsv.csv', '../uploads/upload_68187e006c4dc.csv', 'csv', 10839, 'processed', '2025-05-05 08:59:44');
+(1, 1, 'samplefile.csv', '../uploads/upload_682099bc0815d.csv', 'csv', 10843, 'processed', '2025-05-11 12:36:12');
 
 -- --------------------------------------------------------
 
@@ -232,7 +222,8 @@ CREATE TABLE `records` (
   `vacated_due_to` varchar(255) DEFAULT NULL,
   `vacated_by` varchar(255) DEFAULT NULL,
   `id_no` varchar(50) DEFAULT NULL,
-  `status` enum('Not Yet For Filing','On-Hold','On Process') NOT NULL DEFAULT 'Not Yet For Filing',
+  `status` enum('Not Yet For Filing','On-Hold','On Process','Deliberated') NOT NULL DEFAULT 'Not Yet For Filing',
+  `archive` tinyint(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `created_by` int(11) NOT NULL
@@ -242,46 +233,45 @@ CREATE TABLE `records` (
 -- Dumping data for table `records`
 --
 
-INSERT INTO `records` (`id`, `division_id`, `plantilla_no`, `plantilla_division`, `plantilla_section`, `equivalent_division`, `plantilla_division_definition`, `plantilla_section_definition`, `fullname`, `last_name`, `first_name`, `middle_name`, `ext_name`, `mi`, `sex`, `position_title`, `item_number`, `tech_code`, `level`, `appointment_status`, `sg`, `step`, `monthly_salary`, `date_of_birth`, `date_orig_appt`, `date_govt_srvc`, `date_last_promotion`, `date_last_increment`, `date_longevity`, `date_vacated`, `vacated_due_to`, `vacated_by`, `id_no`, `status`, `created_at`, `updated_at`, `created_by`) VALUES
-(1, 0, '1', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', 'SERVANDO, Nathaniel T.', 'SERVANDO', 'Nathaniel', 'Tabujara', '', 'T.', 'Male', 'Administrator III', 'PAGASAB-AD3-1-2020', 'Administrative', '3', 'Permanent', '30', '1', '196.00', '2065-10-08', '2019-01-31', '2019-01-31', '2023-12-04', '2023-02-03', '2019-01-31', NULL, '', '', '1687', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(2, 0, '2', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', '', '', '', '', '', '', '', 'Director III', 'PAGASAB-DIR3-1-1998', 'Administrative', '3', '', '27', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, '2023-12-04', 'PROMOTION', 'SERVANDO, Nathaniel T.', '', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(3, 0, '3', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', '', '', '', '', '', '', '', 'Director III', 'PAGASAB-DIR3-2-1998', 'Administrative', '3', '', '27', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-09', 'COMPULSORY RETIREMENT', 'PAJUELAS, Bonifacio G.', '', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(4, 0, '4', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', 'VILLAFUERTE, Marcelino II Q.', 'VILLAFUERTE', 'Marcelino', 'Quilates', 'II', 'Q.', 'Male', 'Director III', 'PAGASAB-DIR3-3-1998', 'Administrative', '3', 'Temporary', '27', '1', '136.00', '1981-10-20', '2010-10-28', '2010-10-28', '2024-04-01', '1970-01-01', '2010-10-28', NULL, '', '', '1551', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(5, 0, '5', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', 'SIERRA, Evangielyn L.', 'SIERRA', 'Evangielyn', 'Lunas', '', 'L.', 'Female', 'Administrative Assistant III', 'PAGASAB-ADAS3-5-2004', 'Administrative', '1', 'Permanent', '9', '1', '22.00', '1996-04-25', '2021-01-21', '2021-01-21', '2024-09-08', '1970-01-01', '2021-01-21', NULL, '', '', '1740', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(6, 0, '6', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', 'MAGUMCIA, Symon A.', 'MAGUMCIA', 'Symon', 'Alcantara', '', 'A.', 'Male', 'Administrative Assistant I', 'PAGASAB-ADAS1-6-2004', 'Administrative', '1', 'Permanent', '7', '1', '19.00', '1992-07-24', '2021-12-01', '2021-12-01', '1970-01-01', '1970-01-01', '2021-12-01', NULL, '', '', '1794', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(7, 0, '7', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', '', '', '', '', '', '', '', 'Administrative Assistant I', 'PAGASAB-ADAS1-7-2004', 'Administrative', '1', '', '7', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-08', 'PROMOTION', 'SIERRA, Evangielyn L.', '', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(8, 0, '8', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', 'LONTOC, Arwin Matthew R.', 'LONTOC', 'Arwin Matthew', 'Rivera', '', 'R.', 'Male', 'Administrative Aide VI', 'PAGASAB-ADA6-14-2004', 'Administrative', '1', 'Permanent', '6', '1', '18.00', '1994-03-22', '2020-10-29', '2020-10-29', '2023-12-04', '1970-01-01', '2020-10-29', NULL, '', '', '1719', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(9, 0, '9', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', '', '', '', '', '', '', '', 'Administrative Aide VI', 'PAGASAB-ADA6-18-2004', 'Administrative', '1', '', '6', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, '2024-02-16', 'RESIGNATION', 'GENSON, Crislyn P.', '', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(10, 0, '10', 'AD', 'OCAD', 'AD', 'Administrative Division', 'Office of the Chief, AD', 'ARROYO, Arceli S.', 'ARROYO', 'Arceli', 'Sadural', '', 'S.', 'Female', 'Chief Administrative Officer', 'PAGASAB-CADOF-9-2004', 'Administrative', '2', 'Permanent', '24', '1', '94.00', '2062-08-13', '1989-08-28', '1989-08-28', '2022-08-01', '2007-11-22', '1989-08-28', NULL, '', '', '62', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(11, 0, '11', 'AD', 'OCAD', 'AD', 'Administrative Division', 'Office of the Chief, AD', 'AGSAOAY, Eric Christopher Amado J.', 'AGSAOAY', 'Eric Christopher Amado', 'Juguilon', '', 'J.', 'Male', 'Attorney III', 'PAGASAB-ATY3-1-2010', 'Administrative', '2', 'Permanent', '21', '1', '67.00', '2068-09-13', '2021-02-08', '2021-02-08', '1970-01-01', '1970-01-01', '2021-02-08', NULL, '', '', '1750', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(12, 0, '12', 'AD', 'OCAD', 'AD', 'Administrative Division', 'Office of the Chief, AD', 'MARATAS, Marmel A.', 'MARATAS', 'Marmel', 'Aleria', '', 'A.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-12-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '1992-09-15', '2023-07-13', '2023-07-13', '1970-01-01', '1970-01-01', '2023-07-13', NULL, '', '', '1873', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(13, 0, '13', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'GONZALES, Adelaida P.', 'GONZALES', 'Adelaida', 'Pilande', '', 'P.', 'Female', 'Supervising Administrative Officer', 'PAGASAB-SADOF-6-2004', 'Administrative', '2', 'Permanent', '22', '1', '74.00', '1977-12-09', '2003-04-04', '2003-04-04', '2022-12-12', '2009-04-04', '2003-04-04', NULL, '', '', '1444', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(14, 0, '14', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'SANTOS-ZERRUDO, Christine R.', 'SANTOS-ZERRUDO', 'Christine', 'Rabulan', '', 'R.', 'Female', 'Administrative Officer V', 'PAGASAB-ADOF5-3-2004', 'Administrative', '2', 'Permanent', '18', '1', '49.00', '1989-07-02', '2010-12-22', '2010-12-22', '2024-05-15', '1970-01-01', '2010-12-22', NULL, '', '', '30', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(15, 0, '15', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'ITORALBA, Noli Francis B.', 'ITORALBA', 'Noli Francis', 'Bongga', '', 'B.', 'Male', 'Administrative Officer V', 'PAGASAB-ADOF5-15-2004', 'Administrative', '2', 'Permanent', '18', '1', '49.00', '2069-01-29', '2003-04-23', '2003-04-23', '2022-12-12', '2009-04-23', '2003-04-23', NULL, '', '', '1475', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(16, 0, '16', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', '', '', '', '', '', '', '', 'Administrative Officer V', 'PAGASAB-ADOF5-17-2004', 'Administrative', '2', '', '18', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, '2022-12-12', 'PROMOTION', 'GONZALES, Adelaida P.', '', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(17, 0, '17', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'BAUSA, Jan Ivy L.', 'BAUSA', 'Jan Ivy', 'Lunas', '', 'L.', 'Female', 'Administrative Officer III', 'PAGASAB-ADOF3-13-2004', 'Administrative', '2', 'Permanent', '14', '1', '35.00', '1984-07-17', '2010-03-04', '2010-03-04', '2014-10-10', '1970-01-01', '2010-03-04', NULL, '', '', '1241', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(18, 0, '18', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'ROSALES-SORIANO, Kalayaan V.', 'ROSALES-SORIANO', 'Kalayaan', 'Vergara', '', 'V.', 'Female', 'Administrative Officer II', 'PAGASAB-ADOF2-6-2004', 'Administrative', '2', 'Permanent', '11', '1', '28.00', '1993-02-10', '2015-07-27', '2015-07-27', '2023-12-18', '1970-01-01', '2015-07-27', NULL, '', '', '348', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(19, 0, '19', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', '', '', '', '', '', '', '', 'Administrative Assistant II', 'PAGASAB-ADAS2-4-2004', 'Administrative', '1', '', '8', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-25', 'PROMOTION', 'LAGRIMAS, Alleli Marie U.', '', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(20, 0, '20', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'BABALA, Jenny B.', 'BABALA', 'Jenny', 'Boral', '', 'B.', 'Female', 'Administrative Assistant II', 'PAGASAB-ADAS2-5-2004', 'Administrative', '1', 'Permanent', '8', '1', '20.00', '1984-11-29', '2013-11-04', '2013-11-04', '2020-10-23', '1970-01-01', '2013-11-04', NULL, '', '', '274', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(21, 0, '21', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'SISON, Mary Ann A.', 'SISON', 'Mary Ann', 'Alcantara', '', 'A.', 'Female', 'Administrative Assistant II', 'PAGASAB-ADAS2-6-2004', 'Administrative', '1', 'Permanent', '8', '1', '20.00', '1985-09-07', '2018-02-27', '2018-02-27', '2022-12-12', '1970-01-01', '2018-02-27', NULL, '', '', '1639', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(22, 0, '22', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'ROMBAON-FORTU, Jenelyn P.', 'ROMBAON-FORTU', 'Jenelyn', 'Poryalloste', '', 'P.', 'Female', 'Administrative Aide VI', 'PAGASAB-ADA6-7-2004', 'Administrative', '1', 'Permanent', '6', '1', '18.00', '1989-08-04', '2019-07-08', '2019-07-08', '2024-05-15', '1970-01-01', '2019-07-08', NULL, '', '', '1688', 'Not Yet For Filing', '2025-05-05 08:59:44', '2025-05-05 08:59:44', 1),
-(23, 0, '23', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'FELICITAS, Karizza Joy M.', 'FELICITAS', 'Karizza Joy', 'Mataro', '', 'M.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-7-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '1993-02-08', '2023-12-18', '2023-12-18', '1970-01-01', '1970-01-01', '2023-12-18', NULL, '', '', '1897', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(24, 0, '24', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'BACANI, Marthie R.', 'BACANI', 'Marthie', 'Ramos', '', 'R.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-9-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '1992-12-14', '2023-12-18', '2023-12-18', '1970-01-01', '1970-01-01', '2023-12-18', NULL, '', '', '1895', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(25, 0, '25', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'DE LUNA, Heisei Ruth Angelina F.', 'DE LUNA', 'Heisei Ruth Angelina', 'Farrales', '', 'F.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-11-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '1989-08-02', '2022-12-12', '2022-12-12', '1970-01-01', '1970-01-01', '2022-12-12', NULL, '', '', '1847', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(26, 0, '26', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'NOLASCO, Ma. Annalyn S.', 'NOLASCO', 'Ma. Annalyn', 'Santos', '', 'S.', 'Female', 'Supervising Administrative Officer', 'PAGASAB-SADOF-7-2004', 'Administrative', '2', 'Permanent', '22', '1', '74.00', '1973-05-24', '1996-02-01', '1996-02-01', '2022-12-12', '2007-11-16', '1996-02-01', NULL, '', '', '1255', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(27, 0, '27', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', '', '', '', '', '', '', '', 'Administrative Officer V', 'PAGASAB-ADOF5-6-2004', 'Administrative', '2', '', '18', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, '2024-12-21', 'COMPULSORY RETIREMENT', 'GONZALES, Lynne T.', '', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(28, 0, '28', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'ALBACITE, Rosalie A.', 'ALBACITE', 'Rosalie', 'Aguilar', '', 'A.', 'Female', 'Administrative Officer V', 'PAGASAB-ADOF5-7-2004', 'Administrative', '2', 'Permanent', '18', '1', '49.00', '1974-07-03', '2003-07-14', '2003-07-14', '2017-10-12', '2009-07-14', '2003-07-14', NULL, '', '', '1235', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(29, 0, '29', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'GAINTANO, Julie Faith I.', 'GAINTANO', 'Julie Faith', 'Isip', '', 'I.', 'Female', 'Administrative Officer III', 'PAGASAB-ADOF3-5-2008', 'Administrative', '2', 'Permanent', '14', '1', '35.00', '1994-07-01', '2015-07-31', '2015-07-31', '2024-09-25', '1970-01-01', '2015-07-31', NULL, '', '', '352', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(30, 0, '30', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'TAMBO, Mark Ervin G.', 'TAMBO', 'Mark Ervin', 'Garganta', '', 'G.', 'Male', 'Administrative Officer I', 'PAGASAB-ADOF1-8-2004', 'Administrative', '2', 'Permanent', '10', '1', '24.00', '1991-09-28', '2014-09-17', '2014-09-17', '2019-03-26', '1970-01-01', '2014-09-17', NULL, '', '', '290', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(31, 0, '31', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'TAN, Rea V.', 'TAN', 'Rea', 'Viernes', '', 'V.', 'Female', 'Administrative Officer I', 'PAGASAB-ADOF1-9-2004', 'Administrative', '2', 'Permanent', '10', '1', '24.00', '1982-10-28', '2017-08-03', '2017-08-03', '2023-07-13', '1970-01-01', '2017-08-03', NULL, '', '', '1617', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(32, 0, '32', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'BAJAR, Jocel Asela B.', 'BAJAR', 'Jocel Asela', 'Banguis', '', 'B.', 'Female', 'Administrative Assistant II', 'PAGASAB-ADAS2-8-2004', 'Administrative', '1', 'Permanent', '8', '1', '20.00', '2068-07-26', '2012-09-03', '2012-09-03', '2015-01-20', '1970-01-01', '2012-09-03', '2015-02-02', 'SWAPPING OF ITEM', 'SAAVEDRA, Rhoda A.', '169', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(33, 0, '33', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'ZAMORA, Christine Juliet B.', 'ZAMORA', 'Christine Juliet', 'Belmonte', '', 'B.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-6-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '1979-07-24', '2011-12-09', '2011-12-09', '2023-06-09', '1970-01-01', '2011-12-09', NULL, '', '', '98', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(34, 0, '34', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', '', '', '', '', '', '', '', 'Administrative Aide IV', 'PAGASAB-ADA4-8-2004', 'Administrative', '1', '', '4', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-15', 'PROMOTION', 'ROMBAON-FORTU, Jenelyn P.', '', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(35, 0, '35', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'DATUL, Baby Jean C.', 'DATUL', 'Baby Jean', 'Colobong', '', 'C.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-18-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '1989-05-07', '2018-02-27', '2018-02-27', '2022-12-12', '1970-01-01', '2018-02-27', NULL, '', '', '1640', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(36, 0, '36', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'RONDON, Archie I.', 'RONDON', 'Archie', 'Intod', '', 'I.', 'Male', 'Administrative Aide II', 'PAGASAB-ADA2-19-2004', 'Administrative', '1', 'Permanent', '2', '1', '14.00', '1989-10-24', '2023-12-22', '2023-12-22', '1970-01-01', '1970-01-01', '2023-12-22', NULL, '', '', '1896', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(37, 0, '37', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'ALABADO, Yvonne G.', 'ALABADO', 'Yvonne', 'Gamboa', '', 'G.', 'Female', 'Administrative Aide II', 'PAGASAB-ADA2-20-2004', 'Administrative', '1', 'Permanent', '2', '1', '14.00', '1979-08-17', '2023-12-04', '2023-12-04', '1970-01-01', '1970-01-01', '2023-12-04', NULL, '', '', '1890', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(38, 0, '38', 'AD', 'PPGSS', 'AD', 'Administrative Division', 'Procurement, Property and General Services Section', 'RIVERA, Joel C.', 'RIVERA', 'Joel', 'Cabanela', '', 'C.', 'Male', 'Supervising Administrative Officer', 'PAGASAB-SADOF-8-2004', 'Administrative', '2', 'Permanent', '22', '1', '74.00', '1976-02-13', '2009-07-13', '2009-07-23', '2017-04-10', '1970-01-01', '2009-07-13', NULL, '', '', '488', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1),
-(39, 0, '39', 'AD', 'PPGSS', 'AD', 'Administrative Division', 'Procurement, Property and General Services Section', '', '', '', '', '', '', '', 'Administrative Officer V', 'PAGASAB-ADOF5-2-2004', 'Administrative', '2', '', '18', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-27', 'COMPULSORY RETIREMENT', 'DELA CRUZ, Liceria A.', '', 'Not Yet For Filing', '2025-05-05 08:59:45', '2025-05-05 08:59:45', 1);
+INSERT INTO `records` (`id`, `division_id`, `plantilla_no`, `plantilla_division`, `plantilla_section`, `equivalent_division`, `plantilla_division_definition`, `plantilla_section_definition`, `fullname`, `last_name`, `first_name`, `middle_name`, `ext_name`, `mi`, `sex`, `position_title`, `item_number`, `tech_code`, `level`, `appointment_status`, `sg`, `step`, `monthly_salary`, `date_of_birth`, `date_orig_appt`, `date_govt_srvc`, `date_last_promotion`, `date_last_increment`, `date_longevity`, `date_vacated`, `vacated_due_to`, `vacated_by`, `id_no`, `status`, `archive`, `created_at`, `updated_at`, `created_by`) VALUES
+(1, 0, '1', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', 'SERVANDO, Nathaniel T.', 'SERVANDO', 'Nathaniel', 'Tabujara', '', 'T.', 'Male', 'Administrator III', 'PAGASAB-AD3-1-2020', 'Administrative', '3', 'Permanent', '30', '1', '196.00', '10/08/65', '01/31/19', '01/31/19', '12/04/23', '02/03/23', '01/31/19', '', '', '', '1687', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:42:40', 1),
+(2, 0, '2', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', '', '', '', '', '', '', '', 'Director III', 'PAGASAB-DIR3-1-1998', 'Administrative', '3', '', '27', '', '0.00', '', '', '', '', '', '', '12/04/23', 'PROMOTION', 'SERVANDO, Nathaniel T.', '', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(3, 0, '3', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', '', '', '', '', '', '', '', 'Director III', 'PAGASAB-DIR3-2-1998', 'Administrative', '3', '', '27', '', '0.00', '', '', '', '', '', '', '05/09/24', 'COMPULSORY RETIREMENT', 'PAJUELAS, Bonifacio G.', '', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(4, 0, '4', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', 'VILLAFUERTE, Marcelino II Q.', 'VILLAFUERTE', 'Marcelino', 'Quilates', 'II', 'Q.', 'Male', 'Director III', 'PAGASAB-DIR3-3-1998', 'Administrative', '3', 'Temporary', '27', '1', '136.00', '10/20/81', '10/28/10', '10/28/10', '04/01/24', '-', '10/28/10', '', '', '', '1551', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(5, 0, '5', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', 'SIERRA, Evangielyn L.', 'SIERRA', 'Evangielyn', 'Lunas', '', 'L.', 'Female', 'Administrative Assistant III', 'PAGASAB-ADAS3-5-2004', 'Administrative', '1', 'Permanent', '9', '1', '22.00', '04/25/96', '01/21/21', '01/21/21', '09/08/24', '-', '01/21/21', '', '', '', '1740', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(6, 0, '6', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', 'MAGUMCIA, Symon A.', 'MAGUMCIA', 'Symon', 'Alcantara', '', 'A.', 'Male', 'Administrative Assistant I', 'PAGASAB-ADAS1-6-2004', 'Administrative', '1', 'Permanent', '7', '1', '19.00', '07/24/92', '12/01/21', '12/01/21', '-', '-', '12/01/21', '', '', '', '1794', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(7, 0, '7', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', '', '', '', '', '', '', '', 'Administrative Assistant I', 'PAGASAB-ADAS1-7-2004', 'Administrative', '1', '', '7', '', '0.00', '', '', '', '', '', '', '09/08/24', 'PROMOTION', 'SIERRA, Evangielyn L.', '', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(8, 0, '8', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', 'LONTOC, Arwin Matthew R.', 'LONTOC', 'Arwin Matthew', 'Rivera', '', 'R.', 'Male', 'Administrative Aide VI', 'PAGASAB-ADA6-14-2004', 'Administrative', '1', 'Permanent', '6', '1', '18.00', '03/22/94', '10/29/20', '10/29/20', '12/04/23', '-', '10/29/20', '', '', '', '1719', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(9, 0, '9', 'OA', 'OA', 'AO', 'Office of the Administrator', 'Office of the Administrator', '', '', '', '', '', '', '', 'Administrative Aide VI', 'PAGASAB-ADA6-18-2004', 'Administrative', '1', '', '6', '', '0.00', '', '', '', '', '', '', '02/16/24', 'RESIGNATION', 'GENSON, Crislyn P.', '', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(10, 0, '10', 'AD', 'OCAD', 'AD', 'Administrative Division', 'Office of the Chief, AD', 'ARROYO, Arceli S.', 'ARROYO', 'Arceli', 'Sadural', '', 'S.', 'Female', 'Chief Administrative Officer', 'PAGASAB-CADOF-9-2004', 'Administrative', '2', 'Permanent', '24', '1', '94.00', '08/13/62', '08/28/89', '08/28/89', '08/01/22', '11/22/07', '08/28/89', '', '', '', '62', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(11, 0, '11', 'AD', 'OCAD', 'AD', 'Administrative Division', 'Office of the Chief, AD', 'AGSAOAY, Eric Christopher Amado J.', 'AGSAOAY', 'Eric Christopher Amado', 'Juguilon', '', 'J.', 'Male', 'Attorney III', 'PAGASAB-ATY3-1-2010', 'Administrative', '2', 'Permanent', '21', '1', '67.00', '09/13/68', '02/08/21', '02/08/21', '-', '-', '02/08/21', '', '', '', '1750', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(12, 0, '12', 'AD', 'OCAD', 'AD', 'Administrative Division', 'Office of the Chief, AD', 'MARATAS, Marmel A.', 'MARATAS', 'Marmel', 'Aleria', '', 'A.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-12-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '09/15/92', '07/13/23', '07/13/23', '-', '-', '07/13/23', '', '', '', '1873', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(13, 0, '13', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'GONZALES, Adelaida P.', 'GONZALES', 'Adelaida', 'Pilande', '', 'P.', 'Female', 'Supervising Administrative Officer', 'PAGASAB-SADOF-6-2004', 'Administrative', '2', 'Permanent', '22', '1', '74.00', '12/09/77', '04/04/03', '04/04/03', '12/12/22', '04/04/09', '04/04/03', '', '', '', '1444', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(14, 0, '14', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'SANTOS-ZERRUDO, Christine R.', 'SANTOS-ZERRUDO', 'Christine', 'Rabulan', '', 'R.', 'Female', 'Administrative Officer V', 'PAGASAB-ADOF5-3-2004', 'Administrative', '2', 'Permanent', '18', '1', '49.00', '07/02/89', '12/22/10', '12/22/10', '05/15/24', '-', '12/22/10', '', '', '', '30', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(15, 0, '15', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'ITORALBA, Noli Francis B.', 'ITORALBA', 'Noli Francis', 'Bongga', '', 'B.', 'Male', 'Administrative Officer V', 'PAGASAB-ADOF5-15-2004', 'Administrative', '2', 'Permanent', '18', '1', '49.00', '01/29/69', '04/23/03', '04/23/03', '12/12/22', '04/23/09', '04/23/03', '', '', '', '1475', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(16, 0, '16', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'NACARIO, Jirmy C.', '', '', '', '', '', '', 'Administrative Officer V', 'PAGASAB-ADOF5-17-2004', 'Administrative', '2', '', '18', '', '0.00', '', '', '', '', '', '', '12/12/22', 'PROMOTION', 'GONZALES, Adelaida P.', '', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:42:47', 1),
+(17, 0, '17', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'BAUSA, Jan Ivy L.', 'BAUSA', 'Jan Ivy', 'Lunas', '', 'L.', 'Female', 'Administrative Officer III', 'PAGASAB-ADOF3-13-2004', 'Administrative', '2', 'Permanent', '14', '1', '35.00', '07/17/84', '03/04/10', '03/04/10', '10/10/14', '-', '03/04/10', '', '', '', '1241', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(18, 0, '18', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'ROSALES-SORIANO, Kalayaan V.', 'ROSALES-SORIANO', 'Kalayaan', 'Vergara', '', 'V.', 'Female', 'Administrative Officer II', 'PAGASAB-ADOF2-6-2004', 'Administrative', '2', 'Permanent', '11', '1', '28.00', '02/10/93', '07/27/15', '07/27/15', '12/18/23', '-', '07/27/15', '', '', '', '348', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(19, 0, '19', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', '', '', '', '', '', '', '', 'Administrative Assistant II', 'PAGASAB-ADAS2-4-2004', 'Administrative', '1', '', '8', '', '0.00', '', '', '', '', '', '', '09/25/24', 'PROMOTION', 'LAGRIMAS, Alleli Marie U.', '', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(20, 0, '20', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'BABALA, Jenny B.', 'BABALA', 'Jenny', 'Boral', '', 'B.', 'Female', 'Administrative Assistant II', 'PAGASAB-ADAS2-5-2004', 'Administrative', '1', 'Permanent', '8', '1', '20.00', '11/29/84', '11/04/13', '11/04/13', '10/23/20', '-', '11/04/13', '', '', '', '274', 'Deliberated', 0, '2025-05-11 12:36:12', '2025-05-11 13:02:18', 1),
+(21, 0, '21', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'SISON, Mary Ann A.', 'SISON', 'Mary Ann', 'Alcantara', '', 'A.', 'Female', 'Administrative Assistant II', 'PAGASAB-ADAS2-6-2004', 'Administrative', '1', 'Permanent', '8', '1', '20.00', '09/07/85', '02/27/18', '02/27/18', '12/12/22', '-', '02/27/18', '', '', '', '1639', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(22, 0, '22', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'ROMBAON-FORTU, Jenelyn P.', 'ROMBAON-FORTU', 'Jenelyn', 'Poryalloste', '', 'P.', 'Female', 'Administrative Aide VI', 'PAGASAB-ADA6-7-2004', 'Administrative', '1', 'Permanent', '6', '1', '18.00', '08/04/89', '07/08/19', '07/08/19', '05/15/24', '-', '07/08/19', '', '', '', '1688', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(23, 0, '23', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'FELICITAS, Karizza Joy M.', 'FELICITAS', 'Karizza Joy', 'Mataro', '', 'M.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-7-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '02/08/93', '12/18/23', '12/18/23', '-', '-', '12/18/23', '', '', '', '1897', 'On-Hold', 0, '2025-05-11 12:36:12', '2025-05-11 12:37:51', 1),
+(24, 0, '24', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'BACANI, Marthie R.', 'BACANI', 'Marthie', 'Ramos', '', 'R.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-9-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '12/14/92', '12/18/23', '12/18/23', '-', '-', '12/18/23', '', '', '', '1895', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(25, 0, '25', 'AD', 'HRMDS', 'AD', 'Administrative Division', 'Human Resource Management and Development Section', 'DE LUNA, Heisei Ruth Angelina F.', 'DE LUNA', 'Heisei Ruth Angelina', 'Farrales', '', 'F.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-11-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '08/02/89', '12/12/22', '12/12/22', '-', '-', '12/12/22', '', '', '', '1847', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(27, 0, '27', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', '', '', '', '', '', '', '', 'Administrative Officer V', 'PAGASAB-ADOF5-6-2004', 'Administrative', '2', '', '18', '', '0.00', '', '', '', '', '', '', '12/21/24', 'COMPULSORY RETIREMENT', 'GONZALES, Lynne T.', '', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(28, 0, '28', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'ALBACITE, Rosalie A.', 'ALBACITE', 'Rosalie', 'Aguilar', '', 'A.', 'Female', 'Administrative Officer V', 'PAGASAB-ADOF5-7-2004', 'Administrative', '2', 'Permanent', '18', '1', '49.00', '07/03/74', '07/14/03', '07/14/03', '10/12/17', '07/14/09', '07/14/03', '', '', '', '1235', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(29, 0, '29', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'GAINTANO, Julie Faith I.', 'GAINTANO', 'Julie Faith', 'Isip', '', 'I.', 'Female', 'Administrative Officer III', 'PAGASAB-ADOF3-5-2008', 'Administrative', '2', 'Permanent', '14', '1', '35.00', '07/01/94', '07/31/15', '07/31/15', '09/25/24', '-', '07/31/15', '', '', '', '352', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(30, 0, '30', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'TAMBO, Mark Ervin G.', 'TAMBO', 'Mark Ervin', 'Garganta', '', 'G.', 'Male', 'Administrative Officer I', 'PAGASAB-ADOF1-8-2004', 'Administrative', '2', 'Permanent', '10', '1', '24.00', '09/28/91', '09/17/14', '09/17/14', '03/26/19', '-', '09/17/14', '', '', '', '290', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(31, 0, '31', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'TAN, Rea V.', 'TAN', 'Rea', 'Viernes', '', 'V.', 'Female', 'Administrative Officer I', 'PAGASAB-ADOF1-9-2004', 'Administrative', '2', 'Permanent', '10', '1', '24.00', '10/28/82', '08/03/17', '08/03/17', '07/13/23', '-', '08/03/17', '', '', '', '1617', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(32, 0, '32', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'BAJAR, Jocel Asela B.', 'BAJAR', 'Jocel Asela', 'Banguis', '', 'B.', 'Female', 'Administrative Assistant II', 'PAGASAB-ADAS2-8-2004', 'Administrative', '1', 'Permanent', '8', '1', '20.00', '07/26/68', '09/03/12', '09/03/12', '01/20/15', '-', '09/03/12', '02/02/15', 'SWAPPING OF ITEM', 'SAAVEDRA, Rhoda A.', '169', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(33, 0, '33', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'ZAMORA, Christine Juliet B.', 'ZAMORA', 'Christine Juliet', 'Belmonte', '', 'B.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-6-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '07/24/79', '12/09/11', '12/09/11', '06/09/23', '-', '12/09/11', '', '', '', '98', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(34, 0, '34', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', '', '', '', '', '', '', '', 'Administrative Aide IV', 'PAGASAB-ADA4-8-2004', 'Administrative', '1', '', '4', '', '0.00', '', '', '', '', '', '', '05/15/24', 'PROMOTION', 'ROMBAON-FORTU, Jenelyn P.', '', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(35, 0, '35', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'DATUL, Baby Jean C.', 'DATUL', 'Baby Jean', 'Colobong', '', 'C.', 'Female', 'Administrative Aide IV', 'PAGASAB-ADA4-18-2004', 'Administrative', '1', 'Permanent', '4', '1', '16.00', '05/07/89', '02/27/18', '02/27/18', '12/12/22', '-', '02/27/18', '', '', '', '1640', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(37, 0, '37', 'AD', 'RMS', 'AD', 'Administrative Division', 'Records Management Section', 'ALABADO, Yvonne G.', 'ALABADO', 'Yvonne', 'Gamboa', '', 'G.', 'Female', 'Administrative Aide II', 'PAGASAB-ADA2-20-2004', 'Administrative', '1', 'Permanent', '2', '1', '14.00', '08/17/79', '12/04/23', '12/04/23', '-', '-', '12/04/23', '', '', '', '1890', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(38, 0, '38', 'AD', 'PPGSS', 'AD', 'Administrative Division', 'Procurement, Property and General Services Section', 'RIVERA, Joel C.', 'RIVERA', 'Joel', 'Cabanela', '', 'C.', 'Male', 'Supervising Administrative Officer', 'PAGASAB-SADOF-8-2004', 'Administrative', '2', 'Permanent', '22', '1', '74.00', '02/13/76', '07/13/09', '07/23/09', '04/10/17', '-', '07/13/09', '', '', '', '488', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(39, 0, '39', 'AD', 'PPGSS', 'AD', 'Administrative Division', 'Procurement, Property and General Services Section', '', '', '', '', '', '', '', 'Administrative Officer V', 'PAGASAB-ADOF5-2-2004', 'Administrative', '2', '', '18', '', '0.00', '', '', '', '', '', '', '08/27/24', 'COMPULSORY RETIREMENT', 'DELA CRUZ, Liceria A.', '', 'Not Yet For Filing', 0, '2025-05-11 12:36:12', '2025-05-11 12:36:12', 1),
+(40, 0, '40', 'OA', NULL, 'OA', 'Office of the Administrator', NULL, 'SUAREZ, Jack F.', 'SUAREZ', 'Jack', 'Fonte', NULL, 'C.', 'Male', 'Administrator I', NULL, NULL, '3', 'Permanent', '31', '1', '200.00', '10/11/2002', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Not Yet For Filing', 0, '2025-05-11 12:43:01', '2025-05-11 12:47:13', 1);
 
 -- --------------------------------------------------------
 
@@ -335,7 +325,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `first_name`, `last_name`, `role`, `status`, `photo`, `last_login`, `created_at`, `updated_at`) VALUES
-(1, 'admin', '$2y$10$LL3ggOMo8yBN2sIzyMnNluNGQcAO8fs.ol2AbqZhn.XZIMIHJnulK', 'admin@example.com', 'System', 'Administrator', 'admin', 'active', 'uploads/profile_photos/profile_681442783b2c9_sample .png', '2025-05-05 15:59:30', '2025-05-01 02:27:53', '2025-05-05 07:59:30'),
+(1, 'admin', '$2y$10$LL3ggOMo8yBN2sIzyMnNluNGQcAO8fs.ol2AbqZhn.XZIMIHJnulK', 'admin@example.com', 'System', 'Administrator', 'admin', 'active', 'uploads/profile_photos/profile_681442783b2c9_sample .png', '2025-05-11 20:31:43', '2025-05-01 02:27:53', '2025-05-11 12:31:43'),
 (3, 'kent', '$2y$10$EUBq1J8/4S2B9VqH1DEQz.8ftD0EHpoyyTesMI41Vwi8Gnu3HX.cq', 'kentargie@gmail.com', 'kent', 'argie', 'user', 'active', 'uploads/profile_photos/profile_6815ba37ebfb2_logo.jpg', '2025-05-03 15:04:01', '2025-05-03 05:11:25', '2025-05-03 07:04:01'),
 (6, 'jomar', '$2y$10$lSQ8yaDUVAEJv/Tb5BInX.Yas7wzUwGDGbxCw0pvSgLdqQ3O3lazi', 'jomarpandamon@gmail.com', 'Jomar', 'Pandamon', 'user', 'active', NULL, NULL, '2025-05-03 13:00:47', '2025-05-03 13:00:47');
 
@@ -461,7 +451,7 @@ ALTER TABLE `user_permissions`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `applicants`
@@ -479,7 +469,7 @@ ALTER TABLE `divisions`
 -- AUTO_INCREMENT for table `file_uploads`
 --
 ALTER TABLE `file_uploads`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `organizational_codes`
@@ -491,7 +481,7 @@ ALTER TABLE `organizational_codes`
 -- AUTO_INCREMENT for table `records`
 --
 ALTER TABLE `records`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -555,53 +545,6 @@ ALTER TABLE `organizational_codes`
 --
 ALTER TABLE `user_permissions`
   ADD CONSTRAINT `user_permissions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
--- Update order_count for divisions
-UPDATE `divisions` SET `order_count` = 1 WHERE `code` = 'OA';
-UPDATE `divisions` SET `order_count` = 2 WHERE `code` = 'AD';
-UPDATE `divisions` SET `order_count` = 3 WHERE `code` = 'HRMDS';
-UPDATE `divisions` SET `order_count` = 4 WHERE `code` = 'RMS';
-UPDATE `divisions` SET `order_count` = 5 WHERE `code` = 'PPGSS';
-UPDATE `divisions` SET `order_count` = 6 WHERE `code` = 'FPMD';
-UPDATE `divisions` SET `order_count` = 7 WHERE `code` = 'AS';
-UPDATE `divisions` SET `order_count` = 8 WHERE `code` = 'BPS';
-UPDATE `divisions` SET `order_count` = 9 WHERE `code` = 'MSS';
-UPDATE `divisions` SET `order_count` = 10 WHERE `code` = 'ETSD';
-UPDATE `divisions` SET `order_count` = 11 WHERE `code` = 'METTSS';
-UPDATE `divisions` SET `order_count` = 12 WHERE `code` = 'MGSS';
-UPDATE `divisions` SET `order_count` = 13 WHERE `code` = 'MEIES';
-UPDATE `divisions` SET `order_count` = 14 WHERE `code` = 'WD';
-UPDATE `divisions` SET `order_count` = 15 WHERE `code` = 'WFS';
-UPDATE `divisions` SET `order_count` = 16 WHERE `code` = 'MDIES';
-UPDATE `divisions` SET `order_count` = 17 WHERE `code` = 'TAMSS';
-UPDATE `divisions` SET `order_count` = 18 WHERE `code` = 'AMSS';
-UPDATE `divisions` SET `order_count` = 19 WHERE `code` = 'MMSS';
-UPDATE `divisions` SET `order_count` = 20 WHERE `code` = 'HMD';
-UPDATE `divisions` SET `order_count` = 21 WHERE `code` = 'HDAS';
-UPDATE `divisions` SET `order_count` = 22 WHERE `code` = 'HDAS';
-UPDATE `divisions` SET `order_count` = 23 WHERE `code` = 'FFWS';
-UPDATE `divisions` SET `order_count` = 24 WHERE `code` = 'HTS';
-UPDATE `divisions` SET `order_count` = 25 WHERE `code` = 'CAD';
-UPDATE `divisions` SET `order_count` = 26 WHERE `code` = 'CMPS';
-UPDATE `divisions` SET `order_count` = 27 WHERE `code` = 'FWSS';
-UPDATE `divisions` SET `order_count` = 28 WHERE `code` = 'IAAS';
-UPDATE `divisions` SET `order_count` = 29 WHERE `code` = 'CADS';
-UPDATE `divisions` SET `order_count` = 30 WHERE `code` = 'RDTD';
-UPDATE `divisions` SET `order_count` = 31 WHERE `code` = 'ASSS';
-UPDATE `divisions` SET `order_count` = 32 WHERE `code` = 'CARDS';
-UPDATE `divisions` SET `order_count` = 33 WHERE `code` = 'HTMIRD';
-UPDATE `divisions` SET `order_count` = 34 WHERE `code` = 'NMS';
-UPDATE `divisions` SET `order_count` = 35 WHERE `code` = 'TPIS';
-UPDATE `divisions` SET `order_count` = 36 WHERE `code` = 'NLPRSD';
-UPDATE `divisions` SET `order_count` = 37 WHERE `code` = 'AFFWS';
-UPDATE `divisions` SET `order_count` = 38 WHERE `code` = 'PFFWS';
-UPDATE `divisions` SET `order_count` = 39 WHERE `code` = 'SLPRSD';
-UPDATE `divisions` SET `order_count` = 40 WHERE `code` = 'BFFWS';
-UPDATE `divisions` SET `order_count` = 41 WHERE `code` = 'VPRSD';
-UPDATE `divisions` SET `order_count` = 42 WHERE `code` = 'NMPRSD';
-UPDATE `divisions` SET `order_count` = 43 WHERE `code` = 'SMPRSD';
-UPDATE `divisions` SET `order_count` = 44 WHERE `code` = 'FS';
-
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

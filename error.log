@@ -15,3 +15,10 @@
 Stack trace:
 #0 {main}
   thrown in D:\xampp\htdocs\Plantilla\admin\process\add_user.php on line 102
+[11-May-2025 14:27:33 Europe/Berlin] Database connection successful
+[11-May-2025 14:27:33 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt object is already closed in D:\xammp\htdocs\Plantilla\insert_admin.php:98
+Stack trace:
+#0 D:\xammp\htdocs\Plantilla\insert_admin.php(98): mysqli_stmt->close()
+#1 {main}
+  thrown in D:\xammp\htdocs\Plantilla\insert_admin.php on line 98
+[11-May-2025 14:30:14 Europe/Berlin] Database connection successful

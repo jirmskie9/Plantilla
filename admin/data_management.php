@@ -489,7 +489,7 @@ $monthly_files = getMonthlyFiles($selected_month);
                     <a href = 'new_workbook.php' class="btn btn-success" id="newWorkbookBtn">
                         <i class="bi bi-file-earmark-plus me-2"></i>New Workbook
                     </a>
-                    <a href="export_records.php?division=<?php echo $selected_division; ?>&month=<?php echo $selected_month; ?>" class="btn btn-info">
+                    <a href="api/export_records.php?division=<?php echo $selected_division; ?>&month=<?php echo $selected_month; ?>" class="btn btn-info">
                         <i class="bi bi-file-earmark-excel me-2"></i>Export Records
                     </a>
                 </div>
@@ -795,26 +795,41 @@ $monthly_files = getMonthlyFiles($selected_month);
 
             // Initialize DataTable for Office tab
             var recordsTable = $('#recordsTable').DataTable({
+                serverSide: true,
+                processing: true,
                 ajax: {
                     url: 'api/get_records.php',
                     type: 'GET',
                     data: function(d) {
-                        const divisionId = $('#division').val();
-                        const month = $('#month').val();
-                        d.division = divisionId;
-                        d.month = month;
+                        // Set length to -1 to get all records
+                        d.length = -1;
+                        // Keep existing parameters but set defaults to show all
+                        d.division = $('#division').val() || '0';
+                        d.month = $('#month').val() || '';
+                        d.search_value = d.search.value;
+                        return d;
+                    },
+                    dataSrc: function(json) {
+                        console.log('Server Response:', json);
+                        if (json.error) {
+                            console.error('Server Error:', json.error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error Loading Data',
+                                text: json.error || 'Failed to load data'
+                            });
+                            return [];
+                        }
+                        return json.data || [];
                     }
                 },
+                order: [],
                 columns: [
-                    { data: 'id', type: 'numeric', width: 50, readOnly: true },
-                    { data: 'plantilla_no', type: 'text', width: 100 },
-                    { 
-                        data: 'plantilla_division',
-                        type: 'text',
-                        width: 150
-                    },
+                    { data: 'plantilla_no' },
+                    { data: 'plantilla_division' },
                     { data: 'equivalent_division' },
                     { data: 'plantilla_division_definition' },
+                    { data: 'plantilla_section_definition' },
                     { data: 'fullname' },
                     { data: 'last_name' },
                     { data: 'first_name' },
@@ -830,114 +845,56 @@ $monthly_files = getMonthlyFiles($selected_month);
                     { data: 'sg' },
                     { data: 'step' },
                     { data: 'monthly_salary' },
-                    { 
-                        data: 'date_of_birth',
-                        render: function(data, type, row) {
-                            if (type === 'display' && data) {
-                                return new Date(data).toLocaleDateString();
-                            }
-                            return data;
-                        }
-                    },
-                    { 
-                        data: 'date_orig_appt',
-                        render: function(data, type, row) {
-                            if (type === 'display' && data) {
-                                return new Date(data).toLocaleDateString();
-                            }
-                            return data;
-                        }
-                    },
-                    { 
-                        data: 'date_govt_srvc',
-                        render: function(data, type, row) {
-                            if (type === 'display' && data) {
-                                return new Date(data).toLocaleDateString();
-                            }
-                            return data;
-                        }
-                    },
-                    { 
-                        data: 'date_last_promotion',
-                        render: function(data, type, row) {
-                            if (type === 'display' && data) {
-                                return new Date(data).toLocaleDateString();
-                            }
-                            return data;
-                        }
-                    },
-                    { 
-                        data: 'date_last_increment',
-                        render: function(data, type, row) {
-                            if (type === 'display' && data) {
-                                return new Date(data).toLocaleDateString();
-                            }
-                            return data;
-                        }
-                    },
-                    { 
-                        data: 'date_longevity',
-                        render: function(data, type, row) {
-                            if (type === 'display' && data) {
-                                return new Date(data).toLocaleDateString();
-                            }
-                            return data;
-                        }
-                    },
-                    { 
-                        data: 'date_vacated',
-                        render: function(data, type, row) {
-                            if (type === 'display' && data) {
-                                return new Date(data).toLocaleDateString();
-                            }
-                            return data;
-                        }
-                    },
+                    { data: 'date_of_birth' },
+                    { data: 'date_orig_appt' },
+                    { data: 'date_govt_srvc' },
+                    { data: 'date_last_promotion' },
+                    { data: 'date_last_increment' },
+                    { data: 'date_longevity' },
+                    { data: 'date_vacated' },
                     { data: 'vacated_due_to' },
                     { data: 'vacated_by' },
                     { data: 'id_no' },
-                    { 
-                        data: 'created_at',
-                        render: function(data, type, row) {
-                            if (type === 'display' && data) {
-                                return new Date(data).toLocaleString();
-                            }
-                            return data;
-                        }
-                    },
-                    { 
-                        data: 'updated_at',
-                        render: function(data, type, row) {
-                            if (type === 'display' && data) {
-                                return new Date(data).toLocaleString();
-                            }
-                            return data;
-                        }
-                    },
+                    { data: 'created_at' },
+                    { data: 'updated_at' },
                     { 
                         data: null,
+                        orderable: false,
                         render: function(data, type, row) {
-                            return `
-                                <div class="btn-group">
-                                 
-                                    <button class="btn btn-sm btn-danger delete-record" data-id="${row.id}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
-                            `;
+                            return '<div class="btn-group btn-group-sm">' +
+                                   '<button class="btn btn-danger delete-record" data-id="' + row.id + '"><i class="bi bi-trash"></i></button>' +
+                                   '</div>';
                         }
                     }
                 ],
-                order: [[6, 'desc']], // Sort by created_at by default
-                pageLength: 10,
-                responsive: true,
+                pageLength: -1, // Show all entries
+                lengthMenu: [[-1, 25, 50, 100], ["All", 25, 50, 100]], // Add "All" option
+                scrollX: true,
+                scrollY: 'calc(100vh - 300px)',
+                scrollCollapse: true,
+                fixedHeader: true,
                 language: {
                     search: "",
                     searchPlaceholder: "Search...",
                     lengthMenu: "Show _MENU_ entries",
-                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                    infoEmpty: "Showing 0 to 0 of 0 entries",
-                    infoFiltered: "(filtered from _MAX_ total entries)"
+                    info: "Showing _TOTAL_ entries",
+                    infoEmpty: "Showing 0 entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>',
+                    zeroRecords: "No matching records found"
+                },
+                search: {
+                    smart: false,
+                    caseInsensitive: true
+                },
+                drawCallback: function(settings) {
+                    var api = this.api();
+                    var pageInfo = api.page.info();
+                    if (pageInfo.recordsTotal === 0) {
+                        $('.dataTables_info').html('Showing 0 entries');
+                    } else if (pageInfo.length === -1) {
+                        $('.dataTables_info').html(`Showing all ${pageInfo.recordsTotal} entries`);
+                    }
                 }
             });
 
@@ -1381,79 +1338,148 @@ $monthly_files = getMonthlyFiles($selected_month);
 
             // Load initial data for Spreadsheet
             function loadSpreadsheetData() {
-                const divisionId = $('#divisionFilter').val();
-                const month = $('#monthFilter').val();
+                // Show loading state
+                Swal.fire({
+                    title: 'Loading...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
                 
                 $.ajax({
                     url: 'api/get_records.php',
                     method: 'GET',
                     data: { 
-                        division: divisionId,
-                        month: month
+                        division: '0', // Show all divisions by default
+                        month: '', // Show all months by default
+                        draw: 1,
+                        start: 0,
+                        length: -1 // Get all records
                     },
                     success: function(response) {
-                        if (response.success) {
+                        Swal.close();
+                        
+                        if (response.error) {
+                            console.error('Server Error:', response.error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error Loading Data',
+                                text: response.error || 'Failed to load data'
+                            });
+                            return;
+                        }
+                        
+                        if (!response.data || !Array.isArray(response.data)) {
+                            console.error('Invalid response format:', response);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error Loading Data',
+                                text: 'Invalid data format received from server'
+                            });
+                            return;
+                        }
+
+                        try {
                             // Transform response data to match Handsontable structure
                             const data = response.data.map(record => ({
-                                id: record.id,
-                                plantilla_no: record.plantilla_no,
-                                plantilla_division: record.plantilla_division,
-                                equivalent_division: record.equivalent_division,
-                                plantilla_division_definition: record.plantilla_division_definition,
-                                fullname: record.fullname,
-                                last_name: record.last_name,
-                                first_name: record.first_name,
-                                middle_name: record.middle_name,
-                                ext_name: record.ext_name,
-                                mi: record.mi,
-                                sex: record.sex,
-                                position_title: record.position_title,
-                                item_number: record.item_number,
-                                tech_code: record.tech_code,
-                                level: record.level,
-                                appointment_status: record.appointment_status,
-                                sg: record.sg,
-                                step: record.step,
-                                monthly_salary: record.monthly_salary,
-                                date_of_birth: record.date_of_birth,
-                                date_orig_appt: record.date_orig_appt,
-                                date_govt_srvc: record.date_govt_srvc,
-                                date_last_promotion: record.date_last_promotion,
-                                date_last_increment: record.date_last_increment,
-                                date_longevity: record.date_longevity,
-                                date_vacated: record.date_vacated,
-                                vacated_due_to: record.vacated_due_to,
-                                vacated_by: record.vacated_by,
-                                id_no: record.id_no
+                                id: record.id || '',
+                                plantilla_no: record.plantilla_no || '',
+                                plantilla_division: record.plantilla_division || '',
+                                equivalent_division: record.equivalent_division || '',
+                                plantilla_division_definition: record.plantilla_division_definition || '',
+                                fullname: record.fullname || '',
+                                last_name: record.last_name || '',
+                                first_name: record.first_name || '',
+                                middle_name: record.middle_name || '',
+                                ext_name: record.ext_name || '',
+                                mi: record.mi || '',
+                                sex: record.sex || '',
+                                position_title: record.position_title || '',
+                                item_number: record.item_number || '',
+                                tech_code: record.tech_code || '',
+                                level: record.level || '',
+                                appointment_status: record.appointment_status || '',
+                                sg: record.sg || '',
+                                step: record.step || '',
+                                monthly_salary: record.monthly_salary || '',
+                                date_of_birth: record.date_of_birth || '',
+                                date_orig_appt: record.date_orig_appt || '',
+                                date_govt_srvc: record.date_govt_srvc || '',
+                                date_last_promotion: record.date_last_promotion || '',
+                                date_last_increment: record.date_last_increment || '',
+                                date_longevity: record.date_longevity || '',
+                                date_vacated: record.date_vacated || '',
+                                vacated_due_to: record.vacated_due_to || '',
+                                vacated_by: record.vacated_by || '',
+                                id_no: record.id_no || ''
                             }));
                             
                             // Load data into Handsontable
                             hot.loadData(data);
                             hot.render();
-                        } else {
-                            Swal.fire('Error', response.error || 'Failed to load data', 'error');
+                            
+                            // Show success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Data Loaded',
+                                text: `Successfully loaded ${data.length} records`,
+                                showConfirmButton: false,
+                                timer: 1500,
+                                toast: true,
+                                position: 'top-end'
+                            });
+                        } catch (error) {
+                            console.error('Error processing data:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error Processing Data',
+                                text: 'Failed to process the data. Please try again.'
+                            });
                         }
                     },
-                    error: function() {
-                        Swal.fire('Error', 'Failed to load data', 'error');
+                    error: function(xhr, status, error) {
+                        Swal.close();
+                        console.error('Ajax Error:', {
+                            status: xhr.status,
+                            statusText: xhr.statusText,
+                            responseText: xhr.responseText,
+                            error: error
+                        });
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error Loading Data',
+                            text: 'Failed to load data. Please try again.'
+                        });
                     }
                 });
             }
 
-            // Initialize spreadsheet with current filters
+            // Initialize spreadsheet with all data
             loadSpreadsheetData();
             
-            // Handle division filter change for Spreadsheet
-            $('#divisionFilter').on('change', function() {
+            // Handle division filter change for both tabs
+            $('#divisionFilter, #division').on('change', function() {
+                const divisionId = $(this).val();
+                // Update URL without page reload
+                const newUrl = new URL(window.location.href);
+                newUrl.searchParams.set('division', divisionId);
+                window.history.pushState({}, '', newUrl);
+                
+                // Reload both table and spreadsheet
+                recordsTable.ajax.reload();
                 loadSpreadsheetData();
             });
 
-            // Handle month filter change for both Office and Spreadsheet
-            $('#monthFilter').on('change', function() {
+            // Handle month filter change for both tabs
+            $('#monthFilter, #month').on('change', function() {
                 const month = $(this).val();
                 const newUrl = new URL(window.location.href);
                 newUrl.searchParams.set('month', month);
                 window.history.pushState({}, '', newUrl);
+                
+                // Reload both table and spreadsheet
                 recordsTable.ajax.reload();
                 loadSpreadsheetData();
             });

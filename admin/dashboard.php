@@ -13,6 +13,7 @@ $stmt = $conn->prepare("
         COUNT(CASE WHEN status = 'On Process' THEN 1 END) as on_process,
         COUNT(CASE WHEN status = 'On-Hold' THEN 1 END) as on_hold,
         COUNT(CASE WHEN status = 'Not Yet for Filing' THEN 1 END) as not_yet_filing,
+        COUNT(CASE WHEN status = 'Deliberated' THEN 1 END) as deliberated,
         COUNT(*) as total_applicants
     FROM records
 ");
@@ -213,6 +214,18 @@ $stmt->close();
                     <div class="card-body">
                         <h5 class="card-title">Not Yet for Filing</h5>
                         <h2 class="card-value"><?php echo $stats['not_yet_filing']; ?></h2>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-clock fs-4 me-2"></i>
+                            <span>View Details</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card dashboard-card card-deliberated" onclick="window.location.href='applicant_records.php?status=Deliberated'">
+                    <div class="card-body">
+                        <h5 class="card-title">Deliberated</h5>
+                        <h2 class="card-value"><?php echo $stats['deliberated']; ?></h2>
                         <div class="d-flex align-items-center">
                             <i class="bi bi-clock fs-4 me-2"></i>
                             <span>View Details</span>

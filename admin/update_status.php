@@ -27,7 +27,7 @@ if ($record_id <= 0 || empty($status)) {
 }
 
 // Validate status value
-$valid_statuses = ['Pending', 'On-Hold', 'In Progress', 'Completed'];
+$valid_statuses = ['Pending', 'On-Hold', 'On Process', 'Completed', 'Deliberated'];
 if (!in_array($status, $valid_statuses)) {
     header('Content-Type: application/json');
     echo json_encode(['success' => false, 'message' => 'Invalid status value']);

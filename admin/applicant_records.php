@@ -234,6 +234,58 @@ $stmt->close();
             position: relative;
             padding-right: 50px;
         }
+
+        .dashboard-header {
+            position: relative;
+            z-index: 1000;
+            background: #fff;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .export-buttons {
+            position: relative;
+            z-index: 1001;
+        }
+
+        .dropdown-menu {
+            z-index: 1002;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+
+        .dropdown-menu {
+            min-width: 200px;
+            padding: 0.5rem 0;
+            margin: 0;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            color: #212529;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #16181b;
+        }
+
+        .dropdown-item i {
+            margin-right: 0.5rem;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
@@ -305,12 +357,28 @@ $stmt->close();
     <!-- Main Content -->
     <div class="main-content">
         <div class="dashboard-header">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
                     <h2 class="mb-1">Applicant Records</h2>
                     <p class="text-muted mb-0">Manage and view applicant information</p>
                 </div>
-               
+            </div>
+            <div class="d-flex justify-content-end mb-3">
+                <div class="export-buttons">
+                    <?php
+                    // Build export URL with current filters
+                    $exportParams = [];
+                    if (!empty($search)) $exportParams[] = 'search=' . urlencode($search);
+                    if (!empty($month)) $exportParams[] = 'month=' . urlencode($month);
+                    if (!empty($division)) $exportParams[] = 'division=' . urlencode($division);
+                    if (!empty($status)) $exportParams[] = 'status=' . urlencode($status);
+                    
+                    $exportUrl = 'export_records.php?' . implode('&', $exportParams);
+                    ?>
+                    <a href="<?php echo $exportUrl; ?>" class="btn btn-primary">
+                        <i class="bi bi-file-earmark-excel me-2"></i>Export Records
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -342,7 +410,7 @@ $stmt->close();
                             ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <!-- <div class="col-md-2">
                         <select class="form-select" name="division">
                             <option value="">All Divisions</option>
                             <?php
@@ -353,13 +421,13 @@ $stmt->close();
                             }
                             ?>
                         </select>
-                    </div>
+                    </div> -->
                     <div class="col-md-2">
                         <select class="form-select" name="status">
                             <option value="">All Status</option>
                             <option value="Pending" <?php echo $status === 'Pending' ? 'selected' : ''; ?>>Pending</option>
                             <option value="On-Hold" <?php echo $status === 'On-Hold' ? 'selected' : ''; ?>>On-Hold</option>
-                            <option value="In Progress" <?php echo $status === 'In Progress' ? 'selected' : ''; ?>>In Progress</option>
+                            <option value="On Process" <?php echo $status === 'On Process' ? 'selected' : ''; ?>>On Process</option>
                             <option value="Completed" <?php echo $status === 'Completed' ? 'selected' : ''; ?>>Completed</option>
                         </select>
                     </div>
@@ -572,8 +640,14 @@ $stmt->close();
                             <select class="form-select" name="status" required>
                                 <option value="Pending">Pending</option>
                                 <option value="On-Hold">On-Hold</option>
-                                <option value="In Progress">In Progress</option>
+                                <option value="On Process">On Process</option>
                                 <option value="Completed">Completed</option>
+                                <option value="Deliberated">Deliberated</option>
+                                <option value="Not Yet for Filing">Not Yet for Filing</option>
+                                <option value="Vacant">Vacant</option>
+                                <option value="Temporary">Temporary</option>
+                                <option value="Posted">Posted</option>
+                                <option value="Converted">Converted</option>
                             </select>
                         </div>
                     </form>

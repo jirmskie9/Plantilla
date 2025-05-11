@@ -2,114 +2,175 @@
 session_start();
 require '../dbconnection.php';
 
-// Check admin permissions
+// Check if user is logged in and has admin role
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-    header('Location: ../login.php');
-    exit();
+    die('Unauthorized access');
 }
 
-// Get filter parameters from URL
-$division_id = isset($_GET['division']) ? (int)$_GET['division'] : 0;
+// Get all filter parameters
+$status = isset($_GET['status']) ? $_GET['status'] : '';
+$search = isset($_GET['search']) ? $_GET['search'] : '';
 $month = isset($_GET['month']) ? $_GET['month'] : '';
+$division = isset($_GET['division']) ? $_GET['division'] : '';
 
-// Get division definition if division ID is provided
-$division_definition = '';
-if ($division_id > 0) {
-    $stmt = $conn->prepare("SELECT name FROM divisions WHERE id = ?");
-    $stmt->bind_param("i", $division_id);
+try {
+    // Build the query with all filters
+    $query = "SELECT 
+        id_no,
+        last_name,
+        first_name,
+        middle_name,
+        ext_name,
+        mi,
+        sex,
+        position_title,
+        item_number,
+        tech_code,
+        level,
+        appointment_status,
+        sg,
+        step,
+        DATE_FORMAT(date_of_birth, '%M %d, %Y') as date_of_birth,
+        DATE_FORMAT(date_orig_appt, '%M %d, %Y') as date_orig_appt,
+        DATE_FORMAT(date_govt_srvc, '%M %d, %Y') as date_govt_srvc,
+        DATE_FORMAT(date_last_promotion, '%M %d, %Y') as date_last_promotion,
+        DATE_FORMAT(date_last_increment, '%M %d, %Y') as date_last_increment,
+        DATE_FORMAT(date_longevity, '%M %d, %Y') as date_longevity,
+        plantilla_division,
+        plantilla_section,
+        status,
+        created_at
+    FROM records 
+    WHERE 1=1";
+
+    $params = [];
+    $types = "";
+
+    // Add status filter if present
+    if (!empty($status)) {
+        $query .= " AND status = ?";
+        $params[] = $status;
+        $types .= "s";
+    }
+
+    // Add search filter
+    if (!empty($search)) {
+        $query .= " AND (first_name LIKE ? OR last_name LIKE ? OR middle_name LIKE ? OR ext_name LIKE ?)";
+        $searchParam = "%$search%";
+        $params = array_merge($params, [$searchParam, $searchParam, $searchParam, $searchParam]);
+        $types .= "ssss";
+    }
+
+    // Add month filter
+    if (!empty($month)) {
+        $query .= " AND MONTH(created_at) = ?";
+        $params[] = $month;
+        $types .= "i";
+    }
+
+    // Add division filter
+    if (!empty($division)) {
+        $query .= " AND plantilla_division = ?";
+        $params[] = $division;
+        $types .= "s";
+    }
+
+    // Prepare and execute the query
+    $stmt = $conn->prepare($query);
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
     $stmt->execute();
     $result = $stmt->get_result();
-    if ($row = $result->fetch_assoc()) {
-        $division_definition = $row['name'];
-    }
-}
+    $records = $result->fetch_all(MYSQLI_ASSOC);
 
-// Set headers for CSV download
-header('Content-Type: text/csv; charset=utf-8');
-header('Content-Disposition: attachment; filename=records_export_' . date('Y-m-d') . '.csv');
+    // Generate filename based on filters
+    $filename = 'Records_Export';
+    if (!empty($status)) $filename .= '_' . $status;
+    if (!empty($search)) $filename .= '_Search_' . $search;
+    if (!empty($month)) $filename .= '_Month_' . $month;
+    if (!empty($division)) $filename .= '_Division_' . $division;
+    $filename .= '_' . date('Y-m-d') . '.csv';
 
-// Create output stream
-$output = fopen('php://output', 'w');
+    // Set headers for CSV download
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Pragma: no-cache');
+    header('Expires: 0');
 
-// Build query with filters
-$query = "SELECT 
-    r.plantilla_no,
-    r.plantilla_division,
-    r.plantilla_section,
-    r.equivalent_division,
-    r.plantilla_division_definition,
-    r.plantilla_section_definition,
-    r.fullname,
-    r.last_name,
-    r.first_name,
-    r.middle_name,
-    r.ext_name,
-    r.mi,
-    r.sex,
-    r.position_title,
-    r.item_number,
-    r.tech_code,
-    r.level,
-    r.appointment_status,
-    r.sg,
-    r.step,
-    r.monthly_salary,
-    r.date_of_birth,
-    r.date_orig_appt,
-    r.date_govt_srvc,
-    r.date_last_promotion,
-    r.date_last_increment,
-    r.date_longevity,
-    r.date_vacated,
-    r.vacated_due_to,
-    r.vacated_by,
-    r.id_no
-FROM records r WHERE 1=1";
-$params = array();
-$types = '';
+    // Create output stream
+    $output = fopen('php://output', 'w');
 
-if (!empty($division_definition)) {
-    $query .= " AND r.plantilla_division_definition = ?";
-    $params[] = $division_definition;
-    $types .= 's';
-}
+    // Add UTF-8 BOM for proper Excel encoding
+    fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
 
-if (!empty($month)) {
-    $query .= " AND DATE_FORMAT(r.created_at, '%Y-%m') = ?";
-    $params[] = $month;
-    $types .= 's';
-}
+    // CSV Headers
+    $headers = [
+        'ID No.',
+        'Last Name',
+        'First Name',
+        'Middle Name',
+        'Ext. Name',
+        'MI',
+        'Sex',
+        'Position Title',
+        'Item Number',
+        'Tech Code',
+        'Level',
+        'Appointment Status',
+        'SG',
+        'Step',
+        'Date of Birth',
+        'Date of Original Appointment',
+        'Date of Govt. Service',
+        'Date of Last Promotion',
+        'Date of Last Increment',
+        'Date of Longevity',
+        'Division',
+        'Section',
+        'Status',
+        'Created At'
+    ];
 
-// Prepare and execute query
-$stmt = $conn->prepare($query);
-if (!empty($params)) {
-    $stmt->bind_param($types, ...$params);
-}
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result && $result->num_rows > 0) {
-    // Get column names
-    $fields = $result->fetch_fields();
-    $headers = array();
-    foreach ($fields as $field) {
-        // Convert column name to uppercase and replace underscores with spaces
-        $header = str_replace('_', ' ', strtoupper($field->name));
-        $headers[] = $header;
-    }
-    
     // Write headers
     fputcsv($output, $headers);
-    
+
     // Write data rows
-    while ($row = $result->fetch_assoc()) {
+    foreach ($records as $record) {
+        $row = [
+            $record['id_no'],
+            $record['last_name'],
+            $record['first_name'],
+            $record['middle_name'],
+            $record['ext_name'],
+            $record['mi'],
+            $record['sex'],
+            $record['position_title'],
+            $record['item_number'],
+            $record['tech_code'],
+            $record['level'],
+            $record['appointment_status'],
+            $record['sg'],
+            $record['step'],
+            $record['date_of_birth'],
+            $record['date_orig_appt'],
+            $record['date_govt_srvc'],
+            $record['date_last_promotion'],
+            $record['date_last_increment'],
+            $record['date_longevity'],
+            $record['plantilla_division'],
+            $record['plantilla_section'],
+            $record['status'],
+            $record['created_at']
+        ];
         fputcsv($output, $row);
     }
-} else {
-    // If no records found, write error message
-    fputcsv($output, array('NO RECORDS FOUND'));
-}
 
-// Close the output stream
-fclose($output);
-exit(); 
+    // Close the output stream
+    fclose($output);
+    exit;
+
+} catch (Exception $e) {
+    die('Error exporting records: ' . $e->getMessage());
+}
+?> 
